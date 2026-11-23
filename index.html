@@ -3,1445 +3,1426 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مستقبلي يبدأ الآن — التوجيه المهني للمرحلة المتوسطة</title>
+  <title>مستقبلي يبدأ الآن | منصة التوجيه المهني للطالبات</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: #e2e8f0;
-      --primary: #0f766e;
-      --primary-dark: #115e59;
-      --primary-soft: #ccfbf1;
-      --accent: #1d4ed8;
-      --accent-soft: #dbeafe;
-      --warn: #b45309;
-      --warn-soft: #fef3c7;
-      --danger: #b91c1c;
-      --danger-soft: #fee2e2;
-      --ok: #15803d;
-      --ok-soft: #dcfce7;
-      --radius: 18px;
-      --shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --surface-soft: #f0f4f9;
+      --ink: #132238;
+      --muted: #556780;
+      --primary: #0f5c6e;
+      --primary-dark: #0a4250;
+      --primary-soft: #e4f2f5;
+      --accent: #c97a16;
+      --accent-soft: #fdf3e4;
+      --success: #157347;
+      --success-soft: #e6f6ee;
+      --danger: #b42318;
+      --danger-soft: #fef3f2;
+      --border: #dce4ee;
+      --radius: 16px;
+      --shadow: 0 10px 28px rgba(19, 34, 56, 0.06);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(180deg, #eef6f5 0%, var(--bg) 220px);
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
       color: var(--ink);
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
-    .container {
-      max-width: 1040px;
+    .topbar {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      padding: 18px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: 0 4px 18px rgba(10, 66, 80, 0.22);
+    }
+
+    .topbar-inner {
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 20px 16px 64px;
-    }
-
-    header.app-header {
-      background: linear-gradient(135deg, #0f766e 0%, #134e4a 60%, #1e3a8a 100%);
-      color: #ffffff;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 14px 34px rgba(15, 118, 110, 0.22);
-      margin-bottom: 20px;
-    }
-
-    .header-top {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.28);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    .sync-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.82rem;
-      padding: 5px 11px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-    }
-
-    header.app-header h1 {
-      margin: 12px 0 6px;
-      font-size: clamp(1.55rem, 3.2vw, 2.2rem);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
       font-weight: 800;
     }
 
-    header.app-header p {
+    .brand h1 {
       margin: 0;
-      color: rgba(255, 255, 255, 0.92);
-      font-size: 1rem;
-      max-width: 760px;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .brand p {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #4ade80;
+    }
+
+    .dot.warn {
+      background: #facc15;
+    }
+
+    .dot.err {
+      background: #f87171;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 24px auto 64px;
+      padding: 0 18px;
     }
 
     .nav-tabs {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .tab-btn {
-      border: 1px solid var(--line);
-      background: var(--card);
+      border: 1px solid var(--border);
+      background: var(--surface);
       color: var(--ink);
       font-family: inherit;
-      font-size: 0.96rem;
+      font-size: 0.95rem;
       font-weight: 700;
-      padding: 11px 16px;
-      border-radius: 14px;
+      padding: 11px 18px;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
     }
 
     .tab-btn:hover {
       border-color: var(--primary);
-      transform: translateY(-1px);
+      background: var(--primary-soft);
     }
 
     .tab-btn.active {
       background: var(--primary);
-      color: #ffffff;
+      color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.24);
+      box-shadow: 0 6px 16px rgba(15, 92, 110, 0.24);
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--line);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 22px;
+      padding: 24px;
       box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
       margin-bottom: 18px;
     }
 
     .card h2 {
-      margin: 0 0 8px;
-      font-size: 1.3rem;
+      margin: 0;
+      font-size: 1.2rem;
       font-weight: 800;
-      color: var(--ink);
-    }
-
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 1.08rem;
-      font-weight: 800;
-      color: var(--ink);
+      color: var(--primary-dark);
     }
 
     .muted {
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
     }
 
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 16px;
     }
 
-    .form-group { margin-bottom: 14px; }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
 
     label {
-      display: block;
       font-weight: 700;
-      margin-bottom: 6px;
-      font-size: 0.96rem;
+      font-size: 0.92rem;
     }
 
     input[type="text"],
     input[type="password"],
-    select {
+    select,
+    textarea {
       width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 12px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 11px;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      background: #fff;
       color: var(--ink);
-      background: #ffffff;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     input:focus,
-    select:focus {
+    select:focus,
+    textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+      box-shadow: 0 0 0 3px rgba(15, 92, 110, 0.12);
     }
 
     .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      border: none;
-      border-radius: 13px;
-      padding: 12px 20px;
-      font-family: inherit;
-      font-size: 0.98rem;
-      font-weight: 700;
-      cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .btn-primary { background: var(--primary); color: #ffffff; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { background: #e2e8f0; color: var(--ink); }
-    .btn-secondary:hover { background: #cbd5e1; }
-    .btn-accent { background: var(--accent); color: #ffffff; }
-    .btn-danger { background: var(--danger); color: #ffffff; }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-soft {
+      background: var(--surface-soft);
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+
+    .btn-soft:hover {
+      background: var(--primary-soft);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+      padding: 7px 12px;
+      font-size: 0.82rem;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
     .alert {
       padding: 13px 16px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 0.94rem;
-      margin-top: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 16px;
     }
 
-    .alert-error {
+    .alert-success {
+      background: var(--success-soft);
+      color: var(--success);
+      border: 1px solid #b7ebc6;
+    }
+
+    .alert-danger {
       background: var(--danger-soft);
       color: var(--danger);
-      border: 1px solid #fecaca;
+      border: 1px solid #fecdca;
     }
 
-    .alert-ok {
-      background: var(--ok-soft);
-      color: var(--ok);
-      border: 1px solid #bbf7d0;
+    .alert-info {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      border: 1px solid #bce0e8;
     }
 
-    .alert-warn {
-      background: var(--warn-soft);
-      color: var(--warn);
-      border: 1px solid #fde68a;
+    /* استكشاف المهن التفاعلي */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
     }
 
-    .question-box {
-      border: 1px solid var(--line);
+    .chip {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .career-card {
+      border: 1.5px solid var(--border);
+      border-radius: 15px;
+      padding: 18px;
+      background: var(--surface);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: right;
+      width: 100%;
+      font-family: inherit;
+      color: var(--ink);
+    }
+
+    .career-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(15, 92, 110, 0.12);
+    }
+
+    .career-card.selected {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+
+    .career-detail-box {
+      border: 2px solid var(--primary);
+      background: #fafdff;
       border-radius: 16px;
+      padding: 22px;
+      margin-top: 20px;
+    }
+
+    .detail-list {
+      margin: 8px 0 16px;
+      padding-right: 20px;
+    }
+
+    /* القياس القبلي الكامل */
+    .likert-scale-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: var(--surface-soft);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .question-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 16px;
       margin-bottom: 14px;
-      background: #fafcff;
+      background: #fcfdff;
     }
 
     .question-title {
       font-weight: 700;
       margin-bottom: 10px;
-      font-size: 1rem;
-    }
-
-    .choice-group {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      display: flex;
+      justify-content: space-between;
       gap: 10px;
     }
 
-    .choice-btn {
-      border: 1.5px solid #cbd5e1;
-      background: #ffffff;
-      color: var(--ink);
-      font-family: inherit;
-      font-size: 0.92rem;
-      font-weight: 600;
-      padding: 10px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.18s ease;
+    .likert-options {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(56px, 1fr));
+      gap: 8px;
     }
 
-    .choice-btn:hover {
-      border-color: var(--primary);
-      background: #f0fdfa;
+    .likert-opt {
+      position: relative;
     }
 
-    .choice-btn.selected {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
+    .likert-opt input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
     }
 
-    .domain-card {
-      border: 1.5px solid var(--line);
-      border-radius: 18px;
-      padding: 18px;
-      background: #ffffff;
+    .likert-opt span {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .domain-tag {
-      display: inline-block;
-      background: var(--primary-soft);
-      color: var(--primary-dark);
+      align-items: center;
+      justify-content: center;
+      padding: 9px 6px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
       font-weight: 700;
-      font-size: 0.82rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 8px;
-    }
-
-    .domain-details {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 0.92rem;
-      border: 1px dashed #cbd5e1;
-    }
-
-    .domain-details ul {
-      margin: 6px 0 0;
-      padding-right: 18px;
-    }
-
-    .game-arena {
-      border: 1.5px solid #bfdbfe;
-      background: #f8fbff;
-      border-radius: 18px;
-      padding: 18px;
-    }
-
-    .match-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .match-item {
-      border: 1.5px solid #cbd5e1;
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 13px;
-      font-family: inherit;
-      font-size: 0.94rem;
-      font-weight: 700;
-      color: var(--ink);
+      font-size: 0.85rem;
       cursor: pointer;
-      text-align: right;
-      transition: all 0.18s ease;
+      transition: all 0.15s ease;
     }
 
-    .match-item.selected {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      color: var(--accent);
+    .likert-opt input:checked + span {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
     }
 
-    .match-item.matched {
-      border-color: var(--ok);
-      background: var(--ok-soft);
-      color: var(--ok);
-      cursor: default;
+    /* لوحة الموجهة الطلابية */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
-    .achievement-card {
-      background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
-      border: 2px solid #0f766e;
-      border-radius: 22px;
-      padding: 24px;
-      box-shadow: 0 14px 30px rgba(15, 118, 110, 0.12);
-    }
-
-    .kpi-card {
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      border-radius: 16px;
+    .stat-box {
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       padding: 16px;
     }
 
-    .kpi-value {
+    .stat-num {
       font-size: 1.6rem;
       font-weight: 800;
       color: var(--primary-dark);
-      margin: 4px 0;
     }
 
-    .kpi-formula {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .bar-row { margin-bottom: 12px; }
-
-    .bar-head {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .bar-track {
-      height: 12px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #0f766e, #2563eb);
-      border-radius: 999px;
-      transition: width 0.35s ease;
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 14px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      background: #fff;
     }
 
     th, td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--line);
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--border);
       text-align: right;
+      white-space: nowrap;
     }
 
     th {
-      background: #f1f5f9;
+      background: var(--surface-soft);
       font-weight: 800;
+      color: var(--primary-dark);
     }
 
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 14px;
+    .hidden {
+      display: none !important;
     }
 
-    .hidden { display: none !important; }
-
-    .actions-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: 14px;
+    @media (max-width: 640px) {
+      .likert-options {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 5px;
+      }
+      .likert-opt span {
+        padding: 8px 3px;
+        font-size: 0.78rem;
+      }
+      .card {
+        padding: 18px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="app-header">
-      <div class="header-top">
-        <span class="badge-pill">مبادرة التوجيه المهني • المرحلة المتوسطة</span>
-        <span id="cloudBadge" class="sync-status">جاري التحقق من الربط السحابي...</span>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">م</div>
+        <div>
+          <h1>مستقبلي يبدأ الآن</h1>
+          <p>منصة التوجيه المهني والقياس القبلي للطالبات</p>
+        </div>
       </div>
-      <h1>مستقبلي يبدأ الآن</h1>
-      <p>رحلة تفاعلية لاكتشاف الميول والمهارات وبناء وعي مهني مبكر لطالبات المرحلة المتوسطة، مع متابعة تحليلية دقيقة في لوحة الموجهة الطلابية.</p>
-    </header>
+      <div class="status-pill" id="dbStatusPill">
+        <span class="dot warn" id="dbStatusDot"></span>
+        <span id="dbStatusText">جارٍ التحقق من قاعدة البيانات...</span>
+      </div>
+    </div>
+  </header>
 
-    <nav class="nav-tabs" aria-label="أقسام التطبيق">
-      <button class="tab-btn active" data-tab="intro" onclick="switchTab('intro')">1. التسجيل والقياس القبلي</button>
-      <button class="tab-btn" data-tab="explore" onclick="switchTab('explore')">2. استكشاف المجالات واللعبة</button>
-      <button class="tab-btn" data-tab="post" onclick="switchTab('post')">3. القياس البعدي والأثر</button>
-      <button class="tab-btn" data-tab="card" onclick="switchTab('card')">4. بطاقة الإنجاز</button>
-      <button class="tab-btn" data-tab="advisor" onclick="switchTab('advisor')">لوحة الموجهة الطلابية</button>
+  <main class="container">
+    <nav class="nav-tabs" aria-label="أقسام المنصة">
+      <button class="tab-btn active" data-tab="profileTab">1. بيانات الطالبة</button>
+      <button class="tab-btn" data-tab="exploreTab">2. استكشاف المهن</button>
+      <button class="tab-btn" data-tab="preTestTab">3. القياس القبلي (10 أسئلة)</button>
+      <button class="tab-btn" data-tab="counselorTab">4. لوحة الموجهة الطلابية</button>
     </nav>
 
-    <!-- 1. التسجيل والقياس القبلي -->
-    <section id="tab-intro" class="tab-panel">
+    <div id="globalNotice"></div>
+
+    <!-- القسم 1: بيانات الطالبة -->
+    <section id="profileTab" class="tab-panel">
       <div class="card">
-        <h2>بيانات الطالبة والقياس القبلي</h2>
-        <p class="muted">أدخلي اسمكِ الثلاثي الكامل للبدء. يُشترط أن يكون الاسم ثلاثياً وغير مكرر مسبقاً على مستوى المدرسة.</p>
-
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="studentNameInput">الاسم الثلاثي للطالبة *</label>
-            <input type="text" id="studentNameInput" placeholder="مثال: سارة عبدالله محمد" autocomplete="off" />
+        <div class="card-header">
+          <div>
+            <h2>تسجيل بيانات الطالبة والبدء</h2>
+            <p class="muted">يُشترط إدخال الاسم الثلاثي بدقة لمنع تكرار السجل في قاعدة البيانات.</p>
           </div>
-          <div class="form-group">
-            <label for="dreamJobInput">المهنة أو الطموح الذي يلفت انتباهكِ حالياً (اختياري)</label>
-            <input type="text" id="dreamJobInput" placeholder="مثال: طبيبة أسنان، مصممة واجهات، مهندسة بيئة..." />
-          </div>
+          <span class="tag" id="activeStudentBadge">لم تُسجّل طالبة بعد</span>
         </div>
 
-        <div id="nameFeedback"></div>
+        <form id="studentProfileForm">
+          <div class="grid-2">
+            <div class="field">
+              <label for="fullName">الاسم الثلاثي للطالبة *</label>
+              <input type="text" id="fullName" required placeholder="مثال: سارة أحمد محمد العتيبي" />
+            </div>
+            <div class="field">
+              <label for="gradeLevel">الصف الدراسي *</label>
+              <select id="gradeLevel" required>
+                <option value="">اختاري الصف الدراسي</option>
+                <option value="أول ثانوي">أول ثانوي</option>
+                <option value="ثاني ثانوي">ثاني ثانوي</option>
+                <option value="ثالث ثانوي">ثالث ثانوي</option>
+                <option value="المرحلة المتوسطة">المرحلة المتوسطة</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="trackInterest">المسار أو المجال المفضّل *</label>
+              <select id="trackInterest" required>
+                <option value="">اختاري المجال المفضّل</option>
+                <option value="العلوم الصحية والطب">العلوم الصحية والطب</option>
+                <option value="الهندسة والتقنية والذكاء الاصطناعي">الهندسة والتقنية والذكاء الاصطناعي</option>
+                <option value="إدارة الأعمال والريادة والمالية">إدارة الأعمال والريادة والمالية</option>
+                <option value="التربية والعلوم الإنسانية والقانون">التربية والعلوم الإنسانية والقانون</option>
+                <option value="التصميم والإعلام والابتكار">التصميم والإعلام والابتكار</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="schoolName">المدرسة / الشعبة</label>
+              <input type="text" id="schoolName" placeholder="مثال: الثانوية الأولى - شعبة أ" />
+            </div>
+          </div>
 
-        <h3 style="margin-top:18px;">أسئلة القياس القبلي (قبل الاستكشاف)</h3>
-        <p class="muted">اختاري العبارة الأقرب لحالتكِ الحالية بكل صراحة:</p>
-        <div id="preQuestionsContainer"></div>
-
-        <div class="actions-row">
-          <button class="btn btn-primary" onclick="startJourney()">حفظ والانتقال إلى استكشاف المجالات</button>
-        </div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;">
+            <button type="submit" class="btn btn-primary" id="saveProfileBtn">حفظ بيانات الطالبة والانتقال للاستكشاف</button>
+            <button type="button" class="btn btn-soft" id="goExploreBtn">استعراض المهن مباشرة</button>
+          </div>
+        </form>
       </div>
     </section>
 
-    <!-- 2. استكشاف المجالات واللعبة -->
-    <section id="tab-explore" class="tab-panel hidden">
+    <!-- القسم 2: استكشاف المهن التفاعلي -->
+    <section id="exploreTab" class="tab-panel hidden">
       <div class="card">
-        <h2>استكشاف المجالات المهنية</h2>
-        <p class="muted">تصفحي المجالات المهنية المتنوعة؛ التفاصيل والمهام والمهارات ظاهرة مباشرة أمامكِ لتتأملي ما يناسبكِ.</p>
-        <div id="domainsContainer" class="grid-2"></div>
-      </div>
+        <div class="card-header">
+          <div>
+            <h2>استكشاف المهن والمسارات المستقبلية</h2>
+            <p class="muted">اضغطي على أي بطاقة مهنة لعرض التفاصيل الكاملة، المهارات المطلوبة، واختيارها كمهنة مفضّلة.</p>
+          </div>
+          <span class="tag" id="selectedCareerChip">لم يتم اختيار مهنة بعد</span>
+        </div>
 
+        <div class="filter-bar" id="careerFilterBar"></div>
+        <div class="grid-3" id="careersGrid"></div>
+        <div id="careerDetailPanel" class="career-detail-box hidden"></div>
+      </div>
+    </section>
+
+    <!-- القسم 3: القياس القبلي الكامل (10 أسئلة) -->
+    <section id="preTestTab" class="tab-panel hidden">
       <div class="card">
-        <h2>لعبة مطابقة المهارة بالمجال المهني</h2>
-        <p class="muted">اختاري مهارة أو نشاطاً من العمود الأول، ثم اضغطي على المجال المهني المناسب له لتكوين التطابقات الصحيحة.</p>
-        <div class="game-arena">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; align-items:center;">
-            <div>
-              <strong>التقدم في اللعبة:</strong> <span id="gameScoreText">0 / 4</span>
-              <span class="muted" style="margin-right:10px;">المحاولات: <span id="gameAttemptsText">0</span></span>
-            </div>
-            <button class="btn btn-secondary" onclick="resetMatchGame()">إعادة ترتيب اللعبة</button>
+        <div class="card-header">
+          <div>
+            <h2>مقياس الوعي والجاهزية المهنية (القياس القبلي — 10 أسئلة)</h2>
+            <p class="muted">أجيبي عن جميع البنود بدقة لتقييم مستوى جاهزيتكِ الحالية وحفظ النتيجة في لوحة الموجهة الطلابية.</p>
           </div>
-
-          <div class="grid-2" style="margin-top:14px;">
-            <div>
-              <h3>الأنشطة والمهارات</h3>
-              <div id="gameCluesList" class="match-grid" style="grid-template-columns: 1fr;"></div>
-            </div>
-            <div>
-              <h3>المجالات المهنية</h3>
-              <div id="gameTargetsList" class="match-grid" style="grid-template-columns: 1fr;"></div>
-            </div>
-          </div>
-          <div id="gameFeedback"></div>
+          <span class="tag" id="preTestStudentLabel">الطالبة: غير محددة</span>
         </div>
 
-        <div class="actions-row">
-          <button class="btn btn-primary" onclick="switchTab('post')">الانتقال إلى القياس البعدي والأثر</button>
+        <div class="likert-scale-legend">
+          <span>مقياس الإجابة:</span>
+          <span>1 = لا أوافق بشدة</span>
+          <span>•</span>
+          <span>2 = لا أوافق</span>
+          <span>•</span>
+          <span>3 = محايدة</span>
+          <span>•</span>
+          <span>4 = أوافق</span>
+          <span>•</span>
+          <span>5 = أوافق بشدة</span>
         </div>
+
+        <form id="preTestForm">
+          <div id="questionsContainer"></div>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:18px;">
+            <button type="submit" class="btn btn-primary" id="submitPreTestBtn">إرسال وحفظ القياس القبلي</button>
+            <span class="muted" id="answeredCounter">تمت الإجابة على 0 من 10 أسئلة</span>
+          </div>
+        </form>
+
+        <div id="preTestResultBox" class="hidden" style="margin-top:20px;"></div>
       </div>
     </section>
 
-    <!-- 3. القياس البعدي والأثر السلوكي -->
-    <section id="tab-post" class="tab-panel hidden">
-      <div class="card">
-        <h2>القياس البعدي وقياس الأثر السلوكي المستقل</h2>
-        <p class="muted">أجيبي عن الأسئلة التالية بعد استكشاف المجالات وخوض تجربة المطابقة.</p>
+    <!-- القسم 4: لوحة الموجهة الطلابية -->
+    <section id="counselorTab" class="tab-panel hidden">
+      <div class="card" id="counselorLockCard">
+        <div class="card-header">
+          <div>
+            <h2>لوحة الموجهة الطلابية</h2>
+            <p class="muted">دخول خاص بالموجهة الطلابية لمتابعة سجلات الطالبات ونتائج القياس القبلي وإدارة البيانات.</p>
+          </div>
+        </div>
+        <div class="grid-2" style="max-width:520px;">
+          <div class="field">
+            <label for="counselorPasscode">رمز الدخول الخاص بالموجهة الطلابية</label>
+            <input type="password" id="counselorPasscode" placeholder="أدخلي رمز الدخول (الافتراضي: 2026)" />
+          </div>
+          <div class="field" style="justify-content:flex-end;">
+            <button type="button" class="btn btn-primary" id="unlockCounselorBtn">دخول لوحة الموجهة الطلابية</button>
+          </div>
+        </div>
+        <p class="muted" style="margin:0;">ملاحظة: يمكنكِ تغيير رمز الدخول بسهولة من داخل الكود في قسم إعدادات الموجهة الطلابية.</p>
+      </div>
 
-        <h3>أولاً: القياس البعدي (الوضوح والثقة المهنية)</h3>
-        <div id="postQuestionsContainer"></div>
-
-        <h3 style="margin-top:20px;">ثانياً: قياس الأثر السلوكي المستقل</h3>
-        <p class="muted">ما الخطوة العملية التي تنوين تنفيذها بنفسكِ خلال الأسبوع القادم؟</p>
-        <div id="behaviorQuestionsContainer"></div>
-
-        <div class="form-group" style="margin-top:14px;">
-          <label for="selectedTopDomain">أكثر مجال مهني وجدته قريباً من اهتماماتي بعد التجربة:</label>
-          <select id="selectedTopDomain">
-            <option value="">-- اختاري المجال الأقرب --</option>
-            <option value="الصحة والعلوم الحيوية">الصحة والعلوم الحيوية</option>
-            <option value="التقنية والذكاء الرقمي">التقنية والذكاء الرقمي</option>
-            <option value="الهندسة والابتكار والبيئة">الهندسة والابتكار والبيئة</option>
-            <option value="التصميم والإعلام والإبداع">التصميم والإعلام والإبداع</option>
-            <option value="الأعمال والقيادة وريادة المشاريع">الأعمال والقيادة وريادة المشاريع</option>
-            <option value="التربية والمجتمع والخدمة الإنسانية">التربية والمجتمع والخدمة الإنسانية</option>
-          </select>
+      <div class="card hidden" id="counselorDashboardCard">
+        <div class="card-header">
+          <div>
+            <h2>متابعة الطالبات — لوحة الموجهة الطلابية</h2>
+            <p class="muted">عرض السجلات المحفوظة في قاعدة البيانات (منع تكرار الاسم الثلاثي مفعّل).</p>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button type="button" class="btn btn-soft" id="refreshRecordsBtn">تحديث البيانات</button>
+            <button type="button" class="btn btn-accent" id="exportCsvBtn">تصدير CSV</button>
+            <button type="button" class="btn btn-soft" id="lockCounselorBtn">خروج</button>
+          </div>
         </div>
 
-        <div id="postFeedback"></div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="muted">إجمالي الطالبات المسجلات</div>
+            <div class="stat-num" id="statTotalStudents">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="muted">متوسط القياس القبلي</div>
+            <div class="stat-num" id="statAvgScore">0%</div>
+          </div>
+          <div class="stat-box">
+            <div class="muted">أكثر مجال مختار</div>
+            <div class="stat-num" id="statTopTrack" style="font-size:1.1rem;">—</div>
+          </div>
+        </div>
 
-        <div class="actions-row">
-          <button class="btn btn-primary" onclick="submitFinalAssessment()">اعتماد نتائجي وإصدار بطاقة الإنجاز</button>
+        <div class="field" style="max-width:360px;">
+          <input type="text" id="searchStudentInput" placeholder="ابحثي بالاسم الثلاثي أو الصف أو المهنة..." />
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>الاسم الثلاثي</th>
+                <th>الصف</th>
+                <th>المجال</th>
+                <th>المهنة المختارة</th>
+                <th>درجة القياس القبلي</th>
+                <th>التاريخ</th>
+                <th>إجراء</th>
+              </tr>
+            </thead>
+            <tbody id="recordsTableBody">
+              <tr><td colspan="8" style="text-align:center;">جارٍ تحميل السجلات...</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
-
-    <!-- 4. بطاقة الإنجاز -->
-    <section id="tab-card" class="tab-panel hidden">
-      <div id="achievementEmptyState" class="card">
-        <h2>بطاقة الإنجاز</h2>
-        <p class="muted">أكملي التسجيل والقياس القبلي والبعدي أولاً لتظهر بطاقة إنجازكِ المهنية هنا.</p>
-        <button class="btn btn-primary" onclick="switchTab('intro')">الذهاب إلى البداية</button>
-      </div>
-
-      <div id="achievementCardContainer" class="achievement-card hidden">
-        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:14px;">
-          <span class="badge-pill" style="background:var(--primary-soft); color:var(--primary-dark); border-color:#99f6e4;">بطاقة إنجاز مهني • المرحلة المتوسطة</span>
-          <span id="cardDateText" class="muted"></span>
-        </div>
-
-        <h2 id="cardStudentName" style="font-size:1.55rem; margin-bottom:4px;"></h2>
-        <p class="muted" id="cardDreamJobText" style="margin-top:0;"></p>
-
-        <div class="grid-3" style="margin:16px 0;">
-          <div class="kpi-card">
-            <div class="muted">القياس القبلي</div>
-            <div class="kpi-value" id="cardPreScore">0 / 12</div>
-          </div>
-          <div class="kpi-card">
-            <div class="muted">القياس البعدي</div>
-            <div class="kpi-value" id="cardPostScore">0 / 12</div>
-          </div>
-          <div class="kpi-card">
-            <div class="muted">المجال الأقرب لاهتماماتي</div>
-            <div class="kpi-value" style="font-size:1.15rem;" id="cardTopDomain">-</div>
-          </div>
-        </div>
-
-        <div class="domain-details" style="background:#ffffff; border-style:solid; border-color:#cbd5e1;">
-          <strong>خطتي السلوكية للأسبوع القادم:</strong>
-          <p id="cardBehaviorPlan" style="margin:6px 0 0;"></p>
-        </div>
-
-        <div class="alert alert-ok" style="margin-top:16px;">
-          أناقش خطتي مع أسرتي والموجهة الطلابية
-        </div>
-      </div>
-    </section>
-
-    <!-- لوحة الموجهة الطلابية -->
-    <section id="tab-advisor" class="tab-panel hidden">
-      <div id="advisorLoginBox" class="card">
-        <h2>لوحة الموجهة الطلابية</h2>
-        <p class="muted">هذه اللوحة مخصصة للموجهة الطلابية لمتابعة مؤشرات الطالبات وتصدير البيانات بصيغة CSV.</p>
-        <div class="form-group" style="max-width:360px;">
-          <label for="advisorPassInput">كلمة مرور الموجهة الطلابية</label>
-          <input type="password" id="advisorPassInput" placeholder="أدخلي كلمة المرور" />
-        </div>
-        <div id="advisorLoginError"></div>
-        <div class="actions-row">
-          <button class="btn btn-accent" onclick="unlockAdvisorDashboard()">دخول لوحة الموجهة الطلابية</button>
-        </div>
-      </div>
-
-      <div id="advisorDashboardContent" class="hidden">
-        <div class="card">
-          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;">
-            <div>
-              <h2>لوحة الموجهة الطلابية — التحليلات والبيانات</h2>
-              <p class="muted" style="margin:0;">متابعة الأداء والمكسب المعرفي والأثر السلوكي لجميع الطالبات المسجلات.</p>
-            </div>
-            <div class="actions-row" style="margin-top:0;">
-              <button class="btn btn-primary" onclick="refreshAdvisorData()">تحديث البيانات</button>
-              <button class="btn btn-secondary" onclick="exportAdvisorCSV()">تصدير إكسل (CSV)</button>
-              <button class="btn btn-secondary" onclick="lockAdvisorDashboard()">قفل اللوحة</button>
-            </div>
-          </div>
-
-          <div class="grid-3" style="margin-top:18px;">
-            <div class="kpi-card">
-              <div class="muted">إجمالي الطالبات المكتملات</div>
-              <div class="kpi-value" id="kpiTotalStudents">0</div>
-              <div class="kpi-formula">الطاقة المستهدفة: 600 طالبة</div>
-            </div>
-            <div class="kpi-card">
-              <div class="muted">متوسط القياس القبلي / البعدي</div>
-              <div class="kpi-value" id="kpiAvgPrePost">0 / 0</div>
-              <div class="kpi-formula">المقياس من 12 نقطة</div>
-            </div>
-            <div class="kpi-card">
-              <div class="muted">متوسط المكسب المباشر</div>
-              <div class="kpi-value" id="kpiAvgDirectGain">0</div>
-              <div class="kpi-formula">المعادلة: البعدي − القبلي</div>
-            </div>
-            <div class="kpi-card">
-              <div class="muted">متوسط المكسب المكتسب المعاير (Hake)</div>
-              <div class="kpi-value" id="kpiAvgNormGain">0%</div>
-              <div class="kpi-formula">المعادلة: (البعدي − القبلي) ÷ (12 − القبلي)</div>
-            </div>
-            <div class="kpi-card">
-              <div class="muted">نسبة الأثر السلوكي المستقل</div>
-              <div class="kpi-value" id="kpiBehaviorRate">0%</div>
-              <div class="kpi-formula">نسبة الطالبات ذوات خطة أثر سلوكي ≥ 3/6</div>
-            </div>
-            <div class="kpi-card">
-              <div class="muted">أكثر مجال مهني مختار</div>
-              <div class="kpi-value" style="font-size:1.1rem;" id="kpiTopDomainOverall">-</div>
-              <div class="kpi-formula">توزيع المجالات ظاهر أدناه</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>توزيع المجالات المهنية المختارة</h3>
-          <div id="domainDistributionContainer"></div>
-        </div>
-
-        <div class="card">
-          <h3>سجل نتائج الطالبات</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>الاسم الثلاثي</th>
-                  <th>القبلي</th>
-                  <th>البعدي</th>
-                  <th>المكسب المباشر</th>
-                  <th>المكسب المعاير</th>
-                  <th>الأثر السلوكي</th>
-                  <th>المجال الأقرب</th>
-                  <th>الطموح المهني</th>
-                  <th>إجراء</th>
-                </tr>
-              </thead>
-              <tbody id="advisorTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  </main>
 
   <script>
-    const SUPABASE_BASE_URL = "https://saqpjwezeyuuziwliwhc.supabase.co";
-    const SUPABASE_REST_URL = `${SUPABASE_BASE_URL}/rest/v1/student_results`;
-    const SUPABASE_PUBLISHABLE_KEY = "Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O";
-    const ADVISOR_PASSCODE = "2026";
+    // =========================================================================
+    // إعدادات الربط السحابي (Supabase) ولوحة الموجهة الطلابية
+    // =========================================================================
+    const SUPABASE_URL = 'https://saqpjwezeyuuziwliwhc.supabase.co';
+    const SUPABASE_ANON_KEY = 'Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O';
+    const TABLE_NAME = 'student_assessments';
+    const COUNSELOR_PASSCODE = '2026';
 
-    const PRE_QUESTIONS = [
-      {
-        id: "pre1",
-        text: "1. ما مدى معرفتكِ الحالية بتنوع المجالات والمهن المتاحة في سوق العمل؟",
-        options: [
-          { label: "لا أعرف إلا القليل جداً", score: 1 },
-          { label: "أعرف بعض المهن الشائعة فقط", score: 2 },
-          { label: "لدي معرفة متوسطة بعدة مجالات", score: 3 },
-          { label: "أعرف مجالات ومهارات متنوعة بوضوح", score: 4 }
-        ]
-      },
-      {
-        id: "pre2",
-        text: "2. كيف تقيّمين وضوح ميولكِ واهتماماتكِ الدراسية والمهنية اليوم؟",
-        options: [
-          { label: "غير واضحة تماماً بالنسبة لي", score: 1 },
-          { label: "أفكار متفرقة وغير مؤكدة", score: 2 },
-          { label: "بدأت تتضح لي بعض الميول", score: 3 },
-          { label: "واضحة ومحددة إلى حد كبير", score: 4 }
-        ]
-      },
-      {
-        id: "pre3",
-        text: "3. ما مدى ثقتكِ بقدرتكِ على ربط موادكِ الدراسية بمسار مهني مستقبلي؟",
-        options: [
-          { label: "لا أربط بينهما حالياً", score: 1 },
-          { label: "أجد صعوبة في الربط", score: 2 },
-          { label: "أستطيع الربط في بعض المواد", score: 3 },
-          { label: "أربط بوضوح بين موادي والمهن", score: 4 }
-        ]
-      }
-    ];
-
-    const POST_QUESTIONS = [
-      {
-        id: "post1",
-        text: "1. بعد استكشاف المجالات واللعبة، كيف أصبح فهمكِ لطبيعة المهن والمهارات المطلوبة؟",
-        options: [
-          { label: "ما زال محدوداً", score: 1 },
-          { label: "تحسن بشكل بسيط", score: 2 },
-          { label: "أصبح أوضح بكثير", score: 3 },
-          { label: "واضح جداً ومرتبط بمهارات واقعية", score: 4 }
-        ]
-      },
-      {
-        id: "post2",
-        text: "2. ما مدى وضوح المجال المهني الأقرب لميولكِ بعد هذه التجربة؟",
-        options: [
-          { label: "لم يتضح بعد", score: 1 },
-          { label: "لدي احتمال أو اثنان", score: 2 },
-          { label: "اتضح لي مجال أساسي مناسب", score: 3 },
-          { label: "واضح جداً وأشعر بالحماس تجاهه", score: 4 }
-        ]
-      },
-      {
-        id: "post3",
-        text: "3. ما مدى ثقتكِ في مناقشة خطتكِ المهنية المبكرة مع أسرتكِ والموجهة الطلابية؟",
-        options: [
-          { label: "أتردد كثيراً في مناقشتها", score: 1 },
-          { label: "أحتاج تشجيعاً إضافياً", score: 2 },
-          { label: "مستعدة لمناقشتها قريباً", score: 3 },
-          { label: "واثقة ومستعدة لمناقشتها بوضوح", score: 4 }
-        ]
-      }
-    ];
-
-    const BEHAVIOR_QUESTIONS = [
-      {
-        id: "beh1",
-        text: "خلال الأسبوع القادم، سأبحث وأقرأ عن مهنة واحدة في المجال الذي جذبني وأدوّن 3 مهارات تحتاجها.",
-        options: [
-          { label: "لن أتمكن من تنفيذها", score: 0 },
-          { label: "ربما أنفذها إذا توفر وقت", score: 1 },
-          { label: "سأنفذها بالتأكيد", score: 2 },
-          { label: "سأنفذها وأشارك ما تعلمته", score: 3 }
-        ]
-      },
-      {
-        id: "beh2",
-        text: "سأعرض اختياراتي واهتماماتي المهنية على أسرتي وأستشير الموجهة الطلابية في المدرسة.",
-        options: [
-          { label: "لا أخطط لذلك حالياً", score: 0 },
-          { label: "أفكر في ذلك لاحقاً", score: 1 },
-          { label: "سأتحدث معهما خلال هذا الأسبوع", score: 2 },
-          { label: "سأعد خطة قصيرة وأناقشها معهما", score: 3 }
-        ]
-      }
-    ];
-
-    const CAREER_DOMAINS = [
-      {
-        title: "الصحة والعلوم الحيوية",
-        tag: "الرعاية والعلوم الطبية",
-        summary: "يركز على الوقاية والعلاج وفهم جسم الإنسان والعلوم المخبرية لتحسين جودة الحياة.",
-        tasks: ["متابعة الحالات الصحية وتقديم الرعاية", "إجراء التحاليل والفحوصات المخبرية", "التوعية الصحية والوقائية للمجتمع"],
-        skills: ["الدقة والملاحظة", "التعاطف وضبط النفس", "العمل تحت المسؤولية"]
-      },
-      {
-        title: "التقنية والذكاء الرقمي",
-        tag: "البرمجة والبيانات والأمن السيبراني",
-        summary: "يهتم ببناء التطبيقات والأنظمة الذكية وتحليل البيانات وحماية المعلومات الرقمية.",
-        tasks: ["تطوير المواقع والتطبيقات والبرمجيات", "تحليل البيانات وبناء النماذج الذكية", "تأمين الشبكات وحماية البيانات"],
-        skills: ["التفكير المنطقي والتحليلي", "حل المشكلات التقنية", "التعلم الذاتي المستمر"]
-      },
-      {
-        title: "الهندسة والابتكار والبيئة",
-        tag: "التصميم الهندسي والاستدامة",
-        summary: "يجمع بين الرياضيات والعلوم والابتكار لتصميم المنشآت والأنظمة وحلول الاستدامة البيئية.",
-        tasks: ["تصميم الحلول الهندسية والنماذج الأولية", "إدارة الطاقة والموارد والبيئة المستدامة", "اختبار جودة الأنظمة والمشاريع"],
-        skills: ["التخيل المكاني والهندسي", "التخطيط والقياس الدقيق", "الابتكار العملي"]
-      },
-      {
-        title: "التصميم والإعلام والإبداع",
-        tag: "الهوية البصرية والمحتوى الإبداعي",
-        summary: "يركز على إيصال الأفكار والرسائل بصرياً ورقمياً وإعلامياً بأسلوب جذاب ومؤثر.",
-        tasks: ["تصميم الهويات البصرية والواجهات", "إنتاج المحتوى الإعلامي والمرئي", "سرد القصص وإدارة الحملات الإبداعية"],
-        skills: ["الذائقة البصرية والإبداع", "التواصل المؤثر", "المرونة وتجديد الأفكار"]
-      },
-      {
-        title: "الأعمال والقيادة وريادة المشاريع",
-        tag: "الإدارة والمشاريع والمالية",
-        summary: "يهتم بتحويل الأفكار إلى مشاريع مستدامة، وإدارة الموارد والفرق واتخاذ القرارات المدروسة.",
-        tasks: ["دراسة السوق وبناء نماذج المشاريع", "تنظيم الميزانيات والموارد والفرق", "قيادة المبادرات وتطوير النمو"],
-        skills: ["القيادة والتفاوض", "التفكير الاستراتيجي", "إدارة الوقت والمخاطر"]
-      },
-      {
-        title: "التربية والمجتمع والخدمة الإنسانية",
-        tag: "التعليم والإرشاد والتنمية المجتمعية",
-        summary: "يركز على بناء الإنسان وتمكين الأفراد وتقديم الإرشاد والدعم النفسي والاجتماعي والمبادرات التطوعية.",
-        tasks: ["التعليم وتصميم الأنشطة التربوية", "الإرشاد والدعم الأسري والمجتمعي", "قيادة المبادرات الإنسانية والتطوعية"],
-        skills: ["الإنصات الفعّال والإرشاد", "القدوة والصبر", "العمل الجماعي المجتمعي"]
-      }
-    ];
-
-    const MATCH_PAIRS = [
-      { id: "m1", clue: "كتابة أكواد تطبيق وتأمين البيانات الرقمية", target: "التقنية والذكاء الرقمي" },
-      { id: "m2", clue: "إجراء فحوصات مخبرية ودعم الرعاية الصحية", target: "الصحة والعلوم الحيوية" },
-      { id: "m3", clue: "ابتكار حلول للطاقة النظيفة وتصميم نماذج هندسية", target: "الهندسة والابتكار والبيئة" },
-      { id: "m4", clue: "تصميم هوية بصرية وإنتاج محتوى إعلامي هادف", target: "التصميم والإعلام والإبداع" }
-    ];
+    let supabaseClient = null;
+    let isDbConnected = false;
+    let cachedRecords = [];
 
     const state = {
-      studentName: "",
-      normalizedName: "",
-      dreamJob: "",
-      preAnswers: {},
-      postAnswers: {},
-      behaviorAnswers: {},
-      selectedClueId: null,
-      matchedIds: [],
-      gameAttempts: 0,
-      completedResult: null,
-      recordsCache: []
+      student: {
+        full_name: '',
+        grade_level: '',
+        track_interest: '',
+        school_name: ''
+      },
+      selectedCareer: null,
+      preTestAnswers: {}
     };
 
-    function normalizeArabicName(name) {
-      return (name || "")
-        .trim()
-        .replace(/[إأآا]/g, "ا")
-        .replace(/ى/g, "ي")
-        .replace(/ؤ/g, "و")
-        .replace(/ئ/g, "ي")
-        .replace(/ة/g, "ه")
-        .replace(/[\u064B-\u065F\u0670]/g, "")
-        .replace(/\s+/g, " ")
-        .toLowerCase();
-    }
+    // =========================================================================
+    // بيانات المهن التفاعلية (قابلة للنقر بالكامل)
+    // =========================================================================
+    const CAREERS = [
+      {
+        id: 'ai-engineer',
+        title: 'مهندسة ذكاء اصطناعي وتحليل بيانات',
+        category: 'الهندسة والتقنية',
+        salary: 'متوسط إلى مرتفع جداً',
+        education: 'بكالوريوس علوم الحاسب أو الذكاء الاصطناعي أو هندسة البيانات',
+        summary: 'تصميم نماذج ذكية وتدريبها على البيانات لحل المشكلات الواقعية وبناء تطبيقات مبتكرة.',
+        tasks: [
+          'تنظيف البيانات وبناء النماذج التنبؤية والتحليلية',
+          'اختبار دقة الأنظمة الذكية وتحسين أدائها',
+          'التعاون مع فرق المنتجات والقطاعات الصحية والمالية والتقنية'
+        ],
+        skills: ['التفكير المنطقي', 'البرمجة (Python)', 'الإحصاء والرياضيات', 'حل المشكلات']
+      },
+      {
+        id: 'clinical-pharmacist',
+        title: 'صيدلانية إكلينيكية',
+        category: 'العلوم الصحية',
+        salary: 'مرتفع ومستقر',
+        education: 'دكتور صيدلة (PharmD) مع سنة الامتياز والتدريب السريري',
+        summary: 'متابعة الخطط الدوائية للمرضى بالتنسيق مع الفرق الطبية وضمان الاستخدام الآمن والفعّال للدواء.',
+        tasks: [
+          'مراجعة الجرعات والتداخلات الدوائية للحالات السريرية',
+          'تقديم الاستشارات الدوائية للمرضى والكوادر الصحية',
+          'المشاركة في اللجان العلاجية وبرامج التوعية الصحية'
+        ],
+        skills: ['الدقة والانتباه للتفاصيل', 'التواصل الفعّال', 'العلوم الحيوية والكيمياء', 'اتخاذ القرار المسؤول']
+      },
+      {
+        id: 'product-designer',
+        title: 'مصممة تجربة وواجهة مستخدم (UX/UI)',
+        category: 'التصميم والإعلام',
+        salary: 'جيد إلى مرتفع',
+        education: 'التصميم الرقمي، الفنون البصرية، أو علوم الحاسب مع ملف أعمال تطبيقي',
+        summary: 'ابتكار واجهات تطبيقات ومواقع سهلة وواضحة وممتعة للمستخدمين بناءً على البحث وفهم سلوكهم.',
+        tasks: [
+          'إجراء اختبارات المستخدم وتصميم رحلة الاستخدام',
+          'بناء النماذج الأولية وأنظمة التصميم البصرية',
+          'العمل مع المطورين لتحويل التصاميم إلى منتجات حية'
+        ],
+        skills: ['الإبداع البصري', 'التعاطف مع المستخدم', 'تنظيم المعلومات', 'العمل الجماعي']
+      },
+      {
+        id: 'financial-analyst',
+        title: 'محللة مالية واستثمارية',
+        category: 'إدارة الأعمال والمالية',
+        salary: 'مرتفع',
+        education: 'بكالوريوس المالية، المحاسبة، أو الاقتصاد',
+        summary: 'دراسة البيانات المالية والمؤشرات الاقتصادية لتقييم المشاريع ودعم القرارات الاستثمارية.',
+        tasks: [
+          'إعداد النماذج المالية وتوقعات الإيرادات والتكاليف',
+          'تحليل أداء الشركات والقطاعات وإعداد التقارير',
+          'تقديم التوصيات المبنية على الأدلة للإدارة والمستثمرين'
+        ],
+        skills: ['تحليل الأرقام', 'التخطيط الاستراتيجي', 'كتابة التقارير', 'الموضوعية']
+      },
+      {
+        id: 'corporate-lawyer',
+        title: 'مستشارة قانونية وحوكمة',
+        category: 'القانون والعلوم الإنسانية',
+        salary: 'مرتفع',
+        education: 'بكالوريوس القانون أو الشريعة مع التدريب المهني',
+        summary: 'صياغة العقود ومراجعة السياسات واللوائح لضمان الامتثال القانوني وحماية الحقوق.',
+        tasks: [
+          'مراجعة العقود والاتفاقيات وإبداء الرأي القانوني',
+          'متابعة الالتزام بالأنظمة واللوائح التنظيمية',
+          'إعداد المذكرات القانونية ودعم التفاوض المؤسسي'
+        ],
+        skills: ['التحليل النقدي', 'قوة الحجة والإقناع', 'الدقة اللغوية', 'الأمانة المهنية']
+      },
+      {
+        id: 'biomedical-eng',
+        title: 'مهندسة أجهزة طبية',
+        category: 'الهندسة والتقنية',
+        salary: 'مرتفع ومستقر',
+        education: 'بكالوريوس الهندسة الطبية الحيوية',
+        summary: 'تطوير وصيانة وإدارة التقنيات والأجهزة الطبية المستخدمة في التشخيص والعلاج بالمستشفيات.',
+        tasks: [
+          'معايرة وفحص الأجهزة الطبية والتأكد من سلامتها',
+          'تدريب الكوادر التشغيلية على الاستخدام الصحيح',
+          'المساهمة في تحسين الحلول التقنية للرعاية الصحية'
+        ],
+        skills: ['الهندسة والفيزياء', 'إدارة الأعطال', 'العمل الميداني', 'السلامة والجودة']
+      }
+    ];
 
-    function isValidTripleName(name) {
-      const cleaned = (name || "").trim().replace(/\s+/g, " ");
-      const parts = cleaned.split(" ").filter(Boolean);
-      if (parts.length < 3) return false;
-      return parts.every(part => /^[\u0600-\u06FFa-zA-Z]{2,}$/.test(part));
-    }
+    // =========================================================================
+    // أسئلة القياس القبلي الكاملة (10 أسئلة شاملة)
+    // =========================================================================
+    const PRE_TEST_QUESTIONS = [
+      { id: 'q1', axis: 'الوعي المهني', text: 'لديّ معرفة واضحة بالمسارات الجامعية والمهنية المتاحة بعد المرحلة الدراسية.' },
+      { id: 'q2', axis: 'الوعي المهني', text: 'أفهم طبيعة المهام اليومية والمهارات المطلوبة في المهن التي تهمني.' },
+      { id: 'q3', axis: 'اكتشاف الذات', text: 'أستطيع تحديد نقاط قوتي وميولي وقيمي الشخصية التي تؤثر في اختياري المهني.' },
+      { id: 'q4', axis: 'اكتشاف الذات', text: 'أربط بين المواد الدراسية التي أستمتع بها وبين المهن المرتبطة بها.' },
+      { id: 'q5', axis: 'التخطيط والبحث', text: 'أبحث بانتظام عن معلومات موثوقة حول التخصصات واحتياج سوق العمل.' },
+      { id: 'q6', axis: 'التخطيط والبحث', text: 'أضع خطوات عملية لتطوير مهاراتي قبل اتخاذ قرار التخصص النهائي.' },
+      { id: 'q7', axis: 'الثقة بالقرار', text: 'أشعر بالثقة في قدرتي على موازنة رغبتي الشخصية مع الواقع العملي.' },
+      { id: 'q8', axis: 'الثقة بالقرار', text: 'أتعامل مع التردد أو تغير الاهتمامات بمرونة دون إحباط.' },
+      { id: 'q9', axis: 'الاستفادة من الإرشاد', text: 'أحرص على الاستفادة من جلسات الإرشاد والتوجيه المهني في المدرسة.' },
+      { id: 'q10', axis: 'الجاهزية العامة', text: 'أشعر بأنني مستعدة لبدء رحلة التخطيط لمستقبلي المهني بوعي وخطوات واضحة.' }
+    ];
 
-    function getSupabaseHeaders(prefer = "") {
-      const headers = {
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization": `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-        "Content-Type": "application/json"
-      };
-      if (prefer) headers["Prefer"] = prefer;
-      return headers;
-    }
+    // =========================================================================
+    // تهيئة Supabase والتحقق من الاتصال
+    // =========================================================================
+    async function initSupabase() {
+      const dot = document.getElementById('dbStatusDot');
+      const text = document.getElementById('dbStatusText');
 
-    async function checkCloudConnection() {
-      const badge = document.getElementById("cloudBadge");
       try {
-        const res = await fetch(`${SUPABASE_REST_URL}?select=id&limit=1`, {
-          headers: getSupabaseHeaders()
-        });
-        if (res.ok) {
-          badge.textContent = "متصل بقاعدة البيانات السحابية (Supabase)";
-          badge.style.background = "rgba(21, 128, 61, 0.28)";
-        } else {
-          badge.textContent = "وضع الحفظ المحلي الاحتياطي";
+        if (!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) {
+          throw new Error('مكتبة أو بيانات الربط غير مكتملة');
         }
-      } catch (e) {
-        badge.textContent = "وضع الحفظ المحلي الاحتياطي";
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { error } = await supabaseClient.from(TABLE_NAME).select('id').limit(1);
+        if (error) {
+          throw error;
+        }
+        isDbConnected = true;
+        dot.className = 'dot';
+        text.textContent = 'متصل بقاعدة البيانات (Supabase)';
+      } catch (err) {
+        isDbConnected = false;
+        dot.className = 'dot warn';
+        text.textContent = 'وضع الحفظ المحلي / التحقق من الاتصال';
+        console.warn('Supabase check:', err?.message || err);
       }
     }
 
-    function loadLocalRecords() {
+    function showNotice(type, message) {
+      const box = document.getElementById('globalNotice');
+      const cls = type === 'success' ? 'alert-success' : type === 'danger' ? 'alert-danger' : 'alert-info';
+      box.innerHTML = `<div class="alert ${cls}">${escapeHtml(message)}</div>`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function clearNotice() {
+      document.getElementById('globalNotice').innerHTML = '';
+    }
+
+    function escapeHtml(str = '') {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function normalizeFullName(name = '') {
+      return name.trim().replace(/\s+/g, ' ');
+    }
+
+    function hasThreeNames(name = '') {
+      const parts = normalizeFullName(name).split(' ').filter(Boolean);
+      return parts.length >= 3;
+    }
+
+    // =========================================================================
+    // التنقل بين التبويبات
+    // =========================================================================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== tabId);
+      });
+      updateStudentLabels();
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        clearNotice();
+        switchTab(btn.dataset.tab);
+      });
+    });
+
+    function updateStudentLabels() {
+      const badge = document.getElementById('activeStudentBadge');
+      const preLabel = document.getElementById('preTestStudentLabel');
+      const careerChip = document.getElementById('selectedCareerChip');
+
+      if (state.student.full_name) {
+        badge.textContent = `الطالبة: ${state.student.full_name}${state.student.grade_level ? ' — ' + state.student.grade_level : ''}`;
+        preLabel.textContent = `الطالبة: ${state.student.full_name}`;
+      } else {
+        badge.textContent = 'لم تُسجّل طالبة بعد';
+        preLabel.textContent = 'الطالبة: غير محددة';
+      }
+
+      careerChip.textContent = state.selectedCareer
+        ? `المهنة المختارة: ${state.selectedCareer.title}`
+        : 'لم يتم اختيار مهنة بعد';
+    }
+
+    // =========================================================================
+    // التحقق من تكرار الاسم الثلاثي في قاعدة البيانات
+    // =========================================================================
+    async function checkDuplicateFullName(fullName) {
+      const cleanName = normalizeFullName(fullName);
+
+      if (isDbConnected && supabaseClient) {
+        const { data, error } = await supabaseClient
+          .from(TABLE_NAME)
+          .select('id, full_name')
+          .ilike('full_name', cleanName);
+
+        if (!error && Array.isArray(data) && data.length > 0) {
+          return true;
+        }
+      }
+
+      const localList = getLocalRecords();
+      return localList.some(r => normalizeFullName(r.full_name).toLowerCase() === cleanName.toLowerCase());
+    }
+
+    function getLocalRecords() {
       try {
-        const raw = localStorage.getItem("mustaqbali_local_records_v1");
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) {
+        return JSON.parse(localStorage.getItem('mustaqbali_records_v1') || '[]');
+      } catch {
         return [];
       }
     }
 
-    function saveLocalRecords(list) {
-      try {
-        localStorage.setItem("mustaqbali_local_records_v1", JSON.stringify(list));
-      } catch (e) {}
+    function saveLocalRecord(record) {
+      const list = getLocalRecords();
+      list.unshift(record);
+      localStorage.setItem('mustaqbali_records_v1', JSON.stringify(list));
     }
 
-    async function isDuplicateNormalizedName(normName) {
-      const localList = loadLocalRecords();
-      if (localList.some(r => normalizeArabicName(r.normalized_name || r.student_name) === normName)) {
-        return true;
+    // =========================================================================
+    // نموذج بيانات الطالبة
+    // =========================================================================
+    document.getElementById('studentProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearNotice();
+
+      const fullName = normalizeFullName(document.getElementById('fullName').value);
+      const gradeLevel = document.getElementById('gradeLevel').value;
+      const trackInterest = document.getElementById('trackInterest').value;
+      const schoolName = document.getElementById('schoolName').value.trim();
+
+      if (!hasThreeNames(fullName)) {
+        showNotice('danger', 'يرجى كتابة الاسم الثلاثي كاملاً (ثلاثة مقاطع على الأقل) لمنع تكرار الأسماء.');
+        return;
       }
+
+      const btn = document.getElementById('saveProfileBtn');
+      btn.disabled = true;
+      btn.textContent = 'جارٍ التحقق من الاسم...';
+
       try {
-        const url = `${SUPABASE_REST_URL}?normalized_name=eq.${encodeURIComponent(normName)}&select=id`;
-        const res = await fetch(url, { headers: getSupabaseHeaders() });
-        if (res.ok) {
-          const rows = await res.json();
-          if (Array.isArray(rows) && rows.length > 0) return true;
+        const isDup = await checkDuplicateFullName(fullName);
+        if (isDup) {
+          showNotice('danger', `الاسم الثلاثي "${fullName}" مسجّل مسبقاً في النظام، ولا يُسمح بتكرار الاسم الثلاثي.`);
+          return;
         }
-      } catch (e) {}
-      return false;
-    }
 
-    async function saveStudentResultToCloud(payload) {
-      const localList = loadLocalRecords();
-      const filtered = localList.filter(r => normalizeArabicName(r.normalized_name || r.student_name) !== payload.normalized_name);
-      filtered.unshift(payload);
-      saveLocalRecords(filtered);
+        state.student = {
+          full_name: fullName,
+          grade_level: gradeLevel,
+          track_interest: trackInterest,
+          school_name: schoolName
+        };
+        updateStudentLabels();
+        showNotice('success', `تم حفظ بيانات الطالبة "${fullName}" بنجاح. يمكنكِ الآن استكشاف المهن أو بدء القياس القبلي.`);
+        switchTab('exploreTab');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'حفظ بيانات الطالبة والانتقال للاستكشاف';
+      }
+    });
 
-      try {
-        const res = await fetch(SUPABASE_REST_URL, {
-          method: "POST",
-          headers: getSupabaseHeaders("return=representation"),
-          body: JSON.stringify(payload)
+    document.getElementById('goExploreBtn').addEventListener('click', () => {
+      clearNotice();
+      switchTab('exploreTab');
+    });
+
+    // =========================================================================
+    // استكشاف المهن التفاعلي (الضغط على أي مهنة يفتح تفاصيلها واختيارها)
+    // =========================================================================
+    let activeCategory = 'الكل';
+
+    function renderCareerFilters() {
+      const categories = ['الكل', ...new Set(CAREERS.map(c => c.category))];
+      const bar = document.getElementById('careerFilterBar');
+      bar.innerHTML = '';
+
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `chip ${cat === activeCategory ? 'active' : ''}`;
+        btn.textContent = cat;
+        btn.addEventListener('click', () => {
+          activeCategory = cat;
+          renderCareerFilters();
+          renderCareersGrid();
         });
-        if (!res.ok) {
-          const errText = await res.text();
-          return { ok: false, error: errText };
-        }
-        const inserted = await res.json();
-        return { ok: true, row: Array.isArray(inserted) ? inserted[0] : payload };
-      } catch (e) {
-        return { ok: false, error: e.message };
-      }
-    }
-
-    async function fetchAllStudentResults() {
-      let cloudRows = [];
-      let cloudOk = false;
-      try {
-        const res = await fetch(`${SUPABASE_REST_URL}?select=*&order=created_at.desc`, {
-          headers: getSupabaseHeaders()
-        });
-        if (res.ok) {
-          cloudRows = await res.json();
-          cloudOk = true;
-        }
-      } catch (e) {}
-
-      const localRows = loadLocalRecords();
-      if (cloudOk) {
-        const merged = [...cloudRows];
-        for (const lr of localRows) {
-          const exists = merged.some(cr => normalizeArabicName(cr.normalized_name || cr.student_name) === normalizeArabicName(lr.normalized_name || lr.student_name));
-          if (!exists) merged.push(lr);
-        }
-        return merged;
-      }
-      return localRows;
-    }
-
-    async function deleteStudentRecord(record) {
-      const norm = normalizeArabicName(record.normalized_name || record.student_name);
-      const updatedLocal = loadLocalRecords().filter(r => normalizeArabicName(r.normalized_name || r.student_name) !== norm);
-      saveLocalRecords(updatedLocal);
-
-      try {
-        if (record.id !== undefined && record.id !== null) {
-          await fetch(`${SUPABASE_REST_URL}?id=eq.${encodeURIComponent(record.id)}`, {
-            method: "DELETE",
-            headers: getSupabaseHeaders()
-          });
-        } else if (norm) {
-          await fetch(`${SUPABASE_REST_URL}?normalized_name=eq.${encodeURIComponent(norm)}`, {
-            method: "DELETE",
-            headers: getSupabaseHeaders()
-          });
-        }
-      } catch (e) {}
-    }
-
-    function switchTab(tabName) {
-      document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.add("hidden"));
-      document.getElementById(`tab-${tabName}`).classList.remove("hidden");
-
-      document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.tab === tabName);
-      });
-
-      if (tabName === "card") {
-        renderAchievementCard();
-      }
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function renderQuestionSet(containerId, questions, answersObj) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      questions.forEach(q => {
-        const box = document.createElement("div");
-        box.className = "question-box";
-
-        const title = document.createElement("div");
-        title.className = "question-title";
-        title.textContent = q.text;
-        box.appendChild(title);
-
-        const group = document.createElement("div");
-        group.className = "choice-group";
-
-        q.options.forEach(opt => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "choice-btn" + (answersObj[q.id] === opt.score ? " selected" : "");
-          btn.textContent = opt.label;
-          btn.onclick = () => {
-            answersObj[q.id] = opt.score;
-            renderQuestionSet(containerId, questions, answersObj);
-          };
-          group.appendChild(btn);
-        });
-
-        box.appendChild(group);
-        container.appendChild(box);
+        bar.appendChild(btn);
       });
     }
 
-    function renderDomains() {
-      const container = document.getElementById("domainsContainer");
-      container.innerHTML = "";
-      CAREER_DOMAINS.forEach(dom => {
-        const card = document.createElement("div");
-        card.className = "domain-card";
+    function renderCareersGrid() {
+      const grid = document.getElementById('careersGrid');
+      const filtered = activeCategory === 'الكل'
+        ? CAREERS
+        : CAREERS.filter(c => c.category === activeCategory);
+
+      grid.innerHTML = '';
+      filtered.forEach(career => {
+        const isSelected = state.selectedCareer && state.selectedCareer.id === career.id;
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = `career-card ${isSelected ? 'selected' : ''}`;
         card.innerHTML = `
           <div>
-            <span class="domain-tag">${dom.tag}</span>
-            <h3>${dom.title}</h3>
-            <p class="muted" style="margin:6px 0 12px;">${dom.summary}</p>
-            <div class="domain-details">
-              <div><strong>أبرز المهام:</strong><ul>${dom.tasks.map(t => `<li>${t}</li>`).join("")}</ul></div>
-              <div style="margin-top:8px;"><strong>المهارات الداعمة:</strong> ${dom.skills.join(" • ")}</div>
-            </div>
+            <span class="tag">${escapeHtml(career.category)}</span>
+            <h3 style="margin:10px 0 6px; font-size:1.05rem; font-weight:800;">${escapeHtml(career.title)}</h3>
+            <p class="muted" style="margin:0;">${escapeHtml(career.summary)}</p>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.84rem; font-weight:700; color:var(--primary-dark); margin-top:6px;">
+            <span>${isSelected ? '✓ مختارة حالياً' : 'اضغطي لعرض التفاصيل'}</span>
+            <span>←</span>
           </div>
         `;
-        container.appendChild(card);
+        card.addEventListener('click', () => openCareerDetails(career.id));
+        grid.appendChild(card);
       });
     }
 
-    function shuffleArray(arr) {
-      const copy = [...arr];
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
+    function openCareerDetails(careerId) {
+      const career = CAREERS.find(c => c.id === careerId);
+      if (!career) return;
+
+      const panel = document.getElementById('careerDetailPanel');
+      panel.classList.remove('hidden');
+      panel.innerHTML = `
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;">
+          <div>
+            <span class="tag">${escapeHtml(career.category)}</span>
+            <h3 style="margin:6px 0 0; font-size:1.25rem; font-weight:800; color:var(--primary-dark);">${escapeHtml(career.title)}</h3>
+          </div>
+          <button type="button" class="btn btn-primary" id="chooseThisCareerBtn">اعتماد هذه المهنة كمهنتي المفضّلة</button>
+        </div>
+
+        <p style="margin-top:0;">${escapeHtml(career.summary)}</p>
+        <p style="margin:6px 0;"><strong>المسار التعليمي:</strong> ${escapeHtml(career.education)}</p>
+        <p style="margin:6px 0 12px;"><strong>المستوى المهني / العائد:</strong> ${escapeHtml(career.salary)}</p>
+
+        <div class="grid-2">
+          <div>
+            <strong>أبرز المهام المهنية:</strong>
+            <ul class="detail-list">
+              ${career.tasks.map(t => `<li>${escapeHtml(t)}</li>`).join('')}
+            </ul>
+          </div>
+          <div>
+            <strong>المهارات الأساسية:</strong>
+            <ul class="detail-list">
+              ${career.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('chooseThisCareerBtn').addEventListener('click', () => {
+        state.selectedCareer = career;
+        updateStudentLabels();
+        renderCareersGrid();
+        showNotice('success', `تم اختيار مهنة "${career.title}". يمكنكِ الآن الانتقال إلى القياس القبلي (10 أسئلة).`);
+      });
+
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // =========================================================================
+    // بناء وعرض القياس القبلي الكامل (10 أسئلة)
+    // =========================================================================
+    function renderPreTestQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = '';
+
+      PRE_TEST_QUESTIONS.forEach((q, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'question-item';
+
+        const optionsHtml = [1, 2, 3, 4, 5].map(val => {
+          const checked = state.preTestAnswers[q.id] === val ? 'checked' : '';
+          return `
+            <label class="likert-opt">
+              <input type="radio" name="${q.id}" value="${val}" ${checked} required />
+              <span>${val}</span>
+            </label>
+          `;
+        }).join('');
+
+        wrapper.innerHTML = `
+          <div class="question-title">
+            <span>${idx + 1}. ${escapeHtml(q.text)}</span>
+            <span class="tag">${escapeHtml(q.axis)}</span>
+          </div>
+          <div class="likert-options">${optionsHtml}</div>
+        `;
+
+        container.appendChild(wrapper);
+      });
+
+      container.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          state.preTestAnswers[e.target.name] = Number(e.target.value);
+          updateAnsweredCounter();
+        });
+      });
+
+      updateAnsweredCounter();
+    }
+
+    function updateAnsweredCounter() {
+      const count = Object.keys(state.preTestAnswers).length;
+      document.getElementById('answeredCounter').textContent = `تمت الإجابة على ${count} من ${PRE_TEST_QUESTIONS.length} أسئلة`;
+    }
+
+    document.getElementById('preTestForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearNotice();
+
+      const fullName = normalizeFullName(state.student.full_name || document.getElementById('fullName').value);
+      if (!fullName || !hasThreeNames(fullName)) {
+        showNotice('danger', 'يرجى أولاً تسجيل الاسم الثلاثي للطالبة في تبويب «بيانات الطالبة».');
+        switchTab('profileTab');
+        return;
       }
-      return copy;
-    }
 
-    let shuffledTargets = [];
+      const missing = PRE_TEST_QUESTIONS.filter(q => !state.preTestAnswers[q.id]);
+      if (missing.length > 0) {
+        showNotice('danger', `يرجى الإجابة على جميع الأسئلة العشرة (متبقي ${missing.length} سؤال).`);
+        return;
+      }
 
-    function resetMatchGame() {
-      state.selectedClueId = null;
-      state.matchedIds = [];
-      state.gameAttempts = 0;
-      shuffledTargets = shuffleArray(MATCH_PAIRS.map(p => p.target));
-      document.getElementById("gameFeedback").innerHTML = "";
-      renderMatchGame();
-    }
+      const btn = document.getElementById('submitPreTestBtn');
+      btn.disabled = true;
+      btn.textContent = 'جارٍ حفظ النتيجة...';
 
-    function renderMatchGame() {
-      const cluesEl = document.getElementById("gameCluesList");
-      const targetsEl = document.getElementById("gameTargetsList");
-      cluesEl.innerHTML = "";
-      targetsEl.innerHTML = "";
+      try {
+        const isDup = await checkDuplicateFullName(fullName);
+        if (isDup) {
+          showNotice('danger', `تم تسجيل القياس مسبقاً للاسم الثلاثي "${fullName}". لا يُسمح بتكرار الاسم الثلاثي.`);
+          return;
+        }
 
-      MATCH_PAIRS.forEach(pair => {
-        const isMatched = state.matchedIds.includes(pair.id);
-        const isSelected = state.selectedClueId === pair.id;
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "match-item" + (isMatched ? " matched" : isSelected ? " selected" : "");
-        btn.textContent = pair.clue + (isMatched ? ` ← ${pair.target}` : "");
-        btn.disabled = isMatched;
-        btn.onclick = () => {
-          state.selectedClueId = pair.id;
-          renderMatchGame();
+        const totalScore = PRE_TEST_QUESTIONS.reduce((sum, q) => sum + Number(state.preTestAnswers[q.id]), 0);
+        const maxScore = PRE_TEST_QUESTIONS.length * 5; // 50
+        const percentage = Math.round((totalScore / maxScore) * 100);
+
+        const levelText =
+          percentage >= 80 ? 'جاهزية مرتفعة جداً' :
+          percentage >= 60 ? 'جاهزية متوسطة إلى جيدة' :
+          'بحاجة إلى جلسات توجيه واستكشاف إضافية';
+
+        const payload = {
+          full_name: fullName,
+          grade_level: state.student.grade_level || 'غير محدد',
+          track_interest: state.student.track_interest || 'غير محدد',
+          school_name: state.student.school_name || '',
+          selected_career: state.selectedCareer ? state.selectedCareer.title : 'لم تُحدّد بعد',
+          pre_test_score: totalScore,
+          pre_test_max: maxScore,
+          pre_test_percentage: percentage,
+          answers_json: state.preTestAnswers,
+          created_at: new Date().toISOString()
         };
-        cluesEl.appendChild(btn);
-      });
 
-      shuffledTargets.forEach(targetName => {
-        const matchedPairForTarget = MATCH_PAIRS.find(p => p.target === targetName && state.matchedIds.includes(p.id));
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "match-item" + (matchedPairForTarget ? " matched" : "");
-        btn.textContent = targetName + (matchedPairForTarget ? " ✓" : "");
-        btn.disabled = Boolean(matchedPairForTarget);
-        btn.onclick = () => {
-          if (!state.selectedClueId) {
-            document.getElementById("gameFeedback").innerHTML = `<div class="alert alert-warn">اختاري أولاً نشاطاً أو مهارة من العمود الأول.</div>`;
-            return;
+        if (isDbConnected && supabaseClient) {
+          const { error } = await supabaseClient.from(TABLE_NAME).insert([payload]);
+          if (error) {
+            if (String(error.message || '').toLowerCase().includes('duplicate') || error.code === '23505') {
+              showNotice('danger', `الاسم الثلاثي "${fullName}" مسجّل مسبقاً في قاعدة البيانات.`);
+              return;
+            }
+            throw error;
           }
-          state.gameAttempts += 1;
-          const clueObj = MATCH_PAIRS.find(p => p.id === state.selectedClueId);
-          if (clueObj && clueObj.target === targetName) {
-            state.matchedIds.push(clueObj.id);
-            state.selectedClueId = null;
-            document.getElementById("gameFeedback").innerHTML = `<div class="alert alert-ok">تطابق صحيح! أحسنتِ الربط بين النشاط والمجال المهني.</div>`;
-          } else {
-            document.getElementById("gameFeedback").innerHTML = `<div class="alert alert-error">هذا المجال لا يطابق النشاط المحدد؛ جرّبي مجالاً آخر.</div>`;
-          }
-          renderMatchGame();
-        };
-        targetsEl.appendChild(btn);
-      });
+        } else {
+          saveLocalRecord({ ...payload, id: 'local-' + Date.now() });
+        }
 
-      document.getElementById("gameScoreText").textContent = `${state.matchedIds.length} / ${MATCH_PAIRS.length}`;
-      document.getElementById("gameAttemptsText").textContent = String(state.gameAttempts);
-    }
+        const resultBox = document.getElementById('preTestResultBox');
+        resultBox.classList.remove('hidden');
+        resultBox.innerHTML = `
+          <div class="alert alert-success">
+            <div style="font-size:1.05rem; margin-bottom:6px;">تم تسجيل إجابات القياس القبلي (10 أسئلة) بنجاح!</div>
+            <div>الطالبة: <strong>${escapeHtml(fullName)}</strong></div>
+            <div>المجموع: <strong>${totalScore} من ${maxScore}</strong> (${percentage}%) — <strong>${levelText}</strong></div>
+            <div>المهنة المختارة: <strong>${escapeHtml(payload.selected_career)}</strong></div>
+          </div>
+        `;
+        showNotice('success', 'تم حفظ نتيجتكِ بنجاح وإرسالها إلى لوحة الموجهة الطلابية.');
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (err) {
+        console.error(err);
+        showNotice('danger', 'حدث خطأ أثناء حفظ النتيجة في قاعدة البيانات. تحققي من إعدادات الجدول في Supabase.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'إرسال وحفظ القياس القبلي';
+      }
+    });
 
-    async function startJourney() {
-      const rawName = document.getElementById("studentNameInput").value.trim().replace(/\s+/g, " ");
-      const dreamJob = document.getElementById("dreamJobInput").value.trim();
-      const feedback = document.getElementById("nameFeedback");
-
-      if (!isValidTripleName(rawName)) {
-        feedback.innerHTML = `<div class="alert alert-error">يرجى إدخال الاسم الثلاثي الكامل (الاسم الأول واسم الأب واسم الجد أو العائلة) بحروف صحيحة.</div>`;
+    // =========================================================================
+    // لوحة الموجهة الطلابية
+    // =========================================================================
+    document.getElementById('unlockCounselorBtn').addEventListener('click', async () => {
+      clearNotice();
+      const code = document.getElementById('counselorPasscode').value.trim();
+      if (code !== COUNSELOR_PASSCODE) {
+        showNotice('danger', 'رمز الدخول غير صحيح. الرمز الافتراضي هو 2026.');
         return;
       }
+      document.getElementById('counselorLockCard').classList.add('hidden');
+      document.getElementById('counselorDashboardCard').classList.remove('hidden');
+      await loadCounselorRecords();
+    });
 
-      const norm = normalizeArabicName(rawName);
-      const duplicate = await isDuplicateNormalizedName(norm);
-      if (duplicate) {
-        feedback.innerHTML = `<div class="alert alert-error">عذراً، تم تسجيل هذا الاسم الثلاثي مسبقاً على مستوى المدرسة. يُسمح بمشاركة واحدة لكل طالبة.</div>`;
-        return;
+    document.getElementById('lockCounselorBtn').addEventListener('click', () => {
+      document.getElementById('counselorDashboardCard').classList.add('hidden');
+      document.getElementById('counselorLockCard').classList.remove('hidden');
+      document.getElementById('counselorPasscode').value = '';
+    });
+
+    document.getElementById('refreshRecordsBtn').addEventListener('click', loadCounselorRecords);
+    document.getElementById('searchStudentInput').addEventListener('input', renderRecordsTable);
+    document.getElementById('exportCsvBtn').addEventListener('click', exportRecordsCsv);
+
+    async function loadCounselorRecords() {
+      const tbody = document.getElementById('recordsTableBody');
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">جارٍ تحميل السجلات...</td></tr>';
+
+      let rows = [];
+      if (isDbConnected && supabaseClient) {
+        const { data, error } = await supabaseClient
+          .from(TABLE_NAME)
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (!error && Array.isArray(data)) {
+          rows = data;
+        }
       }
 
-      const allPreAnswered = PRE_QUESTIONS.every(q => typeof state.preAnswers[q.id] === "number");
-      if (!allPreAnswered) {
-        feedback.innerHTML = `<div class="alert alert-error">يرجى الإجابة عن جميع أسئلة القياس القبلي الثلاثة قبل الانتقال.</div>`;
-        return;
-      }
-
-      state.studentName = rawName;
-      state.normalizedName = norm;
-      state.dreamJob = dreamJob || "غير محدد";
-      feedback.innerHTML = `<div class="alert alert-ok">تم التحقق من الاسم وحفظ القياس القبلي. يمكنكِ الآن استكشاف المجالات.</div>`;
-      switchTab("explore");
-    }
-
-    async function submitFinalAssessment() {
-      const postFeedback = document.getElementById("postFeedback");
-      const rawName = document.getElementById("studentNameInput").value.trim().replace(/\s+/g, " ");
-
-      if (!state.studentName && isValidTripleName(rawName)) {
-        state.studentName = rawName;
-        state.normalizedName = normalizeArabicName(rawName);
-        state.dreamJob = document.getElementById("dreamJobInput").value.trim() || "غير محدد";
-      }
-
-      if (!state.studentName || !isValidTripleName(state.studentName)) {
-        postFeedback.innerHTML = `<div class="alert alert-error">يرجى أولاً إدخال الاسم الثلاثي الصحيح في قسم التسجيل والقياس القبلي.</div>`;
-        return;
-      }
-
-      if (!PRE_QUESTIONS.every(q => typeof state.preAnswers[q.id] === "number")) {
-        postFeedback.innerHTML = `<div class="alert alert-error">يرجى إكمال أسئلة القياس القبلي أولاً.</div>`;
-        return;
-      }
-
-      if (!POST_QUESTIONS.every(q => typeof state.postAnswers[q.id] === "number")) {
-        postFeedback.innerHTML = `<div class="alert alert-error">يرجى الإجابة عن جميع أسئلة القياس البعدي الثلاثة.</div>`;
-        return;
-      }
-
-      if (!BEHAVIOR_QUESTIONS.every(q => typeof state.behaviorAnswers[q.id] === "number")) {
-        postFeedback.innerHTML = `<div class="alert alert-error">يرجى الإجابة عن أسئلة الأثر السلوكي المستقل.</div>`;
-        return;
-      }
-
-      const topDomain = document.getElementById("selectedTopDomain").value;
-      if (!topDomain) {
-        postFeedback.innerHTML = `<div class="alert alert-error">يرجى اختيار المجال المهني الأقرب لاهتماماتكِ بعد التجربة.</div>`;
-        return;
-      }
-
-      const duplicate = await isDuplicateNormalizedName(state.normalizedName);
-      if (duplicate) {
-        postFeedback.innerHTML = `<div class="alert alert-error">تم تسجيل هذا الاسم الثلاثي مسبقاً في قاعدة البيانات.</div>`;
-        return;
-      }
-
-      const preScore = PRE_QUESTIONS.reduce((sum, q) => sum + state.preAnswers[q.id], 0);
-      const postScore = POST_QUESTIONS.reduce((sum, q) => sum + state.postAnswers[q.id], 0);
-      const directGain = postScore - preScore;
-      const denom = 12 - preScore;
-      const normalizedGain = denom > 0 ? Number(((directGain / denom) * 100).toFixed(1)) : 0;
-      const behavioralImpact = BEHAVIOR_QUESTIONS.reduce((sum, q) => sum + state.behaviorAnswers[q.id], 0);
-
-      const beh1Label = BEHAVIOR_QUESTIONS[0].options.find(o => o.score === state.behaviorAnswers.beh1)?.label || "";
-      const beh2Label = BEHAVIOR_QUESTIONS[1].options.find(o => o.score === state.behaviorAnswers.beh2)?.label || "";
-
-      const record = {
-        student_name: state.studentName,
-        normalized_name: state.normalizedName,
-        pre_score: preScore,
-        post_score: postScore,
-        direct_gain: directGain,
-        normalized_gain: normalizedGain,
-        behavioral_impact: behavioralImpact,
-        top_domain: topDomain,
-        dream_job: state.dreamJob,
-        behavior_plan: `• استكشاف مهنة: ${beh1Label} • مشاركة الخطة: ${beh2Label}`
-      };
-
-      const saveResult = await saveStudentResultToCloud(record);
-      state.completedResult = saveResult.row || record;
-
-      postFeedback.innerHTML = saveResult.ok
-        ? `<div class="alert alert-ok">تم حفظ نتيجتكِ بنجاح في قاعدة البيانات السحابية وإصدار بطاقة الإنجاز.</div>`
-        : `<div class="alert alert-warn">تم حفظ نتيجتكِ محلياً وإصدار بطاقة الإنجاز بنجاح.</div>`;
-
-      renderAchievementCard();
-      switchTab("card");
-    }
-
-    function renderAchievementCard() {
-      const emptyBox = document.getElementById("achievementEmptyState");
-      const cardBox = document.getElementById("achievementCardContainer");
-      const res = state.completedResult;
-
-      if (!res) {
-        emptyBox.classList.remove("hidden");
-        cardBox.classList.add("hidden");
-        return;
-      }
-
-      emptyBox.classList.add("hidden");
-      cardBox.classList.remove("hidden");
-
-      document.getElementById("cardStudentName").textContent = res.student_name;
-      document.getElementById("cardDreamJobText").textContent = `الطموح المهني المذكور: ${res.dream_job || "غير محدد"}`;
-      document.getElementById("cardPreScore").textContent = `${res.pre_score} / 12`;
-      document.getElementById("cardPostScore").textContent = `${res.post_score} / 12`;
-      document.getElementById("cardTopDomain").textContent = res.top_domain;
-      document.getElementById("cardBehaviorPlan").textContent = res.behavior_plan || `مستوى الأثر السلوكي: ${res.behavioral_impact} / 6`;
-      document.getElementById("cardDateText").textContent = new Date().toLocaleDateString("ar-SA");
-    }
-
-    function unlockAdvisorDashboard() {
-      const pass = document.getElementById("advisorPassInput").value.trim();
-      const errBox = document.getElementById("advisorLoginError");
-      if (pass !== ADVISOR_PASSCODE) {
-        errBox.innerHTML = `<div class="alert alert-error">كلمة المرور غير صحيحة.</div>`;
-        return;
-      }
-      errBox.innerHTML = "";
-      document.getElementById("advisorLoginBox").classList.add("hidden");
-      document.getElementById("advisorDashboardContent").classList.remove("hidden");
-      refreshAdvisorData();
-    }
-
-    function lockAdvisorDashboard() {
-      document.getElementById("advisorPassInput").value = "";
-      document.getElementById("advisorDashboardContent").classList.add("hidden");
-      document.getElementById("advisorLoginBox").classList.remove("hidden");
-    }
-
-    async function refreshAdvisorData() {
-      const records = await fetchAllStudentResults();
-      state.recordsCache = records;
-
-      const total = records.length;
-      document.getElementById("kpiTotalStudents").textContent = String(total);
-
-      if (total === 0) {
-        document.getElementById("kpiAvgPrePost").textContent = "0 / 0";
-        document.getElementById("kpiAvgDirectGain").textContent = "0";
-        document.getElementById("kpiAvgNormGain").textContent = "0%";
-        document.getElementById("kpiBehaviorRate").textContent = "0%";
-        document.getElementById("kpiTopDomainOverall").textContent = "-";
-        document.getElementById("domainDistributionContainer").innerHTML = `<p class="muted">لا توجد بيانات مسجلة بعد.</p>`;
-        document.getElementById("advisorTableBody").innerHTML = `<tr><td colspan="9" style="text-align:center;">لا توجد سجلات بعد</td></tr>`;
-        return;
-      }
-
-      const avgPre = (records.reduce((s, r) => s + Number(r.pre_score || 0), 0) / total).toFixed(1);
-      const avgPost = (records.reduce((s, r) => s + Number(r.post_score || 0), 0) / total).toFixed(1);
-      const avgDirectGain = (records.reduce((s, r) => s + Number(r.direct_gain || 0), 0) / total).toFixed(2);
-      const avgNormGain = (records.reduce((s, r) => s + Number(r.normalized_gain || 0), 0) / total).toFixed(1);
-      const behaviorCount = records.filter(r => Number(r.behavioral_impact || 0) >= 3).length;
-      const behaviorRate = ((behaviorCount / total) * 100).toFixed(1);
-
-      const domainCounts = {};
-      CAREER_DOMAINS.forEach(d => { domainCounts[d.title] = 0; });
-      records.forEach(r => {
-        const d = r.top_domain || "غير محدد";
-        domainCounts[d] = (domainCounts[d] || 0) + 1;
-      });
-
-      let topDomainName = "-";
-      let maxCount = -1;
-      Object.entries(domainCounts).forEach(([dom, cnt]) => {
-        if (cnt > maxCount) {
-          maxCount = cnt;
-          topDomainName = dom;
+      const localRows = getLocalRecords();
+      const mapByName = new Map();
+      [...rows, ...localRows].forEach(item => {
+        const key = normalizeFullName(item.full_name).toLowerCase();
+        if (!mapByName.has(key)) {
+          mapByName.set(key, item);
         }
       });
 
-      document.getElementById("kpiAvgPrePost").textContent = `${avgPre} / ${avgPost}`;
-      document.getElementById("kpiAvgDirectGain").textContent = `${Number(avgDirectGain) >= 0 ? "+" : ""}${avgDirectGain}`;
-      document.getElementById("kpiAvgNormGain").textContent = `${avgNormGain}%`;
-      document.getElementById("kpiBehaviorRate").textContent = `${behaviorRate}%`;
-      document.getElementById("kpiTopDomainOverall").textContent = maxCount > 0 ? `${topDomainName} (${maxCount})` : "-";
+      cachedRecords = Array.from(mapByName.values());
+      updateStats(cachedRecords);
+      renderRecordsTable();
+    }
 
-      const distContainer = document.getElementById("domainDistributionContainer");
-      distContainer.innerHTML = Object.entries(domainCounts).map(([dom, cnt]) => {
-        const pct = total > 0 ? ((cnt / total) * 100).toFixed(1) : 0;
+    function updateStats(records) {
+      document.getElementById('statTotalStudents').textContent = records.length;
+
+      if (!records.length) {
+        document.getElementById('statAvgScore').textContent = '0%';
+        document.getElementById('statTopTrack').textContent = '—';
+        return;
+      }
+
+      const sumPct = records.reduce((acc, r) => acc + (Number(r.pre_test_percentage) || 0), 0);
+      document.getElementById('statAvgScore').textContent = `${Math.round(sumPct / records.length)}%`;
+
+      const trackCounts = {};
+      records.forEach(r => {
+        const t = r.track_interest || 'غير محدد';
+        trackCounts[t] = (trackCounts[t] || 0) + 1;
+      });
+      const topTrack = Object.entries(trackCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '—';
+      document.getElementById('statTopTrack').textContent = topTrack;
+    }
+
+    function renderRecordsTable() {
+      const q = (document.getElementById('searchStudentInput').value || '').trim().toLowerCase();
+      const tbody = document.getElementById('recordsTableBody');
+
+      const filtered = cachedRecords.filter(r => {
+        const hay = `${r.full_name || ''} ${r.grade_level || ''} ${r.track_interest || ''} ${r.selected_career || ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">لا توجد سجلات مطابقة.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((r, i) => {
+        const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString('ar-SA') : '—';
+        const scoreStr = `${r.pre_test_score ?? '—'} / ${r.pre_test_max ?? 50} (${r.pre_test_percentage ?? 0}%)`;
         return `
-          <div class="bar-row">
-            <div class="bar-head"><span>${dom}</span><span>${cnt} طالبة (${pct}%)</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:${pct}%;"></div></div>
-          </div>
+          <tr>
+            <td>${i + 1}</td>
+            <td><strong>${escapeHtml(r.full_name || '')}</strong></td>
+            <td>${escapeHtml(r.grade_level || '')}</td>
+            <td>${escapeHtml(r.track_interest || '')}</td>
+            <td>${escapeHtml(r.selected_career || '')}</td>
+            <td>${escapeHtml(scoreStr)}</td>
+            <td>${escapeHtml(dateStr)}</td>
+            <td>
+              <button type="button" class="btn btn-danger" onclick="deleteRecord('${escapeHtml(String(r.id || ''))}', '${escapeHtml(String(r.full_name || ''))}')">حذف</button>
+            </td>
+          </tr>
         `;
-      }).join("");
-
-      const tbody = document.getElementById("advisorTableBody");
-      tbody.innerHTML = "";
-      records.forEach((rec, idx) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${escapeHtml(rec.student_name || "")}</strong></td>
-          <td>${rec.pre_score ?? 0}</td>
-          <td>${rec.post_score ?? 0}</td>
-          <td>${Number(rec.direct_gain || 0) >= 0 ? "+" : ""}${rec.direct_gain ?? 0}</td>
-          <td>${rec.normalized_gain ?? 0}%</td>
-          <td>${rec.behavioral_impact ?? 0} / 6</td>
-          <td>${escapeHtml(rec.top_domain || "")}</td>
-          <td>${escapeHtml(rec.dream_job || "")}</td>
-          <td><button class="btn btn-danger" style="padding:6px 10px; font-size:0.82rem;" onclick="handleDeleteRecord(${idx})">حذف</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
+      }).join('');
     }
 
-    async function handleDeleteRecord(index) {
-      const rec = state.recordsCache[index];
-      if (!rec) return;
-      await deleteStudentRecord(rec);
-      await refreshAdvisorData();
-    }
+    window.deleteRecord = async function(id, fullName) {
+      if (!confirm(`هل أنتِ متأكدة من حذف سجل الطالبة "${fullName}"؟`)) return;
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-    }
+      if (isDbConnected && supabaseClient && id && !String(id).startsWith('local-')) {
+        await supabaseClient.from(TABLE_NAME).delete().eq('id', id);
+      }
 
-    function exportAdvisorCSV() {
-      const rows = state.recordsCache || [];
-      const headers = [
-        "الاسم الثلاثي",
-        "القياس القبلي",
-        "القياس البعدي",
-        "المكسب المباشر",
-        "المكسب المعاير (%)",
-        "الأثر السلوكي (من 6)",
-        "المجال الأقرب",
-        "الطموح المهني"
-      ];
-      const csvLines = [
-        "\uFEFF" + headers.map(h => `"${h}"`).join(",")
-      ];
+      const remainingLocal = getLocalRecords().filter(
+        r => String(r.id) !== String(id) && normalizeFullName(r.full_name).toLowerCase() !== normalizeFullName(fullName).toLowerCase()
+      );
+      localStorage.setItem('mustaqbali_records_v1', JSON.stringify(remainingLocal));
 
-      rows.forEach(r => {
-        const line = [
-          r.student_name || "",
-          r.pre_score ?? 0,
-          r.post_score ?? 0,
-          r.direct_gain ?? 0,
-          r.normalized_gain ?? 0,
-          r.behavioral_impact ?? 0,
-          r.top_domain || "",
-          r.dream_job || ""
-        ].map(val => `"${String(val).replace(/"/g, '""')}"`).join(",");
-        csvLines.push(line);
+      showNotice('success', `تم حذف سجل "${fullName}".`);
+      await loadCounselorRecords();
+    };
+
+    function exportRecordsCsv() {
+      if (!cachedRecords.length) {
+        showNotice('info', 'لا توجد بيانات لتصديرها.');
+        return;
+      }
+
+      const headers = ['الاسم الثلاثي', 'الصف', 'المجال', 'المهنة المختارة', 'الدرجة', 'النسبة المئوية', 'التاريخ'];
+      const lines = [headers.join(',')];
+
+      cachedRecords.forEach(r => {
+        const row = [
+          r.full_name || '',
+          r.grade_level || '',
+          r.track_interest || '',
+          r.selected_career || '',
+          r.pre_test_score ?? '',
+          (r.pre_test_percentage ?? '') + '%',
+          r.created_at ? new Date(r.created_at).toLocaleDateString('ar-SA') : ''
+        ].map(val => `"${String(val).replace(/"/g, '""')}"`);
+        lines.push(row.join(','));
       });
 
-      const blob = new Blob([csvLines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = "نتائج_التوجيه_المهني.csv";
+      a.download = 'mustaqbali-counselor-records.csv';
       a.click();
       URL.revokeObjectURL(url);
     }
 
-    renderQuestionSet("preQuestionsContainer", PRE_QUESTIONS, state.preAnswers);
-    renderQuestionSet("postQuestionsContainer", POST_QUESTIONS, state.postAnswers);
-    renderQuestionSet("behaviorQuestionsContainer", BEHAVIOR_QUESTIONS, state.behaviorAnswers);
-    renderDomains();
-    resetMatchGame();
-    checkCloudConnection();
+    // =========================================================================
+    // تشغيل التطبيق عند التحميل
+    // =========================================================================
+    renderCareerFilters();
+    renderCareersGrid();
+    renderPreTestQuestions();
+    updateStudentLabels();
+    initSupabase();
   </script>
 </body>
 </html>
