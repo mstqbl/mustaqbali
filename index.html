@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مستقبلي يبدأ الآن | منصة التوجيه المهني لطالبات المرحلة المتوسطة</title>
+  <title>مستقبلي يبدأ الآن | منصة التوجيه المهني والقياس القبلي والبعدي والأثر</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -29,9 +29,7 @@
       --shadow: 0 10px 28px rgba(19, 34, 56, 0.06);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -52,7 +50,7 @@
     }
 
     .topbar-inner {
-      max-width: 1120px;
+      max-width: 1160px;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
@@ -61,11 +59,7 @@
       gap: 12px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .brand { display: flex; align-items: center; gap: 12px; }
 
     .brand-badge {
       width: 44px;
@@ -78,17 +72,8 @@
       font-weight: 800;
     }
 
-    .brand h1 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 800;
-    }
-
-    .brand p {
-      margin: 0;
-      font-size: 0.85rem;
-      opacity: 0.9;
-    }
+    .brand h1 { margin: 0; font-size: 1.25rem; font-weight: 800; }
+    .brand p { margin: 0; font-size: 0.85rem; opacity: 0.9; }
 
     .status-pill {
       display: inline-flex;
@@ -102,51 +87,27 @@
       color: #fff;
     }
 
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #4ade80;
-    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; }
+    .dot.warn { background: #facc15; }
 
-    .dot.warn {
-      background: #facc15;
-    }
+    .container { max-width: 1160px; margin: 24px auto 64px; padding: 0 18px; }
 
-    .dot.err {
-      background: #f87171;
-    }
-
-    .container {
-      max-width: 1120px;
-      margin: 24px auto 64px;
-      padding: 0 18px;
-    }
-
-    .nav-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 22px;
-    }
+    .nav-tabs { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 22px; }
 
     .tab-btn {
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--ink);
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      padding: 11px 18px;
+      padding: 10px 15px;
       border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .tab-btn:hover {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-    }
+    .tab-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
 
     .tab-btn.active {
       background: var(--primary);
@@ -173,46 +134,16 @@
       margin-bottom: 18px;
     }
 
-    .card h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-    }
+    .card h2 { margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); }
+    .muted { color: var(--muted); font-size: 0.92rem; }
 
-    .muted {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    label { font-weight: 700; font-size: 0.92rem; }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 16px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    label {
-      font-weight: 700;
-      font-size: 0.92rem;
-    }
-
-    input[type="text"],
-    input[type="password"],
-    select,
-    textarea {
+    input[type="text"], input[type="password"], select, textarea {
       width: 100%;
       padding: 11px 14px;
       border: 1px solid var(--border);
@@ -223,9 +154,7 @@
       color: var(--ink);
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(15, 92, 110, 0.12);
@@ -234,9 +163,9 @@
     .btn {
       border: none;
       border-radius: 12px;
-      padding: 12px 20px;
+      padding: 11px 18px;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -246,41 +175,13 @@
       transition: all 0.2s ease;
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-soft {
-      background: var(--surface-soft);
-      color: var(--ink);
-      border: 1px solid var(--border);
-    }
-
-    .btn-soft:hover {
-      background: var(--primary-soft);
-    }
-
-    .btn-accent {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .btn-danger {
-      background: var(--danger);
-      color: #fff;
-      padding: 7px 12px;
-      font-size: 0.82rem;
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-soft { background: var(--surface-soft); color: var(--ink); border: 1px solid var(--border); }
+    .btn-soft:hover { background: var(--primary-soft); }
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; padding: 7px 12px; font-size: 0.82rem; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .alert {
       padding: 13px 16px;
@@ -290,31 +191,11 @@
       margin-bottom: 16px;
     }
 
-    .alert-success {
-      background: var(--success-soft);
-      color: var(--success);
-      border: 1px solid #b7ebc6;
-    }
+    .alert-success { background: var(--success-soft); color: var(--success); border: 1px solid #b7ebc6; }
+    .alert-danger { background: var(--danger-soft); color: var(--danger); border: 1px solid #fecdca; }
+    .alert-info { background: var(--primary-soft); color: var(--primary-dark); border: 1px solid #bce0e8; }
 
-    .alert-danger {
-      background: var(--danger-soft);
-      color: var(--danger);
-      border: 1px solid #fecdca;
-    }
-
-    .alert-info {
-      background: var(--primary-soft);
-      color: var(--primary-dark);
-      border: 1px solid #bce0e8;
-    }
-
-    /* استكشاف المهن التفاعلي */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
 
     .chip {
       border: 1px solid var(--border);
@@ -328,11 +209,7 @@
       cursor: pointer;
     }
 
-    .chip.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
+    .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
     .career-card {
       border: 1.5px solid var(--border);
@@ -357,10 +234,7 @@
       box-shadow: 0 10px 22px rgba(15, 92, 110, 0.12);
     }
 
-    .career-card.selected {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-    }
+    .career-card.selected { border-color: var(--accent); background: var(--accent-soft); }
 
     .tag {
       display: inline-block;
@@ -380,12 +254,8 @@
       margin-top: 20px;
     }
 
-    .detail-list {
-      margin: 8px 0 16px;
-      padding-right: 20px;
-    }
+    .detail-list { margin: 8px 0 16px; padding-right: 20px; }
 
-    /* القياس القبلي الكامل */
     .likert-scale-legend {
       display: flex;
       flex-wrap: wrap;
@@ -406,29 +276,11 @@
       background: #fcfdff;
     }
 
-    .question-title {
-      font-weight: 700;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
+    .question-title { font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 10px; }
 
-    .likert-options {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(56px, 1fr));
-      gap: 8px;
-    }
-
-    .likert-opt {
-      position: relative;
-    }
-
-    .likert-opt input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
+    .likert-options { display: grid; grid-template-columns: repeat(5, minmax(56px, 1fr)); gap: 8px; }
+    .likert-opt { position: relative; }
+    .likert-opt input { position: absolute; opacity: 0; pointer-events: none; }
 
     .likert-opt span {
       display: flex;
@@ -445,19 +297,9 @@
       transition: all 0.15s ease;
     }
 
-    .likert-opt input:checked + span {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
+    .likert-opt input:checked + span { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* لوحة الموجهة الطلابية */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 14px; margin-bottom: 20px; }
 
     .stat-box {
       background: var(--surface-soft);
@@ -466,54 +308,39 @@
       padding: 16px;
     }
 
-    .stat-num {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--primary-dark);
+    .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); }
+
+    .impact-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
     }
 
-    .table-wrap {
-      overflow-x: auto;
+    .impact-box {
       border: 1px solid var(--border);
       border-radius: 14px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-      background: #fff;
-    }
-
-    th, td {
-      padding: 11px 12px;
-      border-bottom: 1px solid var(--border);
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    th {
+      padding: 16px;
       background: var(--surface-soft);
-      font-weight: 800;
-      color: var(--primary-dark);
     }
 
-    .hidden {
-      display: none !important;
+    .impact-box.highlight {
+      background: var(--success-soft);
+      border-color: #b7ebc6;
     }
+
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; background: #fff; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+    th { background: var(--surface-soft); font-weight: 800; color: var(--primary-dark); }
+
+    .hidden { display: none !important; }
 
     @media (max-width: 640px) {
-      .likert-options {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 5px;
-      }
-      .likert-opt span {
-        padding: 8px 3px;
-        font-size: 0.78rem;
-      }
-      .card {
-        padding: 18px;
-      }
+      .likert-options { grid-template-columns: repeat(5, 1fr); gap: 5px; }
+      .likert-opt span { padding: 8px 3px; font-size: 0.78rem; }
+      .card { padding: 18px; }
     }
   </style>
 </head>
@@ -524,7 +351,7 @@
         <div class="brand-badge">م</div>
         <div>
           <h1>مستقبلي يبدأ الآن</h1>
-          <p>منصة التوجيه المهني والقياس القبلي لطالبات المرحلة المتوسطة</p>
+          <p>منصة التوجيه المهني والقياس القبلي والبعدي وقياس الأثر لطالبات المرحلة المتوسطة</p>
         </div>
       </div>
       <div class="status-pill" id="dbStatusPill">
@@ -538,19 +365,21 @@
     <nav class="nav-tabs" aria-label="أقسام المنصة">
       <button class="tab-btn active" data-tab="profileTab">1. بيانات الطالبة</button>
       <button class="tab-btn" data-tab="exploreTab">2. استكشاف المهن</button>
-      <button class="tab-btn" data-tab="preTestTab">3. القياس القبلي (10 أسئلة)</button>
-      <button class="tab-btn" data-tab="counselorTab">4. لوحة الموجهة الطلابية</button>
+      <button class="tab-btn" data-tab="preTestTab">3. القياس القبلي (10)</button>
+      <button class="tab-btn" data-tab="postTestTab">4. القياس البعدي (10)</button>
+      <button class="tab-btn" data-tab="impactTab">5. قياس الأثر</button>
+      <button class="tab-btn" data-tab="counselorTab">6. لوحة الموجهة الطلابية</button>
     </nav>
 
     <div id="globalNotice"></div>
 
-    <!-- القسم 1: بيانات الطالبة -->
+    <!-- 1. بيانات الطالبة -->
     <section id="profileTab" class="tab-panel">
       <div class="card">
         <div class="card-header">
           <div>
             <h2>تسجيل بيانات الطالبة (المرحلة المتوسطة)</h2>
-            <p class="muted">يُشترط إدخال الاسم الثلاثي بدقة لمنع تكرار السجل في قاعدة البيانات.</p>
+            <p class="muted">أدخلي الاسم الثلاثي بدقة لربط القياس القبلي والبعدي وقياس الأثر بسجل الطالبة.</p>
           </div>
           <span class="tag" id="activeStudentBadge">لم تُسجّل طالبة بعد</span>
         </div>
@@ -595,7 +424,7 @@
       </div>
     </section>
 
-    <!-- القسم 2: استكشاف المهن التفاعلي -->
+    <!-- 2. استكشاف المهن التفاعلي -->
     <section id="exploreTab" class="tab-panel hidden">
       <div class="card">
         <div class="card-header">
@@ -612,13 +441,13 @@
       </div>
     </section>
 
-    <!-- القسم 3: القياس القبلي الكامل (10 أسئلة) -->
+    <!-- 3. القياس القبلي (10 أسئلة) -->
     <section id="preTestTab" class="tab-panel hidden">
       <div class="card">
         <div class="card-header">
           <div>
-            <h2>مقياس الوعي والجاهزية المهنية (القياس القبلي — 10 أسئلة)</h2>
-            <p class="muted">أجيبي عن جميع البنود بدقة لتقييم مستوى جاهزيتكِ الحالية وحفظ النتيجة في لوحة الموجهة الطلابية.</p>
+            <h2>القياس القبلي للوعي والجاهزية المهنية (10 أسئلة)</h2>
+            <p class="muted">يُطبّق قبل الأنشطة الإرشادية والاستكشاف لقياس نقطة البداية للطالبة.</p>
           </div>
           <span class="tag" id="preTestStudentLabel">الطالبة: غير محددة</span>
         </div>
@@ -637,10 +466,10 @@
         </div>
 
         <form id="preTestForm">
-          <div id="questionsContainer"></div>
+          <div id="preQuestionsContainer"></div>
           <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:18px;">
-            <button type="submit" class="btn btn-primary" id="submitPreTestBtn">إرسال وحفظ القياس القبلي</button>
-            <span class="muted" id="answeredCounter">تمت الإجابة على 0 من 10 أسئلة</span>
+            <button type="submit" class="btn btn-primary" id="submitPreTestBtn">حفظ القياس القبلي</button>
+            <span class="muted" id="preAnsweredCounter">تمت الإجابة على 0 من 10 أسئلة</span>
           </div>
         </form>
 
@@ -648,32 +477,89 @@
       </div>
     </section>
 
-    <!-- القسم 4: لوحة الموجهة الطلابية -->
+    <!-- 4. القياس البعدي (10 أسئلة) -->
+    <section id="postTestTab" class="tab-panel hidden">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>القياس البعدي للوعي والجاهزية المهنية (10 أسئلة)</h2>
+            <p class="muted">يُطبّق بعد استكشاف المهن والأنشطة الإرشادية لقياس التطور الفعلي لدى الطالبة.</p>
+          </div>
+          <span class="tag" id="postTestStudentLabel">الطالبة: غير محددة</span>
+        </div>
+
+        <div class="likert-scale-legend">
+          <span>مقياس الإجابة:</span>
+          <span>1 = لا أوافق بشدة</span>
+          <span>•</span>
+          <span>2 = لا أوافق</span>
+          <span>•</span>
+          <span>3 = محايدة</span>
+          <span>•</span>
+          <span>4 = أوافق</span>
+          <span>•</span>
+          <span>5 = أوافق بشدة</span>
+        </div>
+
+        <form id="postTestForm">
+          <div id="postQuestionsContainer"></div>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:18px;">
+            <button type="submit" class="btn btn-primary" id="submitPostTestBtn">حفظ القياس البعدي وعرض قياس الأثر</button>
+            <span class="muted" id="postAnsweredCounter">تمت الإجابة على 0 من 10 أسئلة</span>
+          </div>
+        </form>
+
+        <div id="postTestResultBox" class="hidden" style="margin-top:20px;"></div>
+      </div>
+    </section>
+
+    <!-- 5. قياس الأثر -->
+    <section id="impactTab" class="tab-panel hidden">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>تقرير قياس الأثر المهني للطالبة</h2>
+            <p class="muted">مقارنة مباشرة بين القياس القبلي والقياس البعدي لإبراز مقدار التحسن والأثر المتحقق.</p>
+          </div>
+          <button type="button" class="btn btn-soft" id="recalcImpactBtn">تحديث حساب الأثر</button>
+        </div>
+
+        <div class="field" style="max-width:420px;">
+          <label for="impactLookupName">الاسم الثلاثي للطالبة لحساب قياس الأثر</label>
+          <input type="text" id="impactLookupName" placeholder="أدخلي الاسم الثلاثي للطالبة..." />
+        </div>
+
+        <div id="impactReportContainer">
+          <div class="alert alert-info">أكملي القياس القبلي والقياس البعدي أو أدخلي الاسم الثلاثي المسجّل لعرض تقرير قياس الأثر.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. لوحة الموجهة الطلابية -->
     <section id="counselorTab" class="tab-panel hidden">
       <div class="card" id="counselorLockCard">
         <div class="card-header">
           <div>
             <h2>لوحة الموجهة الطلابية</h2>
-            <p class="muted">دخول خاص بالموجهة الطلابية لمتابعة سجلات طالبات المرحلة المتوسطة ونتائج القياس القبلي.</p>
+            <p class="muted">دخول خاص بالموجهة الطلابية لمتابعة القياس القبلي والبعدي وقياس الأثر لطالبات المرحلة المتوسطة.</p>
           </div>
         </div>
         <div class="grid-2" style="max-width:520px;">
           <div class="field">
             <label for="counselorPasscode">رمز الدخول الخاص بالموجهة الطلابية</label>
-            <input type="password" id="counselorPasscode" placeholder="أدخلي رمز الدخول (الافتراضي: 2026)" />
+            <input type="password" id="counselorPasscode" placeholder="أدخلي رمز الدخول الخاص بالموجهة الطلابية" />
           </div>
           <div class="field" style="justify-content:flex-end;">
             <button type="button" class="btn btn-primary" id="unlockCounselorBtn">دخول لوحة الموجهة الطلابية</button>
           </div>
         </div>
-        <p class="muted" style="margin:0;">ملاحظة: يمكنكِ تغيير رمز الدخول بسهولة من داخل الكود في قسم إعدادات الموجهة الطلابية.</p>
       </div>
 
       <div class="card hidden" id="counselorDashboardCard">
         <div class="card-header">
           <div>
             <h2>متابعة الطالبات — لوحة الموجهة الطلابية</h2>
-            <p class="muted">عرض السجلات المحفوظة في قاعدة البيانات (منع تكرار الاسم الثلاثي مفعّل).</p>
+            <p class="muted">عرض درجات القياس القبلي والبعدي وقياس الأثر ومنع تكرار الاسم الثلاثي.</p>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:8px;">
             <button type="button" class="btn btn-soft" id="refreshRecordsBtn">تحديث البيانات</button>
@@ -684,16 +570,20 @@
 
         <div class="stats-row">
           <div class="stat-box">
-            <div class="muted">إجمالي الطالبات المسجلات</div>
+            <div class="muted">إجمالي الطالبات</div>
             <div class="stat-num" id="statTotalStudents">0</div>
           </div>
           <div class="stat-box">
             <div class="muted">متوسط القياس القبلي</div>
-            <div class="stat-num" id="statAvgScore">0%</div>
+            <div class="stat-num" id="statPreAvg">0%</div>
           </div>
           <div class="stat-box">
-            <div class="muted">أكثر مجال مختار</div>
-            <div class="stat-num" id="statTopTrack" style="font-size:1.1rem;">—</div>
+            <div class="muted">متوسط القياس البعدي</div>
+            <div class="stat-num" id="statPostAvg">0%</div>
+          </div>
+          <div class="stat-box">
+            <div class="muted">متوسط قياس الأثر</div>
+            <div class="stat-num" id="statImpactAvg">0%</div>
           </div>
         </div>
 
@@ -708,15 +598,16 @@
                 <th>#</th>
                 <th>الاسم الثلاثي</th>
                 <th>الصف</th>
-                <th>المجال</th>
                 <th>المهنة المختارة</th>
-                <th>درجة القياس القبلي</th>
+                <th>القياس القبلي</th>
+                <th>القياس البعدي</th>
+                <th>قياس الأثر</th>
                 <th>التاريخ</th>
                 <th>إجراء</th>
               </tr>
             </thead>
             <tbody id="recordsTableBody">
-              <tr><td colspan="8" style="text-align:center;">جارٍ تحميل السجلات...</td></tr>
+              <tr><td colspan="9" style="text-align:center;">جارٍ تحميل السجلات...</td></tr>
             </tbody>
           </table>
         </div>
@@ -725,32 +616,24 @@
   </main>
 
   <script>
-    // =========================================================================
-    // إعدادات الربط السحابي (Supabase) ولوحة الموجهة الطلابية
-    // =========================================================================
     const SUPABASE_URL = 'https://saqpjwezeyuuziwliwhc.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O';
     const TABLE_NAME = 'student_assessments';
-    const COUNSELOR_PASSCODE = '2026';
+    const COUNSELOR_PASSCODE = 'EmanibrahimKh4422';
 
     let supabaseClient = null;
     let isDbConnected = false;
     let cachedRecords = [];
 
     const state = {
-      student: {
-        full_name: '',
-        grade_level: '',
-        track_interest: '',
-        school_name: ''
-      },
+      student: { full_name: '', grade_level: '', track_interest: '', school_name: '' },
       selectedCareer: null,
-      preTestAnswers: {}
+      preAnswers: {},
+      postAnswers: {},
+      latestPre: null,
+      latestPost: null
     };
 
-    // =========================================================================
-    // بيانات المهن التفاعلية (قابلة للنقر بالكامل)
-    // =========================================================================
     const CAREERS = [
       {
         id: 'ai-engineer',
@@ -759,11 +642,7 @@
         salary: 'متوسط إلى مرتفع جداً',
         education: 'المرحلة المتوسطة ← مسار الحاسب والهندسة ← بكالوريوس الذكاء الاصطناعي أو علوم الحاسب',
         summary: 'تصميم نماذج ذكية وتدريبها على البيانات لحل المشكلات الواقعية وبناء تطبيقات مبتكرة.',
-        tasks: [
-          'تنظيف البيانات وبناء النماذج التنبؤية والتحليلية',
-          'اختبار دقة الأنظمة الذكية وتحسين أدائها',
-          'التعاون مع فرق المنتجات والقطاعات الصحية والمالية والتقنية'
-        ],
+        tasks: ['تنظيف البيانات وبناء النماذج التنبؤية والتحليلية', 'اختبار دقة الأنظمة الذكية وتحسين أدائها', 'التعاون مع فرق المنتجات والقطاعات الصحية والمالية والتقنية'],
         skills: ['التفكير المنطقي', 'البرمجة (Python)', 'الإحصاء والرياضيات', 'حل المشكلات']
       },
       {
@@ -773,11 +652,7 @@
         salary: 'مرتفع ومستقر',
         education: 'المرحلة المتوسطة ← المسار الصحي والحياة ← دكتور صيدلة (PharmD)',
         summary: 'متابعة الخطط الدوائية للمرضى بالتنسيق مع الفرق الطبية وضمان الاستخدام الآمن والفعّال للدواء.',
-        tasks: [
-          'مراجعة الجرعات والتداخلات الدوائية للحالات السريرية',
-          'تقديم الاستشارات الدوائية للمرضى والكوادر الصحية',
-          'المشاركة في اللجان العلاجية وبرامج التوعية الصحية'
-        ],
+        tasks: ['مراجعة الجرعات والتداخلات الدوائية للحالات السريرية', 'تقديم الاستشارات الدوائية للمرضى والكوادر الصحية', 'المشاركة في اللجان العلاجية وبرامج التوعية الصحية'],
         skills: ['الدقة والانتباه للتفاصيل', 'التواصل الفعّال', 'العلوم الحيوية والكيمياء', 'اتخاذ القرار المسؤول']
       },
       {
@@ -787,11 +662,7 @@
         salary: 'جيد إلى مرتفع',
         education: 'المرحلة المتوسطة ← التصميم والتقنية ← التصميم الرقمي أو الفنون أو علوم الحاسب',
         summary: 'ابتكار واجهات تطبيقات ومواقع سهلة وواضحة وممتعة للمستخدمين بناءً على البحث وفهم سلوكهم.',
-        tasks: [
-          'إجراء اختبارات المستخدم وتصميم رحلة الاستخدام',
-          'بناء النماذج الأولية وأنظمة التصميم البصرية',
-          'العمل مع المطورين لتحويل التصاميم إلى منتجات حية'
-        ],
+        tasks: ['إجراء اختبارات المستخدم وتصميم رحلة الاستخدام', 'بناء النماذج الأولية وأنظمة التصميم البصرية', 'العمل مع المطورين لتحويل التصاميم إلى منتجات حية'],
         skills: ['الإبداع البصري', 'التعاطف مع المستخدم', 'تنظيم المعلومات', 'العمل الجماعي']
       },
       {
@@ -801,11 +672,7 @@
         salary: 'مرتفع',
         education: 'المرحلة المتوسطة ← إدارة الأعمال والرياضيات ← بكالوريوس المالية أو المحاسبة',
         summary: 'دراسة البيانات المالية والمؤشرات الاقتصادية لتقييم المشاريع ودعم القرارات الاستثمارية.',
-        tasks: [
-          'إعداد النماذج المالية وتوقعات الإيرادات والتكاليف',
-          'تحليل أداء الشركات والقطاعات وإعداد التقارير',
-          'تقديم التوصيات المبنية على الأدلة للإدارة والمستثمرين'
-        ],
+        tasks: ['إعداد النماذج المالية وتوقعات الإيرادات والتكاليف', 'تحليل أداء الشركات والقطاعات وإعداد التقارير', 'تقديم التوصيات المبنية على الأدلة للإدارة والمستثمرين'],
         skills: ['تحليل الأرقام', 'التخطيط الاستراتيجي', 'كتابة التقارير', 'الموضوعية']
       },
       {
@@ -815,11 +682,7 @@
         salary: 'مرتفع',
         education: 'المرحلة المتوسطة ← العلوم الإنسانية والشرعية ← بكالوريوس القانون أو الشريعة',
         summary: 'صياغة العقود ومراجعة السياسات واللوائح لضمان الامتثال القانوني وحماية الحقوق.',
-        tasks: [
-          'مراجعة العقود والاتفاقيات وإبداء الرأي القانوني',
-          'متابعة الالتزام بالأنظمة واللوائح التنظيمية',
-          'إعداد المذكرات القانونية ودعم التفاوض المؤسسي'
-        ],
+        tasks: ['مراجعة العقود والاتفاقيات وإبداء الرأي القانوني', 'متابعة الالتزام بالأنظمة واللوائح التنظيمية', 'إعداد المذكرات القانونية ودعم التفاوض المؤسسي'],
         skills: ['التحليل النقدي', 'قوة الحجة والإقناع', 'الدقة اللغوية', 'الأمانة المهنية']
       },
       {
@@ -829,19 +692,12 @@
         salary: 'مرتفع ومستقر',
         education: 'المرحلة المتوسطة ← الهندسة والعلوم ← بكالوريوس الهندسة الطبية الحيوية',
         summary: 'تطوير وصيانة وإدارة التقنيات والأجهزة الطبية المستخدمة في التشخيص والعلاج بالمستشفيات.',
-        tasks: [
-          'معايرة وفحص الأجهزة الطبية والتأكد من سلامتها',
-          'تدريب الكوادر التشغيلية على الاستخدام الصحيح',
-          'المساهمة في تحسين الحلول التقنية للرعاية الصحية'
-        ],
+        tasks: ['معايرة وفحص الأجهزة الطبية والتأكد من سلامتها', 'تدريب الكوادر التشغيلية على الاستخدام الصحيح', 'المساهمة في تحسين الحلول التقنية للرعاية الصحية'],
         skills: ['الهندسة والفيزياء', 'إدارة الأعطال', 'العمل الميداني', 'السلامة والجودة']
       }
     ];
 
-    // =========================================================================
-    // أسئلة القياس القبلي الكاملة (10 أسئلة شاملة)
-    // =========================================================================
-    const PRE_TEST_QUESTIONS = [
+    const SCALE_QUESTIONS = [
       { id: 'q1', axis: 'الوعي المهني', text: 'لديّ معرفة واضحة بالمسارات الدراسية والمهنية المتاحة بعد المرحلة المتوسطة.' },
       { id: 'q2', axis: 'الوعي المهني', text: 'أفهم طبيعة المهام اليومية والمهارات المطلوبة في المهن التي تهمني.' },
       { id: 'q3', axis: 'اكتشاف الذات', text: 'أستطيع تحديد نقاط قوتي وميولي وقيمي الشخصية التي تؤثر في اختياري المهني.' },
@@ -854,22 +710,14 @@
       { id: 'q10', axis: 'الجاهزية العامة', text: 'أشعر بأنني مستعدة لبدء رحلة التخطيط لمستقبلي المهني بوعي وخطوات واضحة.' }
     ];
 
-    // =========================================================================
-    // تهيئة Supabase والتحقق من الاتصال
-    // =========================================================================
     async function initSupabase() {
       const dot = document.getElementById('dbStatusDot');
       const text = document.getElementById('dbStatusText');
-
       try {
-        if (!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) {
-          throw new Error('مكتبة أو بيانات الربط غير مكتملة');
-        }
+        if (!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) throw new Error('Missing config');
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const { error } = await supabaseClient.from(TABLE_NAME).select('id').limit(1);
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
         isDbConnected = true;
         dot.className = 'dot';
         text.textContent = 'متصل بقاعدة البيانات (Supabase)';
@@ -877,7 +725,6 @@
         isDbConnected = false;
         dot.className = 'dot warn';
         text.textContent = 'وضع الحفظ المحلي / التحقق من الاتصال';
-        console.warn('Supabase check:', err?.message || err);
       }
     }
 
@@ -888,9 +735,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function clearNotice() {
-      document.getElementById('globalNotice').innerHTML = '';
-    }
+    function clearNotice() { document.getElementById('globalNotice').innerHTML = ''; }
 
     function escapeHtml(str = '') {
       return String(str)
@@ -900,91 +745,62 @@
         .replace(/"/g, '&quot;');
     }
 
-    function normalizeFullName(name = '') {
-      return name.trim().replace(/\s+/g, ' ');
-    }
+    function normalizeFullName(name = '') { return name.trim().replace(/\s+/g, ' '); }
+    function hasThreeNames(name = '') { return normalizeFullName(name).split(' ').filter(Boolean).length >= 3; }
 
-    function hasThreeNames(name = '') {
-      const parts = normalizeFullName(name).split(' ').filter(Boolean);
-      return parts.length >= 3;
-    }
-
-    // =========================================================================
-    // التنقل بين التبويبات
-    // =========================================================================
     function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tabId);
-      });
-      document.querySelectorAll('.tab-panel').forEach(panel => {
-        panel.classList.toggle('hidden', panel.id !== tabId);
-      });
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tabId));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.toggle('hidden', panel.id !== tabId));
       updateStudentLabels();
+      if (tabId === 'impactTab') renderImpactReport();
     }
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        clearNotice();
-        switchTab(btn.dataset.tab);
-      });
+      btn.addEventListener('click', () => { clearNotice(); switchTab(btn.dataset.tab); });
     });
 
     function updateStudentLabels() {
-      const badge = document.getElementById('activeStudentBadge');
-      const preLabel = document.getElementById('preTestStudentLabel');
-      const careerChip = document.getElementById('selectedCareerChip');
-
-      if (state.student.full_name) {
-        badge.textContent = `الطالبة: ${state.student.full_name}${state.student.grade_level ? ' — ' + state.student.grade_level : ''}`;
-        preLabel.textContent = `الطالبة: ${state.student.full_name}`;
-      } else {
-        badge.textContent = 'لم تُسجّل طالبة بعد';
-        preLabel.textContent = 'الطالبة: غير محددة';
-      }
-
-      careerChip.textContent = state.selectedCareer
+      const name = state.student.full_name;
+      const label = name ? `الطالبة: ${name}${state.student.grade_level ? ' — ' + state.student.grade_level : ''}` : 'لم تُسجّل طالبة بعد';
+      document.getElementById('activeStudentBadge').textContent = label;
+      document.getElementById('preTestStudentLabel').textContent = name ? `الطالبة: ${name}` : 'الطالبة: غير محددة';
+      document.getElementById('postTestStudentLabel').textContent = name ? `الطالبة: ${name}` : 'الطالبة: غير محددة';
+      document.getElementById('selectedCareerChip').textContent = state.selectedCareer
         ? `المهنة المختارة: ${state.selectedCareer.title}`
         : 'لم يتم اختيار مهنة بعد';
-    }
-
-    // =========================================================================
-    // التحقق من تكرار الاسم الثلاثي في قاعدة البيانات
-    // =========================================================================
-    async function checkDuplicateFullName(fullName) {
-      const cleanName = normalizeFullName(fullName);
-
-      if (isDbConnected && supabaseClient) {
-        const { data, error } = await supabaseClient
-          .from(TABLE_NAME)
-          .select('id, full_name')
-          .ilike('full_name', cleanName);
-
-        if (!error && Array.isArray(data) && data.length > 0) {
-          return true;
-        }
+      if (name && !document.getElementById('impactLookupName').value) {
+        document.getElementById('impactLookupName').value = name;
       }
-
-      const localList = getLocalRecords();
-      return localList.some(r => normalizeFullName(r.full_name).toLowerCase() === cleanName.toLowerCase());
     }
 
     function getLocalRecords() {
-      try {
-        return JSON.parse(localStorage.getItem('mustaqbali_records_v1') || '[]');
-      } catch {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem('mustaqbali_records_v2') || '[]'); }
+      catch { return []; }
     }
 
     function saveLocalRecord(record) {
       const list = getLocalRecords();
       list.unshift(record);
-      localStorage.setItem('mustaqbali_records_v1', JSON.stringify(list));
+      localStorage.setItem('mustaqbali_records_v2', JSON.stringify(list));
     }
 
-    // =========================================================================
-    // نموذج بيانات الطالبة
-    // =========================================================================
+    async function fetchAllRecordsMerged() {
+      let dbRows = [];
+      if (isDbConnected && supabaseClient) {
+        const { data, error } = await supabaseClient.from(TABLE_NAME).select('*').order('created_at', { ascending: false });
+        if (!error && Array.isArray(data)) dbRows = data;
+      }
+      const localRows = getLocalRecords();
+      return [...dbRows, ...localRows];
+    }
+
+    async function hasStageForStudent(fullName, stage) {
+      const clean = normalizeFullName(fullName).toLowerCase();
+      const all = await fetchAllRecordsMerged();
+      return all.some(r => normalizeFullName(r.full_name).toLowerCase() === clean && (r.stage === stage || (stage === 'pre' && !r.stage)));
+    }
+
+    // 1. بيانات الطالبة
     document.getElementById('studentProfileForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       clearNotice();
@@ -999,67 +815,35 @@
         return;
       }
 
-      const btn = document.getElementById('saveProfileBtn');
-      btn.disabled = true;
-      btn.textContent = 'جارٍ التحقق من الاسم...';
-
-      try {
-        const isDup = await checkDuplicateFullName(fullName);
-        if (isDup) {
-          showNotice('danger', `الاسم الثلاثي "${fullName}" مسجّل مسبقاً في النظام، ولا يُسمح بتكرار الاسم الثلاثي.`);
-          return;
-        }
-
-        state.student = {
-          full_name: fullName,
-          grade_level: gradeLevel,
-          track_interest: trackInterest,
-          school_name: schoolName
-        };
-        updateStudentLabels();
-        showNotice('success', `تم حفظ بيانات الطالبة "${fullName}" بنجاح. يمكنكِ الآن استكشاف المهن أو بدء القياس القبلي.`);
-        switchTab('exploreTab');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'حفظ بيانات الطالبة والانتقال للاستكشاف';
-      }
-    });
-
-    document.getElementById('goExploreBtn').addEventListener('click', () => {
-      clearNotice();
+      state.student = { full_name: fullName, grade_level: gradeLevel, track_interest: trackInterest, school_name: schoolName };
+      document.getElementById('impactLookupName').value = fullName;
+      updateStudentLabels();
+      showNotice('success', `تم حفظ بيانات الطالبة "${fullName}" (${gradeLevel}). يمكنكِ الآن استكشاف المهن أو بدء القياس القبلي.`);
       switchTab('exploreTab');
     });
 
-    // =========================================================================
-    // استكشاف المهن التفاعلي (الضغط على أي مهنة يفتح تفاصيلها واختيارها)
-    // =========================================================================
+    document.getElementById('goExploreBtn').addEventListener('click', () => { clearNotice(); switchTab('exploreTab'); });
+
+    // 2. استكشاف المهن
     let activeCategory = 'الكل';
 
     function renderCareerFilters() {
       const categories = ['الكل', ...new Set(CAREERS.map(c => c.category))];
       const bar = document.getElementById('careerFilterBar');
       bar.innerHTML = '';
-
       categories.forEach(cat => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `chip ${cat === activeCategory ? 'active' : ''}`;
         btn.textContent = cat;
-        btn.addEventListener('click', () => {
-          activeCategory = cat;
-          renderCareerFilters();
-          renderCareersGrid();
-        });
+        btn.addEventListener('click', () => { activeCategory = cat; renderCareerFilters(); renderCareersGrid(); });
         bar.appendChild(btn);
       });
     }
 
     function renderCareersGrid() {
       const grid = document.getElementById('careersGrid');
-      const filtered = activeCategory === 'الكل'
-        ? CAREERS
-        : CAREERS.filter(c => c.category === activeCategory);
-
+      const filtered = activeCategory === 'الكل' ? CAREERS : CAREERS.filter(c => c.category === activeCategory);
       grid.innerHTML = '';
       filtered.forEach(career => {
         const isSelected = state.selectedCareer && state.selectedCareer.id === career.id;
@@ -1085,7 +869,6 @@
     function openCareerDetails(careerId) {
       const career = CAREERS.find(c => c.id === careerId);
       if (!career) return;
-
       const panel = document.getElementById('careerDetailPanel');
       panel.classList.remove('hidden');
       panel.innerHTML = `
@@ -1096,53 +879,42 @@
           </div>
           <button type="button" class="btn btn-primary" id="chooseThisCareerBtn">اعتماد هذه المهنة كمهنتي المفضّلة</button>
         </div>
-
         <p style="margin-top:0;">${escapeHtml(career.summary)}</p>
         <p style="margin:6px 0;"><strong>المسار التعليمي:</strong> ${escapeHtml(career.education)}</p>
         <p style="margin:6px 0 12px;"><strong>المستوى المهني / العائد:</strong> ${escapeHtml(career.salary)}</p>
-
         <div class="grid-2">
           <div>
             <strong>أبرز المهام المهنية:</strong>
-            <ul class="detail-list">
-              ${career.tasks.map(t => `<li>${escapeHtml(t)}</li>`).join('')}
-            </ul>
+            <ul class="detail-list">${career.tasks.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
           </div>
           <div>
             <strong>المهارات الأساسية:</strong>
-            <ul class="detail-list">
-              ${career.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
-            </ul>
+            <ul class="detail-list">${career.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}</ul>
           </div>
         </div>
       `;
-
       document.getElementById('chooseThisCareerBtn').addEventListener('click', () => {
         state.selectedCareer = career;
         updateStudentLabels();
         renderCareersGrid();
-        showNotice('success', `تم اختيار مهنة "${career.title}". يمكنكِ الآن الانتقال إلى القياس القبلي (10 أسئلة).`);
+        showNotice('success', `تم اختيار مهنة "${career.title}". يمكنكِ الآن الانتقال إلى القياس القبلي ثم البعدي وقياس الأثر.`);
       });
-
       panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // =========================================================================
-    // بناء وعرض القياس القبلي الكامل (10 أسئلة)
-    // =========================================================================
-    function renderPreTestQuestions() {
-      const container = document.getElementById('questionsContainer');
+    // 3 & 4. بناء القياس القبلي والبعدي (10 أسئلة لكل قياس)
+    function renderQuestionnaire(containerId, counterId, answersObj) {
+      const container = document.getElementById(containerId);
       container.innerHTML = '';
 
-      PRE_TEST_QUESTIONS.forEach((q, idx) => {
+      SCALE_QUESTIONS.forEach((q, idx) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'question-item';
-
         const optionsHtml = [1, 2, 3, 4, 5].map(val => {
-          const checked = state.preTestAnswers[q.id] === val ? 'checked' : '';
+          const checked = answersObj[q.id] === val ? 'checked' : '';
           return `
             <label class="likert-opt">
-              <input type="radio" name="${q.id}" value="${val}" ${checked} required />
+              <input type="radio" name="${containerId}_${q.id}" value="${val}" ${checked} required />
               <span>${val}</span>
             </label>
           `;
@@ -1155,29 +927,27 @@
           </div>
           <div class="likert-options">${optionsHtml}</div>
         `;
-
         container.appendChild(wrapper);
       });
 
+      const updateCounter = () => {
+        const count = Object.keys(answersObj).length;
+        document.getElementById(counterId).textContent = `تمت الإجابة على ${count} من ${SCALE_QUESTIONS.length} أسئلة`;
+      };
+
       container.querySelectorAll('input[type="radio"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
-          state.preTestAnswers[e.target.name] = Number(e.target.value);
-          updateAnsweredCounter();
+          const qId = e.target.name.split('_')[1];
+          answersObj[qId] = Number(e.target.value);
+          updateCounter();
         });
       });
 
-      updateAnsweredCounter();
+      updateCounter();
     }
 
-    function updateAnsweredCounter() {
-      const count = Object.keys(state.preTestAnswers).length;
-      document.getElementById('answeredCounter').textContent = `تمت الإجابة على ${count} من ${PRE_TEST_QUESTIONS.length} أسئلة`;
-    }
-
-    document.getElementById('preTestForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    async function saveAssessment(stage) {
       clearNotice();
-
       const fullName = normalizeFullName(state.student.full_name || document.getElementById('fullName').value);
       if (!fullName || !hasThreeNames(fullName)) {
         showNotice('danger', 'يرجى أولاً تسجيل الاسم الثلاثي للطالبة في تبويب «بيانات الطالبة».');
@@ -1185,87 +955,135 @@
         return;
       }
 
-      const missing = PRE_TEST_QUESTIONS.filter(q => !state.preTestAnswers[q.id]);
+      const answers = stage === 'pre' ? state.preAnswers : state.postAnswers;
+      const missing = SCALE_QUESTIONS.filter(q => !answers[q.id]);
       if (missing.length > 0) {
         showNotice('danger', `يرجى الإجابة على جميع الأسئلة العشرة (متبقي ${missing.length} سؤال).`);
         return;
       }
 
-      const btn = document.getElementById('submitPreTestBtn');
-      btn.disabled = true;
-      btn.textContent = 'جارٍ حفظ النتيجة...';
+      const alreadyExists = await hasStageForStudent(fullName, stage);
+      if (alreadyExists) {
+        const stageAr = stage === 'pre' ? 'القياس القبلي' : 'القياس البعدي';
+        showNotice('danger', `تم تسجيل ${stageAr} مسبقاً للاسم الثلاثي "${fullName}"، ولا يُسمح بتكرار نفس القياس لنفس الطالبة.`);
+        return;
+      }
 
-      try {
-        const isDup = await checkDuplicateFullName(fullName);
-        if (isDup) {
-          showNotice('danger', `تم تسجيل القياس مسبقاً للاسم الثلاثي "${fullName}". لا يُسمح بتكرار الاسم الثلاثي.`);
-          return;
+      const totalScore = SCALE_QUESTIONS.reduce((sum, q) => sum + Number(answers[q.id]), 0);
+      const maxScore = SCALE_QUESTIONS.length * 5;
+      const percentage = Math.round((totalScore / maxScore) * 100);
+
+      const record = {
+        full_name: fullName,
+        grade_level: state.student.grade_level || 'غير محدد',
+        track_interest: state.student.track_interest || 'غير محدد',
+        school_name: state.student.school_name || '',
+        selected_career: state.selectedCareer ? state.selectedCareer.title : 'لم تُحدّد بعد',
+        stage,
+        score: totalScore,
+        max_score: maxScore,
+        percentage,
+        answers_json: answers,
+        created_at: new Date().toISOString()
+      };
+
+      if (isDbConnected && supabaseClient) {
+        const { error } = await supabaseClient.from(TABLE_NAME).insert([record]);
+        if (error) {
+          saveLocalRecord({ ...record, id: 'local-' + Date.now() });
         }
+      } else {
+        saveLocalRecord({ ...record, id: 'local-' + Date.now() });
+      }
 
-        const totalScore = PRE_TEST_QUESTIONS.reduce((sum, q) => sum + Number(state.preTestAnswers[q.id]), 0);
-        const maxScore = PRE_TEST_QUESTIONS.length * 5;
-        const percentage = Math.round((totalScore / maxScore) * 100);
+      if (stage === 'pre') {
+        state.latestPre = record;
+        const box = document.getElementById('preTestResultBox');
+        box.classList.remove('hidden');
+        box.innerHTML = `<div class="alert alert-success">تم حفظ القياس القبلي للطالبة <strong>${escapeHtml(fullName)}</strong>: <strong>${totalScore} / ${maxScore}</strong> (${percentage}%).</div>`;
+        showNotice('success', 'تم حفظ القياس القبلي بنجاح. يمكنكِ الآن الانتقال إلى القياس البعدي.');
+      } else {
+        state.latestPost = record;
+        const box = document.getElementById('postTestResultBox');
+        box.classList.remove('hidden');
+        box.innerHTML = `<div class="alert alert-success">تم حفظ القياس البعدي للطالبة <strong>${escapeHtml(fullName)}</strong>: <strong>${totalScore} / ${maxScore}</strong> (${percentage}%).</div>`;
+        document.getElementById('impactLookupName').value = fullName;
+        showNotice('success', 'تم حفظ القياس البعدي بنجاح وحساب قياس الأثر.');
+        switchTab('impactTab');
+      }
+    }
 
-        const levelText =
-          percentage >= 80 ? 'جاهزية مرتفعة جداً' :
-          percentage >= 60 ? 'جاهزية متوسطة إلى جيدة' :
-          'بحاجة إلى جلسات توجيه واستكشاف إضافية';
+    document.getElementById('preTestForm').addEventListener('submit', (e) => { e.preventDefault(); saveAssessment('pre'); });
+    document.getElementById('postTestForm').addEventListener('submit', (e) => { e.preventDefault(); saveAssessment('post'); });
 
-        const payload = {
-          full_name: fullName,
-          grade_level: state.student.grade_level || 'غير محدد',
-          track_interest: state.student.track_interest || 'غير محدد',
-          school_name: state.student.school_name || '',
-          selected_career: state.selectedCareer ? state.selectedCareer.title : 'لم تُحدّد بعد',
-          pre_test_score: totalScore,
-          pre_test_max: maxScore,
-          pre_test_percentage: percentage,
-          answers_json: state.preTestAnswers,
-          created_at: new Date().toISOString()
-        };
+    // 5. قياس الأثر
+    document.getElementById('recalcImpactBtn').addEventListener('click', renderImpactReport);
+    document.getElementById('impactLookupName').addEventListener('input', renderImpactReport);
 
-        if (isDbConnected && supabaseClient) {
-          const { error } = await supabaseClient.from(TABLE_NAME).insert([payload]);
-          if (error) {
-            if (String(error.message || '').toLowerCase().includes('duplicate') || error.code === '23505') {
-              showNotice('danger', `الاسم الثلاثي "${fullName}" مسجّل مسبقاً في قاعدة البيانات.`);
-              return;
-            }
-            throw error;
-          }
-        } else {
-          saveLocalRecord({ ...payload, id: 'local-' + Date.now() });
-        }
+    async function renderImpactReport() {
+      const targetName = normalizeFullName(document.getElementById('impactLookupName').value || state.student.full_name).toLowerCase();
+      const container = document.getElementById('impactReportContainer');
 
-        const resultBox = document.getElementById('preTestResultBox');
-        resultBox.classList.remove('hidden');
-        resultBox.innerHTML = `
-          <div class="alert alert-success">
-            <div style="font-size:1.05rem; margin-bottom:6px;">تم تسجيل إجابات القياس القبلي (10 أسئلة) بنجاح!</div>
-            <div>الطالبة: <strong>${escapeHtml(fullName)}</strong></div>
-            <div>المجموع: <strong>${totalScore} من ${maxScore}</strong> (${percentage}%) — <strong>${levelText}</strong></div>
-            <div>المهنة المختارة: <strong>${escapeHtml(payload.selected_career)}</strong></div>
+      if (!targetName) {
+        container.innerHTML = '<div class="alert alert-info">أدخلي الاسم الثلاثي للطالبة لعرض مقارنة القياس القبلي والبعدي وقياس الأثر.</div>';
+        return;
+      }
+
+      const all = await fetchAllRecordsMerged();
+      const studentRows = all.filter(r => normalizeFullName(r.full_name).toLowerCase() === targetName);
+      const preRow = studentRows.find(r => r.stage === 'pre' || !r.stage);
+      const postRow = studentRows.find(r => r.stage === 'post');
+
+      if (!preRow && !postRow) {
+        container.innerHTML = '<div class="alert alert-info">لم يتم العثور على قياسات مسجلة لهذا الاسم الثلاثي بعد.</div>';
+        return;
+      }
+
+      const preScore = preRow ? Number(preRow.score ?? preRow.pre_test_score ?? 0) : null;
+      const postScore = postRow ? Number(postRow.score ?? postRow.post_test_score ?? 0) : null;
+      const prePct = preRow ? Number(preRow.percentage ?? preRow.pre_test_percentage ?? Math.round((preScore / 50) * 100)) : null;
+      const postPct = postRow ? Number(postRow.percentage ?? postRow.post_test_percentage ?? Math.round((postScore / 50) * 100)) : null;
+
+      let impactHtml = '<div class="alert alert-info">بانتظار إكمال كل من القياس القبلي والقياس البعدي لحساب فرق الدرجات ونسبة الأثر.</div>';
+      if (preScore !== null && postScore !== null) {
+        const diffScore = postScore - preScore;
+        const diffPct = postPct - prePct;
+        const impactLevel =
+          diffPct >= 20 ? 'أثر مرتفع جداً' :
+          diffPct >= 10 ? 'أثر إيجابي واضح' :
+          diffPct > 0 ? 'أثر إيجابي مبدئي' :
+          diffPct === 0 ? 'استقرار في المستوى' : 'يحتاج متابعة إرشادية إضافية';
+
+        impactHtml = `
+          <div class="impact-comparison">
+            <div class="impact-box">
+              <div class="muted">القياس القبلي</div>
+              <div class="stat-num">${preScore} / 50 (${prePct}%)</div>
+            </div>
+            <div class="impact-box">
+              <div class="muted">القياس البعدي</div>
+              <div class="stat-num">${postScore} / 50 (${postPct}%)</div>
+            </div>
+            <div class="impact-box highlight">
+              <div class="muted">قياس الأثر (مقدار التحسن)</div>
+              <div class="stat-num">${diffScore >= 0 ? '+' + diffScore : diffScore} درجات (${diffPct >= 0 ? '+' + diffPct + '%' : diffPct + '%'})</div>
+              <div style="font-weight:700; margin-top:4px;">التقدير: ${impactLevel}</div>
+            </div>
           </div>
         `;
-        showNotice('success', 'تم حفظ نتيجتكِ بنجاح وإرسالها إلى لوحة الموجهة الطلابية.');
-        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      } catch (err) {
-        console.error(err);
-        showNotice('danger', 'حدث خطأ أثناء حفظ النتيجة في قاعدة البيانات. تحققي من إعدادات الجدول في Supabase.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'إرسال وحفظ القياس القبلي';
       }
-    });
 
-    // =========================================================================
-    // لوحة الموجهة الطلابية
-    // =========================================================================
+      container.innerHTML = `
+        <p><strong>الطالبة:</strong> ${escapeHtml(preRow?.full_name || postRow?.full_name || '')} — <strong>الصف:</strong> ${escapeHtml(preRow?.grade_level || postRow?.grade_level || '')}</p>
+        ${impactHtml}
+      `;
+    }
+
+    // 6. لوحة الموجهة الطلابية
     document.getElementById('unlockCounselorBtn').addEventListener('click', async () => {
       clearNotice();
-      const code = document.getElementById('counselorPasscode').value.trim();
-      if (code !== COUNSELOR_PASSCODE) {
-        showNotice('danger', 'رمز الدخول غير صحيح. الرمز الافتراضي هو 2026.');
+      if (document.getElementById('counselorPasscode').value.trim() !== COUNSELOR_PASSCODE) {
+        showNotice('danger', 'رمز الدخول غير صحيح.');
         return;
       }
       document.getElementById('counselorLockCard').classList.add('hidden');
@@ -1285,141 +1103,133 @@
 
     async function loadCounselorRecords() {
       const tbody = document.getElementById('recordsTableBody');
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">جارٍ تحميل السجلات...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">جارٍ تحميل السجلات...</td></tr>';
 
-      let rows = [];
-      if (isDbConnected && supabaseClient) {
-        const { data, error } = await supabaseClient
-          .from(TABLE_NAME)
-          .select('*')
-          .order('created_at', { ascending: false });
-        if (!error && Array.isArray(data)) {
-          rows = data;
+      const all = await fetchAllRecordsMerged();
+      const grouped = new Map();
+
+      all.forEach(r => {
+        const key = normalizeFullName(r.full_name).toLowerCase();
+        if (!key) return;
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            id: r.id,
+            full_name: normalizeFullName(r.full_name),
+            grade_level: r.grade_level || '',
+            selected_career: r.selected_career || 'لم تُحدّد بعد',
+            pre: null,
+            post: null,
+            created_at: r.created_at || ''
+          });
         }
-      }
-
-      const localRows = getLocalRecords();
-      const mapByName = new Map();
-      [...rows, ...localRows].forEach(item => {
-        const key = normalizeFullName(item.full_name).toLowerCase();
-        if (!mapByName.has(key)) {
-          mapByName.set(key, item);
+        const entry = grouped.get(key);
+        if (r.stage === 'post') {
+          entry.post = r;
+          if (r.selected_career) entry.selected_career = r.selected_career;
+        } else {
+          entry.pre = r;
+        }
+        if (r.created_at && (!entry.created_at || r.created_at > entry.created_at)) {
+          entry.created_at = r.created_at;
         }
       });
 
-      cachedRecords = Array.from(mapByName.values());
-      updateStats(cachedRecords);
+      cachedRecords = Array.from(grouped.values()).map(item => {
+        const preScore = item.pre ? Number(item.pre.score ?? item.pre.pre_test_score ?? 0) : null;
+        const postScore = item.post ? Number(item.post.score ?? item.post.post_test_score ?? 0) : null;
+        const prePct = preScore !== null ? Math.round((preScore / 50) * 100) : null;
+        const postPct = postScore !== null ? Math.round((postScore / 50) * 100) : null;
+        const impactPct = (prePct !== null && postPct !== null) ? (postPct - prePct) : null;
+        return { ...item, preScore, postScore, prePct, postPct, impactPct };
+      });
+
+      updateCounselorStats(cachedRecords);
       renderRecordsTable();
     }
 
-    function updateStats(records) {
-      document.getElementById('statTotalStudents').textContent = records.length;
+    function updateCounselorStats(rows) {
+      document.getElementById('statTotalStudents').textContent = rows.length;
+      const preList = rows.filter(r => r.prePct !== null);
+      const postList = rows.filter(r => r.postPct !== null);
+      const impList = rows.filter(r => r.impactPct !== null);
 
-      if (!records.length) {
-        document.getElementById('statAvgScore').textContent = '0%';
-        document.getElementById('statTopTrack').textContent = '—';
-        return;
-      }
-
-      const sumPct = records.reduce((acc, r) => acc + (Number(r.pre_test_percentage) || 0), 0);
-      document.getElementById('statAvgScore').textContent = `${Math.round(sumPct / records.length)}%`;
-
-      const trackCounts = {};
-      records.forEach(r => {
-        const t = r.track_interest || 'غير محدد';
-        trackCounts[t] = (trackCounts[t] || 0) + 1;
-      });
-      const topTrack = Object.entries(trackCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '—';
-      document.getElementById('statTopTrack').textContent = topTrack;
+      document.getElementById('statPreAvg').textContent = preList.length
+        ? `${Math.round(preList.reduce((a, b) => a + b.prePct, 0) / preList.length)}%` : '0%';
+      document.getElementById('statPostAvg').textContent = postList.length
+        ? `${Math.round(postList.reduce((a, b) => a + b.postPct, 0) / postList.length)}%` : '0%';
+      const avgImp = impList.length ? Math.round(impList.reduce((a, b) => a + b.impactPct, 0) / impList.length) : 0;
+      document.getElementById('statImpactAvg').textContent = impList.length
+        ? `${avgImp >= 0 ? '+' + avgImp : avgImp}%` : '0%';
     }
 
     function renderRecordsTable() {
       const q = (document.getElementById('searchStudentInput').value || '').trim().toLowerCase();
       const tbody = document.getElementById('recordsTableBody');
-
-      const filtered = cachedRecords.filter(r => {
-        const hay = `${r.full_name || ''} ${r.grade_level || ''} ${r.track_interest || ''} ${r.selected_career || ''}`.toLowerCase();
-        return hay.includes(q);
-      });
+      const filtered = cachedRecords.filter(r =>
+        `${r.full_name} ${r.grade_level} ${r.selected_career}`.toLowerCase().includes(q)
+      );
 
       if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">لا توجد سجلات مطابقة.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">لا توجد سجلات مطابقة.</td></tr>';
         return;
       }
 
       tbody.innerHTML = filtered.map((r, i) => {
-        const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString('ar-SA') : '—';
-        const scoreStr = `${r.pre_test_score ?? '—'} / ${r.pre_test_max ?? 50} (${r.pre_test_percentage ?? 0}%)`;
+        const preText = r.preScore !== null ? `${r.preScore}/50 (${r.prePct}%)` : '—';
+        const postText = r.postScore !== null ? `${r.postScore}/50 (${r.postPct}%)` : '—';
+        const impText = r.impactPct !== null ? `${r.impactPct >= 0 ? '+' + r.impactPct : r.impactPct}%` : '—';
+        const dateText = r.created_at ? new Date(r.created_at).toLocaleDateString('ar-SA') : '—';
         return `
           <tr>
             <td>${i + 1}</td>
-            <td><strong>${escapeHtml(r.full_name || '')}</strong></td>
-            <td>${escapeHtml(r.grade_level || '')}</td>
-            <td>${escapeHtml(r.track_interest || '')}</td>
-            <td>${escapeHtml(r.selected_career || '')}</td>
-            <td>${escapeHtml(scoreStr)}</td>
-            <td>${escapeHtml(dateStr)}</td>
-            <td>
-              <button type="button" class="btn btn-danger" onclick="deleteRecord('${escapeHtml(String(r.id || ''))}', '${escapeHtml(String(r.full_name || ''))}')">حذف</button>
-            </td>
+            <td><strong>${escapeHtml(r.full_name)}</strong></td>
+            <td>${escapeHtml(r.grade_level)}</td>
+            <td>${escapeHtml(r.selected_career)}</td>
+            <td>${escapeHtml(preText)}</td>
+            <td>${escapeHtml(postText)}</td>
+            <td><strong>${escapeHtml(impText)}</strong></td>
+            <td>${escapeHtml(dateText)}</td>
+            <td><button type="button" class="btn btn-danger" onclick="deleteStudentAll('${escapeHtml(r.full_name)}')">حذف</button></td>
           </tr>
         `;
       }).join('');
     }
 
-    window.deleteRecord = async function(id, fullName) {
-      if (!confirm(`هل أنتِ متأكدة من حذف سجل الطالبة "${fullName}"؟`)) return;
-
-      if (isDbConnected && supabaseClient && id && !String(id).startsWith('local-')) {
-        await supabaseClient.from(TABLE_NAME).delete().eq('id', id);
+    window.deleteStudentAll = async function(fullName) {
+      if (!confirm(`هل أنتِ متأكدة من حذف جميع سجلات الطالبة "${fullName}"؟`)) return;
+      const clean = normalizeFullName(fullName).toLowerCase();
+      if (isDbConnected && supabaseClient) {
+        await supabaseClient.from(TABLE_NAME).delete().ilike('full_name', normalizeFullName(fullName));
       }
-
-      const remainingLocal = getLocalRecords().filter(
-        r => String(r.id) !== String(id) && normalizeFullName(r.full_name).toLowerCase() !== normalizeFullName(fullName).toLowerCase()
-      );
-      localStorage.setItem('mustaqbali_records_v1', JSON.stringify(remainingLocal));
-
-      showNotice('success', `تم حذف سجل "${fullName}".`);
+      const remaining = getLocalRecords().filter(r => normalizeFullName(r.full_name).toLowerCase() !== clean);
+      localStorage.setItem('mustaqbali_records_v2', JSON.stringify(remaining));
+      showNotice('success', `تم حذف سجلات "${fullName}".`);
       await loadCounselorRecords();
     };
 
     function exportRecordsCsv() {
-      if (!cachedRecords.length) {
-        showNotice('info', 'لا توجد بيانات لتصديرها.');
-        return;
-      }
-
-      const headers = ['الاسم الثلاثي', 'الصف', 'المجال', 'المهنة المختارة', 'الدرجة', 'النسبة المئوية', 'التاريخ'];
+      if (!cachedRecords.length) { showNotice('info', 'لا توجد بيانات لتصديرها.'); return; }
+      const headers = ['الاسم الثلاثي', 'الصف', 'المهنة المختارة', 'القياس القبلي (%)', 'القياس البعدي (%)', 'قياس الأثر (%)'];
       const lines = [headers.join(',')];
-
       cachedRecords.forEach(r => {
-        const row = [
-          r.full_name || '',
-          r.grade_level || '',
-          r.track_interest || '',
-          r.selected_career || '',
-          r.pre_test_score ?? '',
-          (r.pre_test_percentage ?? '') + '%',
-          r.created_at ? new Date(r.created_at).toLocaleDateString('ar-SA') : ''
-        ].map(val => `"${String(val).replace(/"/g, '""')}"`);
-        lines.push(row.join(','));
+        lines.push([
+          r.full_name, r.grade_level, r.selected_career,
+          r.prePct ?? '', r.postPct ?? '', r.impactPct ?? ''
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
       });
-
       const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'mustaqbali-counselor-records.csv';
+      a.download = 'mustaqbali-impact-report.csv';
       a.click();
       URL.revokeObjectURL(url);
     }
 
-    // =========================================================================
-    // تشغيل التطبيق عند التحميل
-    // =========================================================================
     renderCareerFilters();
     renderCareersGrid();
-    renderPreTestQuestions();
+    renderQuestionnaire('preQuestionsContainer', 'preAnsweredCounter', state.preAnswers);
+    renderQuestionnaire('postQuestionsContainer', 'postAnsweredCounter', state.postAnswers);
     updateStudentLabels();
     initSupabase();
   </script>
