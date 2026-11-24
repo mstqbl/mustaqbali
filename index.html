@@ -1,1292 +1,570 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مستقبلي يبدأ الآن | منصة التوجيه المهني للمرحلة المتوسطة</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #f3f8f9;
-      --surface: #ffffff;
-      --surface-soft: #eef5f7;
-      --ink: #172a3a;
-      --muted: #5c7285;
-      --primary: #0d6e7a;
-      --primary-dark: #084d56;
-      --primary-soft: #e1f2f4;
-      --accent: #d9822b;
-      --accent-soft: #fdf2e6;
-      --success: #1b7a4b;
-      --success-soft: #e7f6ee;
-      --danger: #b8292f;
-      --danger-soft: #fdecec;
-      --border: #d7e4e8;
-      --radius: 18px;
-      --shadow: 0 10px 26px rgba(23, 42, 58, 0.06);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Cairo', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.75;
-    }
-
-    .topbar {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      color: #fff;
-      padding: 12px 18px;
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      box-shadow: 0 4px 16px rgba(8, 77, 86, 0.2);
-    }
-
-    .topbar-inner {
-      max-width: 1140px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .brand { display: flex; align-items: center; gap: 10px; }
-
-    .brand-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      background: rgba(255, 255, 255, 0.18);
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .brand h1 { margin: 0; font-size: 1.12rem; font-weight: 800; }
-    .brand p { margin: 0; font-size: 0.78rem; opacity: 0.92; }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 12px;
-      border-radius: 999px;
-      font-size: 0.76rem;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
-    .dot.warn { background: #facc15; }
-
-    .container { max-width: 1140px; margin: 18px auto 64px; padding: 0 16px; }
-
-    .stepper {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-      gap: 9px;
-      margin-bottom: 18px;
-      scroll-margin-top: 90px;
-    }
-
-    .step-btn {
-      border: 1.5px solid var(--border);
-      background: var(--surface);
-      color: var(--ink);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 9px 10px;
-      border-radius: 13px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
-    }
-
-    .step-btn.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 6px 14px rgba(13, 110, 122, 0.22);
-    }
-
-    .step-btn.done {
-      border-color: var(--success);
-      background: var(--success-soft);
-      color: var(--success);
-    }
-
-    .step-btn.locked {
-      opacity: 0.55;
-      background: #eef2f5;
-      color: var(--muted);
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-    }
-
-    .card-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .card h2 { margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); }
-    .card h3 { margin: 0 0 8px; font-size: 1.05rem; font-weight: 800; color: var(--primary-dark); }
-    .muted { color: var(--muted); font-size: 0.92rem; margin: 4px 0 0; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
-
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-    label { font-weight: 700; font-size: 0.92rem; }
-
-    input[type="text"], input[type="password"], select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      background: #fff;
-      color: var(--ink);
-    }
-
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(13, 110, 122, 0.12);
-    }
-
-    .btn {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 20px;
-      font-family: inherit;
-      font-size: 0.94rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-soft { background: var(--surface-soft); color: var(--ink); border: 1px solid var(--border); }
-    .btn-soft:hover { background: var(--primary-soft); }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-danger { background: var(--danger); color: #fff; padding: 7px 12px; font-size: 0.82rem; }
-
-    .alert {
-      padding: 13px 16px;
-      border-radius: 13px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      margin-bottom: 18px;
-    }
-
-    .alert-success { background: var(--success-soft); color: var(--success); border: 1px solid #b8e8cf; }
-    .alert-danger { background: var(--danger-soft); color: var(--danger); border: 1px solid #f7c5c8; }
-    .alert-info { background: var(--primary-soft); color: var(--primary-dark); border: 1px solid #bfe3e8; }
-
-    .closing-message {
-      background: linear-gradient(135deg, #e7f6ee, #e1f2f4);
-      border: 2px solid #9ad8b8;
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 18px;
-      color: var(--ink);
-    }
-
-    .closing-message h4 {
-      margin: 0 0 8px;
-      font-size: 1.06rem;
-      font-weight: 800;
-      color: var(--primary-dark);
-    }
-
-    .closing-message p {
-      margin: 0;
-      font-size: 0.96rem;
-      font-weight: 700;
-      line-height: 1.85;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 4px 11px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      background: var(--primary-soft);
-      color: var(--primary-dark);
-    }
-
-    .question-box {
-      border: 1.5px solid var(--border);
-      border-radius: 15px;
-      padding: 16px;
-      margin-bottom: 14px;
-      background: #fcfefe;
-    }
-
-    .question-text { font-weight: 700; font-size: 0.98rem; margin-bottom: 12px; }
-
-    .choice-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-      gap: 8px;
-    }
-
-    .choice-item { position: relative; }
-    .choice-item input { position: absolute; opacity: 0; pointer-events: none; }
-
-    .choice-item span {
-      display: block;
-      text-align: center;
-      padding: 10px 8px;
-      border: 1.5px solid var(--border);
-      border-radius: 11px;
-      background: #fff;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .choice-item input:checked + span {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-
-    .career-simple-card {
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .career-simple-card.chosen {
-      border-color: var(--success);
-      background: #f5fbf8;
-    }
-
-    .career-simple-desc {
-      border-top: 1px dashed var(--border);
-      padding-top: 10px;
-      font-size: 0.92rem;
-    }
-
-    .career-example {
-      margin-top: 8px;
-      padding: 9px 11px;
-      border-radius: 10px;
-      background: var(--surface-soft);
-      font-size: 0.87rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
-
-    .behavior-option {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      border: 1.5px solid var(--border);
-      border-radius: 13px;
-      padding: 13px 14px;
-      margin-bottom: 10px;
-      background: #fcfefe;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .behavior-option input {
-      margin-top: 4px;
-      width: 18px;
-      height: 18px;
-      accent-color: var(--primary);
-    }
-
-    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .stat-box {
-      background: linear-gradient(180deg, #ffffff, var(--surface-soft));
-      border: 1.5px solid var(--border);
-      border-radius: 15px;
-      padding: 16px;
-    }
-    .stat-num { font-size: 1.55rem; font-weight: 800; color: var(--primary-dark); margin-top: 4px; }
-
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .chart-card {
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
-      background: #fcfefe;
-    }
-
-    .chart-wrap { position: relative; height: 260px; width: 100%; }
-
-    .report-box {
-      border: 1.5px solid #bfe3e8;
-      border-radius: 16px;
-      padding: 18px;
-      background: #f4fafb;
-      margin-bottom: 18px;
-    }
-
-    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; background: #fff; }
-    th, td { padding: 11px 12px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
-    th { background: var(--surface-soft); font-weight: 800; color: var(--primary-dark); }
-    tbody tr:hover { background: #f8fbfc; }
-
-    .hidden { display: none !important; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>مستقبلي يبدأ الآن | منصة التوجيه المهني للمرحلة المتوسطة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f3f8f9;--surface:#fff;--soft:#eef5f7;--ink:#172a3a;--muted:#5c7285;--primary:#0d6e7a;--pdark:#084d56;--psoft:#e1f2f4;--accent:#d9822b;--ok:#1b7a4b;--oksoft:#e7f6ee;--err:#b8292f;--errsoft:#fdecec;--border:#d7e4e8;--r:18px;--sh:0 10px 26px rgba(23,42,58,.06)}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);line-height:1.75}
+.topbar{background:linear-gradient(135deg,var(--pdark),var(--primary));color:#fff;padding:12px 18px;position:sticky;top:0;z-index:40;box-shadow:0 4px 16px rgba(8,77,86,.2)}
+.topbar-inner,.container{max-width:1140px;margin:0 auto}
+.topbar-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.container{margin:18px auto 64px;padding:0 16px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-badge{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:18px;font-weight:800}
+.brand h1{margin:0;font-size:1.12rem;font-weight:800}
+.brand p{margin:0;font-size:.78rem;opacity:.92}
+.status-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:999px;font-size:.76rem;font-weight:700;background:rgba(255,255,255,.16)}
+.dot{width:8px;height:8px;border-radius:50%;background:#4ade80}
+.dot.warn{background:#facc15}
+.stepper{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-bottom:18px}
+.step-btn{border:1.5px solid var(--border);background:var(--surface);color:var(--ink);font-family:inherit;font-size:.85rem;font-weight:700;padding:9px 10px;border-radius:13px;cursor:pointer;text-align:center;transition:.2s}
+.step-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 6px 14px rgba(13,110,122,.22)}
+.step-btn.done{border-color:var(--ok);background:var(--oksoft);color:var(--ok)}
+.step-btn.locked{opacity:.55;background:#eef2f5;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:var(--sh);margin-bottom:20px}
+.card-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.card h2{margin:0;font-size:1.2rem;font-weight:800;color:var(--pdark)}
+.card h3{margin:0 0 8px;font-size:1.05rem;font-weight:800;color:var(--pdark)}
+.muted{color:var(--muted);font-size:.92rem;margin:4px 0 0}
+.grid-2,.grid-3,.stats-row,.charts-grid{display:grid;gap:16px}
+.grid-2,.grid-3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.stats-row{grid-template-columns:repeat(auto-fit,minmax(185px,1fr));margin-bottom:20px}
+.charts-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-bottom:20px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+label{font-weight:700;font-size:.92rem}
+input[type="text"],input[type="password"],select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:.95rem;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(13,110,122,.12)}
+.btn{border:none;border-radius:12px;padding:12px 20px;font-family:inherit;font-size:.94rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--pdark)}
+.btn-soft{background:var(--soft);color:var(--ink);border:1px solid var(--border)}
+.btn-soft:hover{background:var(--psoft)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-danger{background:var(--err);color:#fff;padding:7px 12px;font-size:.82rem}
+.alert{padding:13px 16px;border-radius:13px;font-weight:700;font-size:.92rem;margin-bottom:18px}
+.alert-success{background:var(--oksoft);color:var(--ok);border:1px solid #b8e8cf}
+.alert-danger{background:var(--errsoft);color:var(--err);border:1px solid #f7c5c8}
+.alert-info{background:var(--psoft);color:var(--pdark);border:1px solid #bfe3e8}
+.closing-message{background:linear-gradient(135deg,#e7f6ee,#e1f2f4);border:2px solid #9ad8b8;border-radius:16px;padding:20px;margin-top:18px}
+.closing-message h4{margin:0 0 8px;font-size:1.06rem;font-weight:800;color:var(--pdark)}
+.closing-message p{margin:0;font-size:.96rem;font-weight:700;line-height:1.85}
+.tag{display:inline-block;padding:4px 11px;border-radius:999px;font-size:.8rem;font-weight:700;background:var(--psoft);color:var(--pdark)}
+.question-box{border:1.5px solid var(--border);border-radius:15px;padding:16px;margin-bottom:14px;background:#fcfefe}
+.question-text{font-weight:700;font-size:.98rem;margin-bottom:12px}
+.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}
+.choice-item{position:relative}
+.choice-item input{position:absolute;opacity:0;pointer-events:none}
+.choice-item span{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--border);border-radius:11px;background:#fff;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s}
+.choice-item input:checked+span{background:var(--primary);color:#fff;border-color:var(--primary)}
+.career-simple-card{border:1.5px solid var(--border);border-radius:16px;padding:18px;background:#fff;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.career-simple-card.chosen{border-color:var(--ok);background:#f5fbf8}
+.career-simple-desc{border-top:1px dashed var(--border);padding-top:10px;font-size:.92rem}
+.career-example{margin-top:8px;padding:9px 11px;border-radius:10px;background:var(--soft);font-size:.87rem;font-weight:700;color:var(--pdark)}
+.behavior-option{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--border);border-radius:13px;padding:13px 14px;margin-bottom:10px;background:#fcfefe;cursor:pointer;font-weight:700}
+.behavior-option input{margin-top:4px;width:18px;height:18px;accent-color:var(--primary)}
+.stat-box{background:linear-gradient(180deg,#fff,var(--soft));border:1.5px solid var(--border);border-radius:15px;padding:16px}
+.stat-num{font-size:1.55rem;font-weight:800;color:var(--pdark);margin-top:4px}
+.chart-card{border:1.5px solid var(--border);border-radius:16px;padding:18px;background:#fcfefe}
+.chart-wrap{position:relative;height:260px;width:100%}
+.report-box{border:1.5px solid #bfe3e8;border-radius:16px;padding:18px;background:#f4fafb;margin-bottom:18px}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:#fff}
+th,td{padding:11px 12px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+th{background:var(--soft);font-weight:800;color:var(--pdark)}
+tbody tr:hover{background:#f8fbfc}
+.hidden{display:none!important}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-badge">م</div>
-        <div>
-          <h1>مستقبلي يبدأ الآن</h1>
-          <p>رحلة التوجيه المهني لطالبات المرحلة المتوسطة</p>
-        </div>
-      </div>
-      <div class="status-pill" id="dbStatusPill">
-        <span class="dot warn" id="dbStatusDot"></span>
-        <span id="dbStatusText">جارٍ التحقق من الاتصال...</span>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-badge">م</div>
+      <div>
+        <h1>مستقبلي يبدأ الآن</h1>
+        <p>رحلة التوجيه المهني لطالبات المرحلة المتوسطة</p>
       </div>
     </div>
-  </header>
+    <div class="status-pill" id="dbStatusPill">
+      <span class="dot warn" id="dbStatusDot"></span>
+      <span id="dbStatusText">جارٍ التحقق من الاتصال...</span>
+    </div>
+  </div>
+</header>
 
-  <main class="container">
-    <nav class="stepper" aria-label="خطوات الرحلة">
-      <button type="button" class="step-btn active" data-step="profileStep" id="btn-profileStep">1. بيانات الطالبة</button>
-      <button type="button" class="step-btn locked" data-step="preStep" id="btn-preStep">2. القياس القبلي</button>
-      <button type="button" class="step-btn locked" data-step="exploreStep" id="btn-exploreStep">3. استكشاف المهن</button>
-      <button type="button" class="step-btn locked" data-step="postStep" id="btn-postStep">4. القياس البعدي</button>
-      <button type="button" class="step-btn locked" data-step="impactStep" id="btn-impactStep">5. الأثر السلوكي وقياس الأثر</button>
-      <button type="button" class="step-btn" data-step="counselorStep" id="btn-counselorStep">لوحة الموجهة الطلابية</button>
-    </nav>
+<main class="container">
+  <nav class="stepper" aria-label="خطوات الرحلة">
+    <button type="button" class="step-btn active" data-step="profileStep" id="btn-profileStep">1. بيانات الطالبة</button>
+    <button type="button" class="step-btn locked" data-step="preStep" id="btn-preStep">2. القياس القبلي</button>
+    <button type="button" class="step-btn locked" data-step="exploreStep" id="btn-exploreStep">3. استكشاف المهن</button>
+    <button type="button" class="step-btn locked" data-step="postStep" id="btn-postStep">4. القياس البعدي</button>
+    <button type="button" class="step-btn locked" data-step="impactStep" id="btn-impactStep">5. الأثر السلوكي وقياس الأثر</button>
+    <button type="button" class="step-btn" data-step="counselorStep" id="btn-counselorStep">لوحة الموجهة الطلابية</button>
+  </nav>
 
-    <div id="noticeArea"></div>
+  <div id="noticeArea"></div>
 
-    <!-- 1. بيانات الطالبة -->
-    <section id="profileStep" class="step-panel">
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>أهلاً بكِ في رحلة «مستقبلي يبدأ الآن»</h2>
-            <p class="muted">ابدئي بتسجيل اسمكِ الثلاثي وصفكِ في المرحلة المتوسطة للانطلاق خطوة بخطوة.</p>
-          </div>
-          <span class="tag" id="studentTag">لم تُسجّل طالبة بعد</span>
+  <section id="profileStep" class="step-panel">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>أهلاً بكِ في رحلة «مستقبلي يبدأ الآن»</h2>
+          <p class="muted">ابدئي بتسجيل اسمكِ الثلاثي وصفكِ في المرحلة المتوسطة للانطلاق خطوة بخطوة.</p>
         </div>
-
-        <form id="profileForm">
-          <div class="grid-2">
-            <div class="field">
-              <label for="fullName">الاسم الثلاثي *</label>
-              <input type="text" id="fullName" required placeholder="مثال: سارة أحمد محمد العتيبي" />
-            </div>
-            <div class="field">
-              <label for="gradeLevel">الصف الدراسي *</label>
-              <select id="gradeLevel" required>
-                <option value="">اختاري الصف</option>
-                <option value="أول متوسط">أول متوسط</option>
-                <option value="ثاني متوسط">ثاني متوسط</option>
-                <option value="ثالث متوسط">ثالث متوسط</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="schoolName">المدرسة / الشعبة</label>
-              <input type="text" id="schoolName" placeholder="مثال: المتوسطة الأولى - شعبة أ" />
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary" id="startJourneyBtn">حفظ والبدء بالقياس القبلي</button>
-        </form>
+        <span class="tag" id="studentTag">لم تُسجّل طالبة بعد</span>
       </div>
-    </section>
-
-    <!-- 2. القياس القبلي -->
-    <section id="preStep" class="step-panel hidden">
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>القياس القبلي (10 أسئلة)</h2>
-            <p class="muted">أجيبي عن كل عبارة باختيار الإجابة التي تعبّر عنكِ الآن قبل استكشاف المهن.</p>
-          </div>
-          <span class="tag" id="preCounter">0 / 10</span>
-        </div>
-
-        <form id="preForm">
-          <div id="preQuestionsList"></div>
-          <button type="submit" class="btn btn-primary" id="savePreBtn">حفظ القياس القبلي والانتقال لاستكشاف المهن</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 3. استكشاف المهن -->
-    <section id="exploreStep" class="step-panel hidden">
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>استكشاف المهن</h2>
-            <p class="muted">تعرّفي على مهن متنوعة بلغة سهلة وواضحة مع أمثلة قريبة منكِ، ويجب اختيار مهنة واحدة على الأقل قبل الانتقال للقياس البعدي.</p>
-          </div>
-          <span class="tag" id="chosenCareerTag">لم تختاري مهنة بعد</span>
-        </div>
-
-        <div class="grid-3" id="careersList"></div>
-
-        <div style="margin-top:22px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;">
-          <span class="muted">اختاري المهنة الأقرب لكِ أولاً ثم انتقلي للقياس البعدي.</span>
-          <button type="button" class="btn btn-primary" id="toPostTestBtn">الانتقال إلى القياس البعدي</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. القياس البعدي -->
-    <section id="postStep" class="step-panel hidden">
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>القياس البعدي (10 أسئلة)</h2>
-            <p class="muted">أجيبي عن الأسئلة بعد استكشاف المهن لنقيس مدى وضوح الصورة لديكِ الآن.</p>
-          </div>
-          <span class="tag" id="postCounter">0 / 10</span>
-        </div>
-
-        <form id="postForm">
-          <div id="postQuestionsList"></div>
-          <button type="submit" class="btn btn-primary" id="savePostBtn">حفظ القياس البعدي والانتقال للأثر السلوكي</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- 5. الأثر السلوكي وقياس الأثر -->
-    <section id="impactStep" class="step-panel hidden">
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <h2>الأثر السلوكي وقياس الأثر</h2>
-            <p class="muted">اختاري خطوات عملية بسيطة ستبدئين بها لتطوير مهاراتكِ، وشاهدي نتيجة قياس الأثر.</p>
-          </div>
-        </div>
-
-        <div id="impactScoreSummary"></div>
-
-        <form id="behaviorForm" style="margin-top:18px;">
-          <h3>ما الخطوات العملية التي تنوين القيام بها لتطوير نفسكِ؟</h3>
-          <p class="muted">اختاري ما يناسبكِ من هذه الخطوات السهلة والعملية:</p>
-          <div id="behaviorOptionsList" style="margin-top:12px;"></div>
-          <button type="submit" class="btn btn-primary" style="margin-top:12px;">حفظ خطوات الأثر السلوكي وإتمام قياس الأثر</button>
-        </form>
-
-        <div id="behaviorSavedBox" class="hidden" style="margin-top:16px;"></div>
-
-        <div id="finalGuidanceMessage" class="closing-message hidden">
-          <h4>رسالة لكِ في ختام رحلتكِ</h4>
-          <p>
-            هذي الشاشة عامل بسيط مساعد، لكن المهن متنوعة وكثيرة؛ ابحثي وواصلي واجتهدي ليكون لكِ مستقبل ناجح بإذن الله.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- لوحة التحكم -->
-    <section id="counselorStep" class="step-panel hidden">
-      <div class="card" id="counselorLockBox">
-        <h2>بوابة الوصول</h2>
-        <p class="muted">أدخلي بيانات الوصول للمتابعة.</p>
-        <form id="counselorLoginForm" style="max-width:460px; margin-top:14px;">
+      <form id="profileForm">
+        <div class="grid-2">
           <div class="field">
-            <label for="counselorEmailInput">اليوزر</label>
-            <input type="text" id="counselorEmailInput" required placeholder="اليوزر" autocomplete="off" />
+            <label for="fullName">الاسم الثلاثي *</label>
+            <input type="text" id="fullName" required placeholder="مثال: سارة أحمد محمد العتيبي"/>
           </div>
           <div class="field">
-            <label for="passcodeInput">الرمز السري</label>
-            <input type="password" id="passcodeInput" required placeholder="الرمز السري" autocomplete="off" />
+            <label for="gradeLevel">الصف الدراسي *</label>
+            <select id="gradeLevel" required>
+              <option value="">اختاري الصف</option>
+              <option value="أول متوسط">أول متوسط</option>
+              <option value="ثاني متوسط">ثاني متوسط</option>
+              <option value="ثالث متوسط">ثالث متوسط</option>
+            </select>
           </div>
-          <button type="submit" class="btn btn-primary" id="unlockBtn">دخول</button>
-        </form>
+          <div class="field">
+            <label for="schoolName">المدرسة / الشعبة</label>
+            <input type="text" id="schoolName" placeholder="مثال: المتوسطة الأولى - شعبة أ"/>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="startJourneyBtn">حفظ والبدء بالقياس القبلي</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="preStep" class="step-panel hidden">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>القياس القبلي (10 أسئلة)</h2>
+          <p class="muted">أجيبي عن كل عبارة باختيار الإجابة التي تعبّر عنكِ الآن قبل استكشاف المهن.</p>
+        </div>
+        <span class="tag" id="preCounter">0 / 10</span>
       </div>
+      <form id="preForm">
+        <div id="preQuestionsList"></div>
+        <button type="submit" class="btn btn-primary" id="savePreBtn">حفظ القياس القبلي والانتقال لاستكشاف المهن</button>
+      </form>
+    </div>
+  </section>
 
-      <div class="card hidden" id="counselorBoardBox">
-        <div class="card-header">
-          <div>
-            <h2>متابعة النتائج والتقارير</h2>
-            <p class="muted">عرض نتائج القياس القبلي والبعدي وقياس الأثر وتقرير التطوير والتدريب.</p>
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:8px;">
-            <button type="button" class="btn btn-soft" id="refreshBtn">تحديث البيانات</button>
-            <button type="button" class="btn btn-accent" id="exportBtn">تصدير CSV</button>
-            <button type="button" class="btn btn-soft" id="lockBtn">خروج</button>
-          </div>
+  <section id="exploreStep" class="step-panel hidden">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>استكشاف المهن</h2>
+          <p class="muted">تعرّفي على مهن متنوعة بلغة سهلة وواضحة مع أمثلة قريبة منكِ، ويجب اختيار مهنة واحدة على الأقل قبل الانتقال للقياس البعدي.</p>
         </div>
+        <span class="tag" id="chosenCareerTag">لم تختاري مهنة بعد</span>
+      </div>
+      <div class="grid-3" id="careersList"></div>
+      <div style="margin-top:22px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+        <span class="muted">اختاري المهنة الأقرب لكِ أولاً ثم انتقلي للقياس البعدي.</span>
+        <button type="button" class="btn btn-primary" id="toPostTestBtn">الانتقال إلى القياس البعدي</button>
+      </div>
+    </div>
+  </section>
 
-        <div class="stats-row">
-          <div class="stat-box">
-            <div class="muted">عدد الطالبات</div>
-            <div class="stat-num" id="statCount">0</div>
-          </div>
-          <div class="stat-box">
-            <div class="muted">متوسط القياس القبلي</div>
-            <div class="stat-num" id="statPre">0%</div>
-          </div>
-          <div class="stat-box">
-            <div class="muted">متوسط القياس البعدي</div>
-            <div class="stat-num" id="statPost">0%</div>
-          </div>
-          <div class="stat-box">
-            <div class="muted">قياس الأثر للبرنامج</div>
-            <div class="stat-num" id="statImpact">0%</div>
-          </div>
+  <section id="postStep" class="step-panel hidden">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>القياس البعدي (10 أسئلة)</h2>
+          <p class="muted">أجيبي عن الأسئلة بعد استكشاف المهن لنقيس مدى وضوح الصورة لديكِ الآن.</p>
         </div>
+        <span class="tag" id="postCounter">0 / 10</span>
+      </div>
+      <form id="postForm">
+        <div id="postQuestionsList"></div>
+        <button type="submit" class="btn btn-primary" id="savePostBtn">حفظ القياس البعدي والانتقال للأثر السلوكي</button>
+      </form>
+    </div>
+  </section>
 
-        <div class="charts-grid">
-          <div class="chart-card">
-            <h3>مقارنة القياس القبلي والبعدي للبرنامج</h3>
-            <div class="chart-wrap">
-              <canvas id="programComparisonChart"></canvas>
-            </div>
-          </div>
-          <div class="chart-card">
-            <h3>استعداد الطالبات للتطوير والتدريب (الأثر السلوكي)</h3>
-            <div class="chart-wrap">
-              <canvas id="readinessChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <div class="report-box" id="behavioralReportBox">
-          <h3>تقرير الأثر السلوكي: استعداد الطالبات للتطوير والتدريب</h3>
-          <div id="behavioralReportDetails" class="muted">جارٍ إعداد التقرير...</div>
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>الاسم الثلاثي</th>
-                <th>الصف</th>
-                <th>المهنة المختارة</th>
-                <th>القياس القبلي</th>
-                <th>القياس البعدي</th>
-                <th>قياس الأثر</th>
-                <th>الأثر السلوكي (التطوير والتدريب)</th>
-                <th>إجراء</th>
-              </tr>
-            </thead>
-            <tbody id="recordsBody">
-              <tr><td colspan="9" style="text-align:center;">جارٍ التحميل...</td></tr>
-            </tbody>
-          </table>
+  <section id="impactStep" class="step-panel hidden">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>الأثر السلوكي وقياس الأثر</h2>
+          <p class="muted">اختاري خطوات عملية بسيطة ستبدئين بها لتطوير مهاراتكِ، وشاهدي نتيجة قياس الأثر.</p>
         </div>
       </div>
-    </section>
-  </main>
+      <div id="impactScoreSummary"></div>
+      <form id="behaviorForm" style="margin-top:18px">
+        <h3>ما الخطوات العملية التي تنوين القيام بها لتطوير نفسكِ؟</h3>
+        <p class="muted">اختاري ما يناسبكِ من هذه الخطوات السهلة والعملية:</p>
+        <div id="behaviorOptionsList" style="margin-top:12px"></div>
+        <button type="submit" class="btn btn-primary" style="margin-top:12px">حفظ خطوات الأثر السلوكي وإتمام قياس الأثر</button>
+      </form>
+      <div id="behaviorSavedBox" class="hidden" style="margin-top:16px"></div>
+      <div id="finalGuidanceMessage" class="closing-message hidden">
+        <h4>رسالة لكِ في ختام رحلتكِ</h4>
+        <p>هذي الشاشة عامل بسيط مساعد، لكن المهن متنوعة وكثيرة؛ ابحثي وواصلي واجتهدي ليكون لكِ مستقبل ناجح بإذن الله.</p>
+      </div>
+    </div>
+  </section>
 
-  <script>
-    const SUPABASE_URL = 'https://saqpjwezeyuuziwliwhc.supabase.co';
-    const SUPABASE_ANON_KEY = 'Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O';
-    const TABLE_NAME = 'student_assessments';
-    const COUNSELOR_USER = 'ershadd66@gmail.com';
-    const COUNSELOR_PASSCODE = 'EmanibrahimKh4422';
-
-    const CHOICES = [
-      { value: 1, label: 'لا أوافق بشدة' },
-      { value: 2, label: 'لا أوافق' },
-      { value: 3, label: 'محايدة' },
-      { value: 4, label: 'أوافق' },
-      { value: 5, label: 'أوافق بشدة' }
-    ];
-
-    const QUESTIONS = [
-      'أعرف ما هي المهن الموجودة في مجالات اهتمامي.',
-      'أفهم ماذا تفعل صاحبة هذه المهنة في عملها اليومي.',
-      'أعرف المواد الدراسية التي تساعدني على الاستعداد لمستقبلي.',
-      'أستطيع أن أذكر نقاط قوة أحبها في نفسي.',
-      'أحب البحث والقراءة عن الأفكار والمهن الجديدة.',
-      'أفكر في خطوات بسيطة أطور بها نفسي من الآن.',
-      'أشعر بثقة أكبر عند التفكير في مستقبلي الدراسي والمهني.',
-      'لا أقلق إذا احتجت وقتاً للتفكير قبل أن أختار.',
-      'أستفيد من نصائح وتوجيه المرشدة والمعلمات.',
-      'أشعر أنني مستعدة لبدء التفكير في مستقبلي بخطوات واضحة.'
-    ];
-
-    const CAREERS = [
-      {
-        id: 'ai',
-        title: 'مختصة الذكاء الاصطناعي وتدريب الأنظمة الذكية',
-        field: 'الذكاء الاصطناعي والتقنية',
-        simpleDesc: 'تدرّب البرامج الذكية على فهم الأسئلة ومساعدة الناس وتنظيم المعلومات وتسهيل المهام اليومية بأمان ووضوح.',
-        example: 'مثال: تدريب مساعد ذكي يلخّص دروس العلوم أو يقترح أفكاراً لمشروع مدرسي.'
-      },
-      {
-        id: 'edu-games',
-        title: 'مصممة ألعاب وتجارب تعليمية تفاعلية',
-        field: 'التعليم والتصميم التفاعلي',
-        simpleDesc: 'تحوّل الدروس والمفاهيم إلى أنشطة وألعاب ممتعة تساعد الطالبات على الفهم والتذكر بسهولة.',
-        example: 'مثال: تصميم لعبة أسئلة وتحديات لمراجعة جدول الضرب أو خريطة العالم.'
-      },
-      {
-        id: 'tech',
-        title: 'مصممة برامج وتطبيقات',
-        field: 'التقنية والحاسب',
-        simpleDesc: 'تبتكر تطبيقات الهواتف والمواقع التي نستخدمها يومياً، وتحل المشكلات بأفكار ذكية.',
-        example: 'مثال: تصميم تطبيق بسيط يرتّب جدول المذاكرة والمهام اليومية.'
-      },
-      {
-        id: 'health',
-        title: 'طبيبة أو صيدلانية',
-        field: 'العلوم والصحة',
-        simpleDesc: 'تساعد المرضى على التعافي وتشرح لهم كيفية استخدام العلاج بأمان واهتمام.',
-        example: 'مثال: توضيح طريقة استخدام الدواء الصحيحة ومواعيده بلغة سهلة للمريض.'
-      },
-      {
-        id: 'design',
-        title: 'مصممة جرافيك ومحتوى إبداعي',
-        field: 'الفن والإبداع',
-        simpleDesc: 'تصمم الشعارات والملصقات والصور والمحتوى الجميل الذي يوصل الفكرة بوضوح.',
-        example: 'مثال: تصميم لوحة توعوية مدرسية بألوان متناسقة ورسوم واضحة.'
-      },
-      {
-        id: 'business',
-        title: 'رائدة أعمال ومشروعات',
-        field: 'المشاريع والإدارة',
-        simpleDesc: 'تحوّل فكرة جميلة إلى مشروع صغير أو متجر منظم وتديره بنجاح.',
-        example: 'مثال: إدارة ركن صغير في السوق المدرسي وتنظيم التكاليف والمبيعات.'
-      }
-    ];
-
-    const BEHAVIOR_ACTIONS = [
-      'القراءة عن مهارة واحدة مرتبطة بالمهنة التي أعجبتني.',
-      'البحث في مصدر موثوق عن تفاصيل المهنة وخطواتها.',
-      'محاولة التدريب العملي أو تجربة نشاط بسيط يطوّر هذه المهارة.',
-      'مشاركة ما تعرفتُ عليه مع أسرتي أو معلمتي أو الموجهة الطلابية.'
-    ];
-
-    let supabaseClient = null;
-    let isDbConnected = false;
-    let isCounselorAuthenticated = false;
-    let cachedBoardRows = [];
-    let comparisonChartInstance = null;
-    let readinessChartInstance = null;
-
-    const state = {
-      student: { full_name: '', grade_level: '', school_name: '' },
-      preAnswers: {},
-      postAnswers: {},
-      selectedBehaviors: [],
-      preDone: false,
-      exploredDone: false,
-      postDone: false,
-      impactCompleted: false,
-      chosenCareer: null,
-      preScore: null,
-      postScore: null
-    };
-
-    async function initDb() {
-      const dot = document.getElementById('dbStatusDot');
-      const text = document.getElementById('dbStatusText');
-      try {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { error } = await supabaseClient.from(TABLE_NAME).select('id').limit(1);
-        if (error) throw error;
-        isDbConnected = true;
-        dot.className = 'dot';
-        text.textContent = 'متصل بقاعدة البيانات';
-      } catch {
-        isDbConnected = false;
-        dot.className = 'dot warn';
-        text.textContent = 'حفظ محلي احتياطي';
-      }
-    }
-
-    function showNotice(type, msg) {
-      const cls = type === 'success' ? 'alert-success' : type === 'danger' ? 'alert-danger' : 'alert-info';
-      document.getElementById('noticeArea').innerHTML = `<div class="alert ${cls}">${escapeHtml(msg)}</div>`;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function clearNotice() { document.getElementById('noticeArea').innerHTML = ''; }
-
-    function escapeHtml(s = '') {
-      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    function cleanName(n = '') { return n.trim().replace(/\s+/g, ' '); }
-    function isThreeNames(n = '') { return cleanName(n).split(' ').filter(Boolean).length >= 3; }
-
-    function getLocalRows() {
-      try { return JSON.parse(localStorage.getItem('mustaqbali_v9_rows') || '[]'); }
-      catch { return []; }
-    }
-
-    function addLocalRow(row) {
-      const rows = getLocalRows();
-      rows.unshift(row);
-      localStorage.setItem('mustaqbali_v9_rows', JSON.stringify(rows));
-    }
-
-    async function getAllRows() {
-      let dbRows = [];
-      if (isDbConnected && supabaseClient) {
-        const { data, error } = await supabaseClient.from(TABLE_NAME).select('*').order('created_at', { ascending: false });
-        if (!error && Array.isArray(data)) dbRows = data;
-      }
-      return [...dbRows, ...getLocalRows()];
-    }
-
-    async function isNameUsedForStage(fullName, stage) {
-      const target = cleanName(fullName).toLowerCase();
-      const rows = await getAllRows();
-      return rows.some(r => cleanName(r.full_name).toLowerCase() === target && r.stage === stage);
-    }
-
-    function canOpenStep(stepId) {
-      if (stepId === 'profileStep' || stepId === 'counselorStep') return true;
-      if (stepId === 'preStep') return Boolean(state.student.full_name);
-      if (stepId === 'exploreStep') return state.preDone;
-      if (stepId === 'postStep') return state.preDone && state.exploredDone && Boolean(state.chosenCareer);
-      if (stepId === 'impactStep') return state.preDone && state.postDone;
-      return false;
-    }
-
-    function refreshStepper() {
-      const map = [
-        { id: 'profileStep', done: Boolean(state.student.full_name) },
-        { id: 'preStep', done: state.preDone },
-        { id: 'exploreStep', done: state.exploredDone && Boolean(state.chosenCareer) },
-        { id: 'postStep', done: state.postDone },
-        { id: 'impactStep', done: state.impactCompleted }
-      ];
-
-      map.forEach(item => {
-        const btn = document.getElementById('btn-' + item.id);
-        const unlocked = canOpenStep(item.id);
-        btn.classList.toggle('locked', !unlocked);
-        btn.classList.toggle('done', item.done && unlocked);
-      });
-
-      document.getElementById('studentTag').textContent = state.student.full_name
-        ? `${state.student.full_name} — ${state.student.grade_level}`
-        : 'لم تُسجّل طالبة بعد';
-
-      document.getElementById('chosenCareerTag').textContent = state.chosenCareer
-        ? `المهنة المختارة: ${state.chosenCareer.title}`
-        : 'لم تختاري مهنة بعد';
-    }
-
-    async function goToStep(stepId) {
-      clearNotice();
-      if (!canOpenStep(stepId)) {
-        if (stepId === 'preStep') showNotice('danger', 'يرجى أولاً إدخال الاسم الثلاثي والصف في خطوة «بيانات الطالبة».');
-        else if (stepId === 'exploreStep') showNotice('danger', 'يرجى إكمال «القياس القبلي» أولاً قبل استكشاف المهن.');
-        else if (stepId === 'postStep') {
-          if (!state.preDone) showNotice('danger', 'يرجى إكمال «القياس القبلي» أولاً.');
-          else showNotice('danger', 'يجب اختيار مهنة من «استكشاف المهن» أولاً قبل الانتقال إلى «القياس البعدي».');
-        }
-        else if (stepId === 'impactStep') showNotice('danger', 'تظهر هذه الخطوة بعد إكمال القياس القبلي والقياس البعدي معاً.');
-        return;
-      }
-
-      document.querySelectorAll('.step-btn').forEach(b => b.classList.toggle('active', b.dataset.step === stepId));
-      document.querySelectorAll('.step-panel').forEach(p => p.classList.toggle('hidden', p.id !== stepId));
-
-      if (stepId === 'impactStep') renderImpactSection();
-      if (stepId === 'counselorStep') {
-        if (isCounselorAuthenticated) {
-          document.getElementById('counselorLockBox').classList.add('hidden');
-          document.getElementById('counselorBoardBox').classList.remove('hidden');
-          await loadBoard();
-        } else {
-          document.getElementById('counselorBoardBox').classList.add('hidden');
-          document.getElementById('counselorLockBox').classList.remove('hidden');
-        }
-      }
-    }
-
-    document.querySelectorAll('.step-btn').forEach(btn => {
-      btn.addEventListener('click', () => goToStep(btn.dataset.step));
-    });
-
-    document.getElementById('profileForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      clearNotice();
-
-      const fullName = cleanName(document.getElementById('fullName').value);
-      const gradeLevel = document.getElementById('gradeLevel').value;
-      const schoolName = document.getElementById('schoolName').value.trim();
-
-      if (!isThreeNames(fullName)) {
-        showNotice('danger', 'يرجى كتابة الاسم الثلاثي كاملاً (ثلاثة أسماء على الأقل) لمنع تكرار الاسم.');
-        return;
-      }
-
-      if (await isNameUsedForStage(fullName, 'pre')) {
-        showNotice('danger', `الاسم الثلاثي "${fullName}" مسجّل مسبقاً، ولا يُسمح بتكرار الاسم الثلاثي.`);
-        return;
-      }
-
-      state.student = { full_name: fullName, grade_level: gradeLevel, school_name: schoolName };
-      refreshStepper();
-      showNotice('success', `أهلاً بكِ يا ${fullName}. ابدئي الآن بحل القياس القبلي.`);
-      goToStep('preStep');
-    });
-
-    function renderQuestions(containerId, counterId, answersStore) {
-      const box = document.getElementById(containerId);
-      box.innerHTML = '';
-
-      QUESTIONS.forEach((qText, index) => {
-        const qKey = 'q' + (index + 1);
-        const item = document.createElement('div');
-        item.className = 'question-box';
-
-        const optionsHtml = CHOICES.map(c => {
-          const checked = answersStore[qKey] === c.value ? 'checked' : '';
-          return `
-            <label class="choice-item">
-              <input type="radio" name="${containerId}_${qKey}" value="${c.value}" ${checked} required />
-              <span>${escapeHtml(c.label)}</span>
-            </label>
-          `;
-        }).join('');
-
-        item.innerHTML = `
-          <div class="question-text">${index + 1}. ${escapeHtml(qText)}</div>
-          <div class="choice-grid">${optionsHtml}</div>
-        `;
-        box.appendChild(item);
-      });
-
-      const updateCnt = () => {
-        document.getElementById(counterId).textContent = `${Object.keys(answersStore).length} / ${QUESTIONS.length}`;
-      };
-
-      box.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.addEventListener('change', (ev) => {
-          const k = ev.target.name.split('_')[1];
-          answersStore[k] = Number(ev.target.value);
-          updateCnt();
-        });
-      });
-
-      updateCnt();
-    }
-
-    async function submitStage(stage) {
-      clearNotice();
-      const answers = stage === 'pre' ? state.preAnswers : state.postAnswers;
-      if (Object.keys(answers).length < QUESTIONS.length) {
-        showNotice('danger', 'يرجى الإجابة على جميع الأسئلة العشرة.');
-        return;
-      }
-
-      if (stage === 'post' && !state.chosenCareer) {
-        showNotice('danger', 'يرجى اختيار مهنة في خطوة «استكشاف المهن» قبل حفظ القياس البعدي.');
-        return;
-      }
-
-      if (await isNameUsedForStage(state.student.full_name, stage)) {
-        showNotice('danger', `تم تسجيل هذا القياس مسبقاً للاسم "${state.student.full_name}" ولا يمكن تكراره.`);
-        return;
-      }
-
-      const sum = Object.values(answers).reduce((a, b) => a + Number(b), 0);
-      const pct = Math.round((sum / (QUESTIONS.length * 5)) * 100);
-
-      const record = {
-        full_name: state.student.full_name,
-        grade_level: state.student.grade_level,
-        school_name: state.student.school_name || '',
-        selected_career: state.chosenCareer ? state.chosenCareer.title : 'لم تُحدّد بعد',
-        stage,
-        score: sum,
-        max_score: QUESTIONS.length * 5,
-        percentage: pct,
-        behavioral_actions: [],
-        created_at: new Date().toISOString()
-      };
-
-      if (isDbConnected && supabaseClient) {
-        const { error } = await supabaseClient.from(TABLE_NAME).insert([record]);
-        if (error) addLocalRow({ ...record, id: 'local-' + Date.now() });
-      } else {
-        addLocalRow({ ...record, id: 'local-' + Date.now() });
-      }
-
-      if (stage === 'pre') {
-        state.preDone = true;
-        state.preScore = pct;
-        refreshStepper();
-        showNotice('success', 'تم حفظ القياس القبلي. انتقلي الآن لاستكشاف المهن واختاري المهنة الأقرب لكِ.');
-        goToStep('exploreStep');
-      } else {
-        state.postDone = true;
-        state.postScore = pct;
-        refreshStepper();
-        showNotice('success', 'تم حفظ القياس البعدي بنجاح. اختاري الآن خطوات الأثر السلوكي واطلعي على قياس الأثر.');
-        goToStep('impactStep');
-      }
-    }
-
-    document.getElementById('preForm').addEventListener('submit', (e) => { e.preventDefault(); submitStage('pre'); });
-    document.getElementById('postForm').addEventListener('submit', (e) => { e.preventDefault(); submitStage('post'); });
-
-    function renderCareers() {
-      const list = document.getElementById('careersList');
-      list.innerHTML = '';
-
-      CAREERS.forEach(career => {
-        const chosen = state.chosenCareer && state.chosenCareer.id === career.id;
-        const card = document.createElement('div');
-        card.className = `career-simple-card ${chosen ? 'chosen' : ''}`;
-        card.innerHTML = `
-          <div>
-            <span class="tag">${escapeHtml(career.field)}</span>
-            <h3 style="margin:8px 0 6px; font-size:1.05rem; font-weight:800;">${escapeHtml(career.title)}</h3>
-            <div class="career-simple-desc">${escapeHtml(career.simpleDesc)}</div>
-            <div class="career-example">${escapeHtml(career.example)}</div>
-          </div>
-          <button type="button" class="btn ${chosen ? 'btn-primary' : 'btn-soft'}">
-            ${chosen ? '✓ اخترتِ هذه المهنة' : 'اختيار هذه المهنة'}
-          </button>
-        `;
-
-        card.querySelector('button').addEventListener('click', () => {
-          state.chosenCareer = career;
-          state.exploredDone = true;
-          refreshStepper();
-          renderCareers();
-          showNotice('success', `تم تسجيل اختياركِ لمهنة "${career.title}". يمكنكِ الآن الانتقال للقياس البعدي.`);
-        });
-
-        list.appendChild(card);
-      });
-    }
-
-    document.getElementById('toPostTestBtn').addEventListener('click', () => {
-      clearNotice();
-      if (!state.chosenCareer) {
-        showNotice('danger', 'يجب اختيار مهنة واحدة على الأقل قبل الانتقال إلى القياس البعدي.');
-        return;
-      }
-      state.exploredDone = true;
-      refreshStepper();
-      goToStep('postStep');
-    });
-
-    function renderImpactSection() {
-      const pre = state.preScore ?? 0;
-      const post = state.postScore ?? 0;
-      const diff = post - pre;
-
-      document.getElementById('impactScoreSummary').innerHTML = `
-        <p><strong>الطالبة:</strong> ${escapeHtml(state.student.full_name)} (${escapeHtml(state.student.grade_level)})</p>
-        <p><strong>المهنة المختارة:</strong> ${escapeHtml(state.chosenCareer ? state.chosenCareer.title : 'لم يتم اختيار مهنة')}</p>
-        <div class="stats-row">
-          <div class="stat-box"><div class="muted">القياس القبلي</div><div class="stat-num">${pre}%</div></div>
-          <div class="stat-box"><div class="muted">القياس البعدي</div><div class="stat-num">${post}%</div></div>
-          <div class="stat-box"><div class="muted">قياس الأثر</div><div class="stat-num">${diff >= 0 ? '+' + diff : diff}%</div></div>
+  <section id="counselorStep" class="step-panel hidden">
+    <div class="card" id="counselorLockBox">
+      <h2>بوابة الوصول</h2>
+      <p class="muted">أدخلي بيانات الوصول للمتابعة.</p>
+      <form id="counselorLoginForm" style="max-width:460px;margin-top:14px">
+        <div class="field">
+          <label for="counselorEmailInput">اليوزر</label>
+          <input type="text" id="counselorEmailInput" required placeholder="اليوزر" autocomplete="off"/>
         </div>
-      `;
+        <div class="field">
+          <label for="passcodeInput">الرمز السري</label>
+          <input type="password" id="passcodeInput" required placeholder="الرمز السري" autocomplete="off"/>
+        </div>
+        <button type="submit" class="btn btn-primary" id="unlockBtn">دخول</button>
+      </form>
+    </div>
 
-      const list = document.getElementById('behaviorOptionsList');
-      list.innerHTML = '';
-      BEHAVIOR_ACTIONS.forEach((act, idx) => {
-        const checked = state.selectedBehaviors.includes(act) ? 'checked' : '';
-        const lbl = document.createElement('label');
-        lbl.className = 'behavior-option';
-        lbl.innerHTML = `
-          <input type="checkbox" value="${escapeHtml(act)}" ${checked} />
-          <span>${idx + 1}. ${escapeHtml(act)}</span>
-        `;
-        list.appendChild(lbl);
-      });
+    <div class="card hidden" id="counselorBoardBox">
+      <div class="card-header">
+        <div>
+          <h2>متابعة النتائج والتقارير</h2>
+          <p class="muted">عرض نتائج القياس القبلي والبعدي وقياس الأثر وتقرير التطوير والتدريب.</p>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button type="button" class="btn btn-soft" id="refreshBtn">تحديث البيانات</button>
+          <button type="button" class="btn btn-accent" id="exportBtn">تصدير CSV</button>
+          <button type="button" class="btn btn-soft" id="lockBtn">خروج</button>
+        </div>
+      </div>
 
-      if (state.impactCompleted) {
-        document.getElementById('finalGuidanceMessage').classList.remove('hidden');
-      }
-    }
+      <div class="stats-row">
+        <div class="stat-box"><div class="muted">عدد الطالبات</div><div class="stat-num" id="statCount">0</div></div>
+        <div class="stat-box"><div class="muted">متوسط القياس القبلي</div><div class="stat-num" id="statPre">0%</div></div>
+        <div class="stat-box"><div class="muted">متوسط القياس البعدي</div><div class="stat-num" id="statPost">0%</div></div>
+        <div class="stat-box"><div class="muted">قياس الأثر للبرنامج</div><div class="stat-num" id="statImpact">0%</div></div>
+      </div>
 
-    document.getElementById('behaviorForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const chosen = Array.from(document.querySelectorAll('#behaviorOptionsList input:checked')).map(i => i.value);
-      if (!chosen.length) {
-        showNotice('danger', 'اختاري خطوة واحدة على الأقل لتسجيل أثركِ السلوكي.');
-        return;
-      }
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>مقارنة القياس القبلي والبعدي للبرنامج</h3>
+          <div class="chart-wrap"><canvas id="programComparisonChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>استعداد الطالبات للتطوير والتدريب (الأثر السلوكي)</h3>
+          <div class="chart-wrap"><canvas id="readinessChart"></canvas></div>
+        </div>
+      </div>
 
-      state.selectedBehaviors = chosen;
-      state.impactCompleted = true;
-      refreshStepper();
+      <div class="report-box" id="behavioralReportBox">
+        <h3>تقرير الأثر السلوكي: استعداد الطالبات للتطوير والتدريب</h3>
+        <div id="behavioralReportDetails" class="muted">جارٍ إعداد التقرير...</div>
+      </div>
 
-      const record = {
-        full_name: state.student.full_name,
-        grade_level: state.student.grade_level,
-        school_name: state.student.school_name || '',
-        selected_career: state.chosenCareer ? state.chosenCareer.title : 'لم تُحدّد بعد',
-        stage: 'behavior',
-        score: chosen.length,
-        max_score: BEHAVIOR_ACTIONS.length,
-        percentage: Math.round((chosen.length / BEHAVIOR_ACTIONS.length) * 100),
-        behavioral_actions: chosen,
-        created_at: new Date().toISOString()
-      };
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>الاسم الثلاثي</th><th>الصف</th><th>المهنة المختارة</th>
+              <th>القياس القبلي</th><th>القياس البعدي</th><th>قياس الأثر</th>
+              <th>الأثر السلوكي (التطوير والتدريب)</th><th>إجراء</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody">
+            <tr><td colspan="9" style="text-align:center">جارٍ التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
 
-      if (isDbConnected && supabaseClient) {
-        const { error } = await supabaseClient.from(TABLE_NAME).insert([record]);
-        if (error) addLocalRow({ ...record, id: 'local-' + Date.now() });
-      } else {
-        addLocalRow({ ...record, id: 'local-' + Date.now() });
-      }
+<script>
+const SUPABASE_URL='https://saqpjwezeyuuziwliwhc.supabase.co';
+const SUPABASE_ANON_KEY='Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O';
+const TABLE_NAME='student_assessments',COUNSELOR_USER='ershadd66@gmail.com',COUNSELOR_PASSCODE='EmanibrahimKh4422';
+const CHOICES=[{value:1,label:'لا أوافق بشدة'},{value:2,label:'لا أوافق'},{value:3,label:'محايدة'},{value:4,label:'أوافق'},{value:5,label:'أوافق بشدة'}];
+const QUESTIONS=[
+  'أعرف ما هي المهن الموجودة في مجالات اهتمامي.',
+  'أفهم ماذا تفعل صاحبة هذه المهنة في عملها اليومي.',
+  'أعرف المواد الدراسية التي تساعدني على الاستعداد لمستقبلي.',
+  'أستطيع أن أذكر نقاط قوة أحبها في نفسي.',
+  'أحب البحث والقراءة عن الأفكار والمهن الجديدة.',
+  'أفكر في خطوات بسيطة أطور بها نفسي من الآن.',
+  'أشعر بثقة أكبر عند التفكير في مستقبلي الدراسي والمهني.',
+  'لا أقلق إذا احتجت وقتاً للتفكير قبل أن أختار.',
+  'أستفيد من نصائح وتوجيه المرشدة والمعلمات.',
+  'أشعر أنني مستعدة لبدء التفكير في مستقبلي بخطوات واضحة.'
+];
+const CAREERS=[
+  {id:'ai',title:'مختصة الذكاء الاصطناعي وتدريب الأنظمة الذكية',field:'الذكاء الاصطناعي والتقنية',simpleDesc:'تدرّب البرامج الذكية على فهم الأسئلة ومساعدة الناس وتنظيم المعلومات وتسهيل المهام اليومية بأمان ووضوح.',example:'مثال: تدريب مساعد ذكي يلخّص دروس العلوم أو يقترح أفكاراً لمشروع مدرسي.'},
+  {id:'edu-games',title:'مصممة ألعاب وتجارب تعليمية تفاعلية',field:'التعليم والتصميم التفاعلي',simpleDesc:'تحوّل الدروس والمفاهيم إلى أنشطة وألعاب ممتعة تساعد الطالبات على الفهم والتذكر بسهولة.',example:'مثال: تصميم لعبة أسئلة وتحديات لمراجعة جدول الضرب أو خريطة العالم.'},
+  {id:'tech',title:'مصممة برامج وتطبيقات',field:'التقنية والحاسب',simpleDesc:'تبتكر تطبيقات الهواتف والمواقع التي نستخدمها يومياً، وتحل المشكلات بأفكار ذكية.',example:'مثال: تصميم تطبيق بسيط يرتّب جدول المذاكرة والمهام اليومية.'},
+  {id:'health',title:'طبيبة أو صيدلانية',field:'العلوم والصحة',simpleDesc:'تساعد المرضى على التعافي وتشرح لهم كيفية استخدام العلاج بأمان واهتمام.',example:'مثال: توضيح طريقة استخدام الدواء الصحيحة ومواعيده بلغة سهلة للمريض.'},
+  {id:'design',title:'مصممة جرافيك ومحتوى إبداعي',field:'الفن والإبداع',simpleDesc:'تصمم الشعارات والملصقات والصور والمحتوى الجميل الذي يوصل الفكرة بوضوح.',example:'مثال: تصميم لوحة توعوية مدرسية بألوان متناسقة ورسوم واضحة.'},
+  {id:'business',title:'رائدة أعمال ومشروعات',field:'المشاريع والإدارة',simpleDesc:'تحوّل فكرة جميلة إلى مشروع صغير أو متجر منظم وتديره بنجاح.',example:'مثال: إدارة ركن صغير في السوق المدرسي وتنظيم التكاليف والمبيعات.'}
+];
+const BEHAVIOR_ACTIONS=[
+  'القراءة عن مهارة واحدة مرتبطة بالمهنة التي أعجبتني.',
+  'البحث في مصدر موثوق عن تفاصيل المهنة وخطواتها.',
+  'محاولة التدريب العملي أو تجربة نشاط بسيط يطوّر هذه المهارة.',
+  'مشاركة ما تعرفتُ عليه مع أسرتي أو معلمتي أو الموجهة الطلابية.'
+];
 
-      const box = document.getElementById('behaviorSavedBox');
-      box.classList.remove('hidden');
-      box.innerHTML = `<div class="alert alert-success">تم حفظ خطوات الأثر السلوكي وإتمام قياس الأثر بنجاح (${chosen.length} خطوات).</div>`;
-      document.getElementById('finalGuidanceMessage').classList.remove('hidden');
-      showNotice('success', 'أتممتِ قياس الأثر بنجاح! اطلعي على رسالتكِ الختامية أدناه.');
-    });
+let supabaseClient=null,isDbConnected=false,isCounselorAuthenticated=false,cachedBoardRows=[],comparisonChartInstance=null,readinessChartInstance=null;
+const state={student:{full_name:'',grade_level:'',school_name:''},preAnswers:{},postAnswers:{},selectedBehaviors:[],preDone:false,exploredDone:false,postDone:false,impactCompleted:false,chosenCareer:null,preScore:null,postScore:null};
 
-    document.getElementById('counselorLoginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      clearNotice();
+async function initDb(){
+  const dot=document.getElementById('dbStatusDot'),text=document.getElementById('dbStatusText');
+  try{
+    supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+    const{error}=await supabaseClient.from(TABLE_NAME).select('id').limit(1);
+    if(error)throw error;
+    isDbConnected=true;dot.className='dot';text.textContent='متصل بقاعدة البيانات';
+  }catch{
+    isDbConnected=false;dot.className='dot warn';text.textContent='حفظ محلي احتياطي';
+  }
+}
 
-      const enteredUser = document.getElementById('counselorEmailInput').value.trim().toLowerCase();
-      const enteredPass = document.getElementById('passcodeInput').value;
+function showNotice(type,msg){
+  const cls=type==='success'?'alert-success':type==='danger'?'alert-danger':'alert-info';
+  document.getElementById('noticeArea').innerHTML=`<div class="alert ${cls}">${escapeHtml(msg)}</div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function clearNotice(){document.getElementById('noticeArea').innerHTML=''}
+function escapeHtml(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function cleanName(n=''){return n.trim().replace(/\s+/g,' ')}
+function isThreeNames(n=''){return cleanName(n).split(' ').filter(Boolean).length>=3}
 
-      if (enteredUser !== COUNSELOR_USER.toLowerCase() || enteredPass !== COUNSELOR_PASSCODE) {
-        isCounselorAuthenticated = false;
-        showNotice('danger', 'بيانات الدخول غير صحيحة.');
-        return;
-      }
+function getLocalRows(){try{return JSON.parse(localStorage.getItem('mustaqbali_v9_rows')||'[]')}catch{return[]}}
+function addLocalRow(row){const rows=getLocalRows();rows.unshift(row);localStorage.setItem('mustaqbali_v9_rows',JSON.stringify(rows))}
 
-      isCounselorAuthenticated = true;
+async function getAllRows(){
+  let dbRows=[];
+  if(isDbConnected&&supabaseClient){
+    const{data,error}=await supabaseClient.from(TABLE_NAME).select('*').order('created_at',{ascending:false});
+    if(!error&&Array.isArray(data))dbRows=data;
+  }
+  return[...dbRows,...getLocalRows()];
+}
+
+async function isNameUsedForStage(fullName,stage){
+  const target=cleanName(fullName).toLowerCase(),rows=await getAllRows();
+  return rows.some(r=>cleanName(r.full_name).toLowerCase()===target&&r.stage===stage);
+}
+
+function canOpenStep(stepId){
+  if(stepId==='profileStep'||stepId==='counselorStep')return true;
+  if(stepId==='preStep')return Boolean(state.student.full_name);
+  if(stepId==='exploreStep')return state.preDone;
+  if(stepId==='postStep')return state.preDone&&state.exploredDone&&Boolean(state.chosenCareer);
+  if(stepId==='impactStep')return state.preDone&&state.postDone;
+  return false;
+}
+
+function refreshStepper(){
+  [{id:'profileStep',done:Boolean(state.student.full_name)},{id:'preStep',done:state.preDone},{id:'exploreStep',done:state.exploredDone&&Boolean(state.chosenCareer)},{id:'postStep',done:state.postDone},{id:'impactStep',done:state.impactCompleted}].forEach(item=>{
+    const btn=document.getElementById('btn-'+item.id),unlocked=canOpenStep(item.id);
+    btn.classList.toggle('locked',!unlocked);
+    btn.classList.toggle('done',item.done&&unlocked);
+  });
+  document.getElementById('studentTag').textContent=state.student.full_name?`${state.student.full_name} — ${state.student.grade_level}`:'لم تُسجّل طالبة بعد';
+  document.getElementById('chosenCareerTag').textContent=state.chosenCareer?`المهنة المختارة: ${state.chosenCareer.title}`:'لم تختاري مهنة بعد';
+}
+
+async function goToStep(stepId){
+  clearNotice();
+  if(!canOpenStep(stepId)){
+    if(stepId==='preStep')showNotice('danger','يرجى أولاً إدخال الاسم الثلاثي والصف في خطوة «بيانات الطالبة».');
+    else if(stepId==='exploreStep')showNotice('danger','يرجى إكمال «القياس القبلي» أولاً قبل استكشاف المهن.');
+    else if(stepId==='postStep')showNotice('danger',!state.preDone?'يرجى إكمال «القياس القبلي» أولاً.':'يجب اختيار مهنة من «استكشاف المهن» أولاً قبل الانتقال إلى «القياس البعدي».');
+    else if(stepId==='impactStep')showNotice('danger','تظهر هذه الخطوة بعد إكمال القياس القبلي والقياس البعدي معاً.');
+    return;
+  }
+  document.querySelectorAll('.step-btn').forEach(b=>b.classList.toggle('active',b.dataset.step===stepId));
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.toggle('hidden',p.id!==stepId));
+  if(stepId==='impactStep')renderImpactSection();
+  if(stepId==='counselorStep'){
+    if(isCounselorAuthenticated){
       document.getElementById('counselorLockBox').classList.add('hidden');
       document.getElementById('counselorBoardBox').classList.remove('hidden');
       await loadBoard();
-    });
-
-    document.getElementById('lockBtn').addEventListener('click', () => {
-      isCounselorAuthenticated = false;
+    }else{
       document.getElementById('counselorBoardBox').classList.add('hidden');
       document.getElementById('counselorLockBox').classList.remove('hidden');
-      document.getElementById('counselorEmailInput').value = '';
-      document.getElementById('passcodeInput').value = '';
-    });
-
-    document.getElementById('refreshBtn').addEventListener('click', async () => {
-      if (!isCounselorAuthenticated) return;
-      await loadBoard();
-    });
-
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      if (!isCounselorAuthenticated) return;
-      exportBoardCsv();
-    });
-
-    function renderCharts(rows, preAvg, postAvg, impactAvg) {
-      if (!window.Chart) return;
-
-      const compCtx = document.getElementById('programComparisonChart').getContext('2d');
-      if (comparisonChartInstance) comparisonChartInstance.destroy();
-      comparisonChartInstance = new Chart(compCtx, {
-        type: 'bar',
-        data: {
-          labels: ['متوسط القياس القبلي', 'متوسط القياس البعدي', 'قياس الأثر للبرنامج'],
-          datasets: [{
-            label: 'النسبة (%)',
-            data: [preAvg, postAvg, impactAvg],
-            backgroundColor: ['#5c7285', '#0d6e7a', '#1b7a4b'],
-            borderRadius: 10
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
-          }
-        }
-      });
-
-      const readyCount = rows.filter(x => x.readyForTraining).length;
-      const notReadyCount = Math.max(0, rows.length - readyCount);
-      const readyCtx = document.getElementById('readinessChart').getContext('2d');
-      if (readinessChartInstance) readinessChartInstance.destroy();
-      readinessChartInstance = new Chart(readyCtx, {
-        type: 'doughnut',
-        data: {
-          labels: ['مستعدة للتطوير والتدريب', 'لم تحدد خطوات بعد'],
-          datasets: [{
-            data: [readyCount, notReadyCount],
-            backgroundColor: ['#1b7a4b', '#d9822b']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } }
-        }
-      });
     }
+  }
+}
 
-    async function loadBoard() {
-      if (!isCounselorAuthenticated) return;
+document.querySelectorAll('.step-btn').forEach(btn=>btn.addEventListener('click',()=>goToStep(btn.dataset.step)));
 
-      const tbody = document.getElementById('recordsBody');
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">جارٍ التحميل...</td></tr>';
+document.getElementById('profileForm').addEventListener('submit',async e=>{
+  e.preventDefault();clearNotice();
+  const fullName=cleanName(document.getElementById('fullName').value),gradeLevel=document.getElementById('gradeLevel').value,schoolName=document.getElementById('schoolName').value.trim();
+  if(!isThreeNames(fullName)){showNotice('danger','يرجى كتابة الاسم الثلاثي كاملاً (ثلاثة أسماء على الأقل) لمنع تكرار الاسم.');return}
+  if(await isNameUsedForStage(fullName,'pre')){showNotice('danger',`الاسم الثلاثي "${fullName}" مسجّل مسبقاً، ولا يُسمح بتكرار الاسم الثلاثي.`);return}
+  state.student={full_name:fullName,grade_level:gradeLevel,school_name:schoolName};
+  refreshStepper();showNotice('success',`أهلاً بكِ يا ${fullName}. ابدئي الآن بحل القياس القبلي.`);goToStep('preStep');
+});
 
-      const all = await getAllRows();
-      const map = new Map();
+function renderQuestions(containerId,counterId,answersStore){
+  const box=document.getElementById(containerId);box.innerHTML='';
+  QUESTIONS.forEach((qText,index)=>{
+    const qKey='q'+(index+1),item=document.createElement('div');item.className='question-box';
+    const optionsHtml=CHOICES.map(c=>`<label class="choice-item"><input type="radio" name="${containerId}_${qKey}" value="${c.value}" ${answersStore[qKey]===c.value?'checked':''} required/><span>${escapeHtml(c.label)}</span></label>`).join('');
+    item.innerHTML=`<div class="question-text">${index+1}. ${escapeHtml(qText)}</div><div class="choice-grid">${optionsHtml}</div>`;
+    box.appendChild(item);
+  });
+  const updateCnt=()=>document.getElementById(counterId).textContent=`${Object.keys(answersStore).length} / ${QUESTIONS.length}`;
+  box.querySelectorAll('input[type="radio"]').forEach(radio=>radio.addEventListener('change',ev=>{answersStore[ev.target.name.split('_')[1]]=Number(ev.target.value);updateCnt()}));
+  updateCnt();
+}
 
-      all.forEach(r => {
-        const key = cleanName(r.full_name).toLowerCase();
-        if (!key) return;
-        if (!map.has(key)) {
-          map.set(key, {
-            full_name: cleanName(r.full_name),
-            grade_level: r.grade_level || '',
-            selected_career: r.selected_career || '—',
-            pre: null,
-            post: null,
-            behaviors: []
-          });
-        }
-        const entry = map.get(key);
-        if (r.selected_career && r.selected_career !== 'لم تُحدّد بعد') entry.selected_career = r.selected_career;
-        if (r.stage === 'pre') entry.pre = Number(r.percentage ?? 0);
-        if (r.stage === 'post') entry.post = Number(r.percentage ?? 0);
-        if (r.stage === 'behavior' && Array.isArray(r.behavioral_actions) && r.behavioral_actions.length) {
-          entry.behaviors = r.behavioral_actions;
-        }
-      });
+async function submitStage(stage){
+  clearNotice();
+  const answers=stage==='pre'?state.preAnswers:state.postAnswers;
+  if(Object.keys(answers).length<QUESTIONS.length){showNotice('danger','يرجى الإجابة على جميع الأسئلة العشرة.');return}
+  if(stage==='post'&&!state.chosenCareer){showNotice('danger','يرجى اختيار مهنة في خطوة «استكشاف المهن» قبل حفظ القياس البعدي.');return}
+  if(await isNameUsedForStage(state.student.full_name,stage)){showNotice('danger',`تم تسجيل هذا القياس مسبقاً للاسم "${state.student.full_name}" ولا يمكن تكراره.`);return}
+  const sum=Object.values(answers).reduce((a,b)=>a+Number(b),0),pct=Math.round((sum/(QUESTIONS.length*5))*100);
+  const record={full_name:state.student.full_name,grade_level:state.student.grade_level,school_name:state.student.school_name||'',selected_career:state.chosenCareer?state.chosenCareer.title:'لم تُحدّد بعد',stage,score:sum,max_score:QUESTIONS.length*5,percentage:pct,behavioral_actions:[],created_at:new Date().toISOString()};
+  if(isDbConnected&&supabaseClient){const{error}=await supabaseClient.from(TABLE_NAME).insert([record]);if(error)addLocalRow({...record,id:'local-'+Date.now()})}
+  else addLocalRow({...record,id:'local-'+Date.now()});
+  if(stage==='pre'){state.preDone=true;state.preScore=pct;refreshStepper();showNotice('success','تم حفظ القياس القبلي. انتقلي الآن لاستكشاف المهن واختاري المهنة الأقرب لكِ.');goToStep('exploreStep')}
+  else{state.postDone=true;state.postScore=pct;refreshStepper();showNotice('success','تم حفظ القياس البعدي بنجاح. اختاري الآن خطوات الأثر السلوكي واطلعي على قياس الأثر.');goToStep('impactStep')}
+}
 
-      cachedBoardRows = Array.from(map.values()).map(item => ({
-        ...item,
-        impact: (item.pre !== null && item.post !== null) ? (item.post - item.pre) : null,
-        readyForTraining: item.behaviors.length > 0
-      }));
+document.getElementById('preForm').addEventListener('submit',e=>{e.preventDefault();submitStage('pre')});
+document.getElementById('postForm').addEventListener('submit',e=>{e.preventDefault();submitStage('post')});
 
-      document.getElementById('statCount').textContent = cachedBoardRows.length;
-      const preVals = cachedBoardRows.filter(x => x.pre !== null).map(x => x.pre);
-      const postVals = cachedBoardRows.filter(x => x.post !== null).map(x => x.post);
-      const impVals = cachedBoardRows.filter(x => x.impact !== null).map(x => x.impact);
+function renderCareers(){
+  const list=document.getElementById('careersList');list.innerHTML='';
+  CAREERS.forEach(career=>{
+    const chosen=state.chosenCareer&&state.chosenCareer.id===career.id,card=document.createElement('div');
+    card.className=`career-simple-card ${chosen?'chosen':''}`;
+    card.innerHTML=`<div><span class="tag">${escapeHtml(career.field)}</span><h3 style="margin:8px 0 6px;font-size:1.05rem;font-weight:800">${escapeHtml(career.title)}</h3><div class="career-simple-desc">${escapeHtml(career.simpleDesc)}</div><div class="career-example">${escapeHtml(career.example)}</div></div><button type="button" class="btn ${chosen?'btn-primary':'btn-soft'}">${chosen?'✓ اخترتِ هذه المهنة':'اختيار هذه المهنة'}</button>`;
+    card.querySelector('button').addEventListener('click',()=>{state.chosenCareer=career;state.exploredDone=true;refreshStepper();renderCareers();showNotice('success',`تم تسجيل اختياركِ لمهنة "${career.title}". يمكنكِ الآن الانتقال للقياس البعدي.`)});
+    list.appendChild(card);
+  });
+}
 
-      const preAvg = preVals.length ? Math.round(preVals.reduce((a, b) => a + b, 0) / preVals.length) : 0;
-      const postAvg = postVals.length ? Math.round(postVals.reduce((a, b) => a + b, 0) / postVals.length) : 0;
-      const impAvg = impVals.length ? Math.round(impVals.reduce((a, b) => a + b, 0) / impVals.length) : 0;
+document.getElementById('toPostTestBtn').addEventListener('click',()=>{
+  clearNotice();
+  if(!state.chosenCareer){showNotice('danger','يجب اختيار مهنة واحدة على الأقل قبل الانتقال إلى القياس البعدي.');return}
+  state.exploredDone=true;refreshStepper();goToStep('postStep');
+});
 
-      document.getElementById('statPre').textContent = preAvg + '%';
-      document.getElementById('statPost').textContent = postAvg + '%';
-      document.getElementById('statImpact').textContent = (impAvg >= 0 ? '+' + impAvg : impAvg) + '%';
+function renderImpactSection(){
+  const pre=state.preScore??0,post=state.postScore??0,diff=post-pre;
+  document.getElementById('impactScoreSummary').innerHTML=`<p><strong>الطالبة:</strong> ${escapeHtml(state.student.full_name)} (${escapeHtml(state.student.grade_level)})</p><p><strong>المهنة المختارة:</strong> ${escapeHtml(state.chosenCareer?state.chosenCareer.title:'لم يتم اختيار مهنة')}</p><div class="stats-row"><div class="stat-box"><div class="muted">القياس القبلي</div><div class="stat-num">${pre}%</div></div><div class="stat-box"><div class="muted">القياس البعدي</div><div class="stat-num">${post}%</div></div><div class="stat-box"><div class="muted">قياس الأثر</div><div class="stat-num">${diff>=0?'+'+diff:diff}%</div></div></div>`;
+  const list=document.getElementById('behaviorOptionsList');list.innerHTML='';
+  BEHAVIOR_ACTIONS.forEach((act,idx)=>{
+    const lbl=document.createElement('label');lbl.className='behavior-option';
+    lbl.innerHTML=`<input type="checkbox" value="${escapeHtml(act)}" ${state.selectedBehaviors.includes(act)?'checked':''}/><span>${idx+1}. ${escapeHtml(act)}</span>`;
+    list.appendChild(lbl);
+  });
+  if(state.impactCompleted)document.getElementById('finalGuidanceMessage').classList.remove('hidden');
+}
 
-      renderCharts(cachedBoardRows, preAvg, postAvg, impAvg);
+document.getElementById('behaviorForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const chosen=Array.from(document.querySelectorAll('#behaviorOptionsList input:checked')).map(i=>i.value);
+  if(!chosen.length){showNotice('danger','اختاري خطوة واحدة على الأقل لتسجيل أثركِ السلوكي.');return}
+  state.selectedBehaviors=chosen;state.impactCompleted=true;refreshStepper();
+  const record={full_name:state.student.full_name,grade_level:state.student.grade_level,school_name:state.student.school_name||'',selected_career:state.chosenCareer?state.chosenCareer.title:'لم تُحدّد بعد',stage:'behavior',score:chosen.length,max_score:BEHAVIOR_ACTIONS.length,percentage:Math.round((chosen.length/BEHAVIOR_ACTIONS.length)*100),behavioral_actions:chosen,created_at:new Date().toISOString()};
+  if(isDbConnected&&supabaseClient){const{error}=await supabaseClient.from(TABLE_NAME).insert([record]);if(error)addLocalRow({...record,id:'local-'+Date.now()})}
+  else addLocalRow({...record,id:'local-'+Date.now()});
+  const box=document.getElementById('behaviorSavedBox');box.classList.remove('hidden');
+  box.innerHTML=`<div class="alert alert-success">تم حفظ خطوات الأثر السلوكي وإتمام قياس الأثر بنجاح (${chosen.length} خطوات).</div>`;
+  document.getElementById('finalGuidanceMessage').classList.remove('hidden');
+  showNotice('success','أتممتِ قياس الأثر بنجاح! اطلعي على رسالتكِ الختامية أدناه.');
+});
 
-      const readyStudents = cachedBoardRows.filter(x => x.readyForTraining);
-      document.getElementById('behavioralReportDetails').innerHTML = `
-        <p style="margin:6px 0;"><strong>الطالبات اللاتي أظهرن استعداداً للتطوير والتدريب:</strong> ${readyStudents.length} من أصل ${cachedBoardRows.length} طالبة.</p>
-        <p style="margin:6px 0;">${readyStudents.length ? 'أسماء الطالبات المستعدات للتطوير والتدريب: ' + readyStudents.map(s => escapeHtml(s.full_name)).join('، ') : 'لم تسجّل أي طالبة خطوات التطوير والتدريب بعد.'}</p>
-      `;
+document.getElementById('counselorLoginForm').addEventListener('submit',async e=>{
+  e.preventDefault();clearNotice();
+  if(document.getElementById('counselorEmailInput').value.trim().toLowerCase()!==COUNSELOR_USER.toLowerCase()||document.getElementById('passcodeInput').value!==COUNSELOR_PASSCODE){
+    isCounselorAuthenticated=false;showNotice('danger','بيانات الدخول غير صحيحة.');return;
+  }
+  isCounselorAuthenticated=true;
+  document.getElementById('counselorLockBox').classList.add('hidden');
+  document.getElementById('counselorBoardBox').classList.remove('hidden');
+  await loadBoard();
+});
 
-      if (!cachedBoardRows.length) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">لا توجد سجلات بعد.</td></tr>';
-        return;
-      }
+document.getElementById('lockBtn').addEventListener('click',()=>{
+  isCounselorAuthenticated=false;
+  document.getElementById('counselorBoardBox').classList.add('hidden');
+  document.getElementById('counselorLockBox').classList.remove('hidden');
+  document.getElementById('counselorEmailInput').value='';document.getElementById('passcodeInput').value='';
+});
+document.getElementById('refreshBtn').addEventListener('click',async()=>{if(isCounselorAuthenticated)await loadBoard()});
+document.getElementById('exportBtn').addEventListener('click',()=>{if(isCounselorAuthenticated)exportBoardCsv()});
 
-      tbody.innerHTML = cachedBoardRows.map((r, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td><strong>${escapeHtml(r.full_name)}</strong></td>
-          <td>${escapeHtml(r.grade_level)}</td>
-          <td>${escapeHtml(r.selected_career)}</td>
-          <td>${r.pre !== null ? r.pre + '%' : '—'}</td>
-          <td>${r.post !== null ? r.post + '%' : '—'}</td>
-          <td><strong>${r.impact !== null ? (r.impact >= 0 ? '+' + r.impact : r.impact) + '%' : '—'}</strong></td>
-          <td>${r.behaviors.length ? 'مستعدة للتطوير (' + r.behaviors.length + ' خطوات)' : 'لم تحدد بعد'}</td>
-          <td><button type="button" class="btn btn-danger" onclick="removeStudent('${escapeHtml(r.full_name)}')">حذف</button></td>
-        </tr>
-      `).join('');
-    }
+function renderCharts(rows,preAvg,postAvg,impactAvg){
+  if(!window.Chart)return;
+  const compCtx=document.getElementById('programComparisonChart').getContext('2d');
+  if(comparisonChartInstance)comparisonChartInstance.destroy();
+  comparisonChartInstance=new Chart(compCtx,{type:'bar',data:{labels:['متوسط القياس القبلي','متوسط القياس البعدي','قياس الأثر للبرنامج'],datasets:[{label:'النسبة (%)',data:[preAvg,postAvg,impactAvg],backgroundColor:['#5c7285','#0d6e7a','#1b7a4b'],borderRadius:10}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}}}});
+  const readyCount=rows.filter(x=>x.readyForTraining).length,notReadyCount=Math.max(0,rows.length-readyCount);
+  const readyCtx=document.getElementById('readinessChart').getContext('2d');
+  if(readinessChartInstance)readinessChartInstance.destroy();
+  readinessChartInstance=new Chart(readyCtx,{type:'doughnut',data:{labels:['مستعدة للتطوير والتدريب','لم تحدد خطوات بعد'],datasets:[{data:[readyCount,notReadyCount],backgroundColor:['#1b7a4b','#d9822b']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+}
 
-    window.removeStudent = async function(fullName) {
-      if (!isCounselorAuthenticated) return;
-      if (!confirm(`حذف سجل "${fullName}"؟`)) return;
-      const target = cleanName(fullName).toLowerCase();
-      if (isDbConnected && supabaseClient) {
-        await supabaseClient.from(TABLE_NAME).delete().ilike('full_name', cleanName(fullName));
-      }
-      const left = getLocalRows().filter(r => cleanName(r.full_name).toLowerCase() !== target);
-      localStorage.setItem('mustaqbali_v9_rows', JSON.stringify(left));
-      await loadBoard();
-    };
+async function loadBoard(){
+  if(!isCounselorAuthenticated)return;
+  const tbody=document.getElementById('recordsBody');tbody.innerHTML='<tr><td colspan="9" style="text-align:center">جارٍ التحميل...</td></tr>';
+  const all=await getAllRows(),map=new Map();
+  all.forEach(r=>{
+    const key=cleanName(r.full_name).toLowerCase();if(!key)return;
+    if(!map.has(key))map.set(key,{full_name:cleanName(r.full_name),grade_level:r.grade_level||'',selected_career:r.selected_career||'—',pre:null,post:null,behaviors:[]});
+    const entry=map.get(key);
+    if(r.selected_career&&r.selected_career!=='لم تُحدّد بعد')entry.selected_career=r.selected_career;
+    if(r.stage==='pre')entry.pre=Number(r.percentage??0);
+    if(r.stage==='post')entry.post=Number(r.percentage??0);
+    if(r.stage==='behavior'&&Array.isArray(r.behavioral_actions)&&r.behavioral_actions.length)entry.behaviors=r.behavioral_actions;
+  });
+  cachedBoardRows=Array.from(map.values()).map(item=>({...item,impact:(item.pre!==null&&item.post!==null)?(item.post-item.pre):null,readyForTraining:item.behaviors.length>0}));
+  document.getElementById('statCount').textContent=cachedBoardRows.length;
+  const preVals=cachedBoardRows.filter(x=>x.pre!==null).map(x=>x.pre),postVals=cachedBoardRows.filter(x=>x.post!==null).map(x=>x.post),impVals=cachedBoardRows.filter(x=>x.impact!==null).map(x=>x.impact);
+  const preAvg=preVals.length?Math.round(preVals.reduce((a,b)=>a+b,0)/preVals.length):0,postAvg=postVals.length?Math.round(postVals.reduce((a,b)=>a+b,0)/postVals.length):0,impAvg=impVals.length?Math.round(impVals.reduce((a,b)=>a+b,0)/impVals.length):0;
+  document.getElementById('statPre').textContent=preAvg+'%';document.getElementById('statPost').textContent=postAvg+'%';document.getElementById('statImpact').textContent=(impAvg>=0?'+'+impAvg:impAvg)+'%';
+  renderCharts(cachedBoardRows,preAvg,postAvg,impAvg);
+  const readyStudents=cachedBoardRows.filter(x=>x.readyForTraining);
+  document.getElementById('behavioralReportDetails').innerHTML=`<p style="margin:6px 0"><strong>الطالبات اللاتي أظهرن استعداداً للتطوير والتدريب:</strong> ${readyStudents.length} من أصل ${cachedBoardRows.length} طالبة.</p><p style="margin:6px 0">${readyStudents.length?'أسماء الطالبات المستعدات للتطوير والتدريب: '+readyStudents.map(s=>escapeHtml(s.full_name)).join('، '):'لم تسجّل أي طالبة خطوات التطوير والتدريب بعد.'}</p>`;
+  if(!cachedBoardRows.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center">لا توجد سجلات بعد.</td></tr>';return}
+  tbody.innerHTML=cachedBoardRows.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${escapeHtml(r.full_name)}</strong></td><td>${escapeHtml(r.grade_level)}</td><td>${escapeHtml(r.selected_career)}</td><td>${r.pre!==null?r.pre+'%':'—'}</td><td>${r.post!==null?r.post+'%':'—'}</td><td><strong>${r.impact!==null?(r.impact>=0?'+'+r.impact:r.impact)+'%':'—'}</strong></td><td>${r.behaviors.length?'مستعدة للتطوير ('+r.behaviors.length+' خطوات)':'لم تحدد بعد'}</td><td><button type="button" class="btn btn-danger" onclick="removeStudent('${escapeHtml(r.full_name)}')">حذف</button></td></tr>`).join('');
+}
 
-    function exportBoardCsv() {
-      if (!cachedBoardRows.length) { showNotice('info', 'لا توجد بيانات للتصدير.'); return; }
-      const headers = ['الاسم الثلاثي', 'الصف', 'المهنة المختارة', 'القبلي (%)', 'البعدي (%)', 'الأثر (%)', 'استعداد التطوير والتدريب'];
-      const lines = [headers.join(',')];
-      cachedBoardRows.forEach(r => {
-        lines.push([
-          r.full_name, r.grade_level, r.selected_career,
-          r.pre ?? '', r.post ?? '', r.impact ?? '',
-          r.behaviors.join(' | ')
-        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
-      });
-      const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'mustaqbali-full-report.csv';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+window.removeStudent=async function(fullName){
+  if(!isCounselorAuthenticated||!confirm(`حذف سجل "${fullName}"؟`))return;
+  const target=cleanName(fullName).toLowerCase();
+  if(isDbConnected&&supabaseClient)await supabaseClient.from(TABLE_NAME).delete().ilike('full_name',cleanName(fullName));
+  localStorage.setItem('mustaqbali_v9_rows',JSON.stringify(getLocalRows().filter(r=>cleanName(r.full_name).toLowerCase()!==target)));
+  await loadBoard();
+};
 
-    renderQuestions('preQuestionsList', 'preCounter', state.preAnswers);
-    renderQuestions('postQuestionsList', 'postCounter', state.postAnswers);
-    renderCareers();
-    refreshStepper();
-    initDb();
-  </script>
+function exportBoardCsv(){
+  if(!cachedBoardRows.length){showNotice('info','لا توجد بيانات للتصدير.');return}
+  const lines=[['الاسم الثلاثي','الصف','المهنة المختارة','القبلي (%)','البعدي (%)','الأثر (%)','استعداد التطوير والتدريب'].join(',')];
+  cachedBoardRows.forEach(r=>lines.push([r.full_name,r.grade_level,r.selected_career,r.pre??'',r.post??'',r.impact??'',r.behaviors.join(' | ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')));
+  const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='mustaqbali-full-report.csv';a.click();URL.revokeObjectURL(url);
+}
+
+renderQuestions('preQuestionsList','preCounter',state.preAnswers);
+renderQuestions('postQuestionsList','postCounter',state.postAnswers);
+renderCareers();refreshStepper();initDb();
+</script>
 </body>
 </html>
