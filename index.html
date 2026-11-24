@@ -160,7 +160,7 @@
     .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
     label { font-weight: 700; font-size: 0.94rem; }
 
-    input[type="text"], select {
+    input[type="text"], input[type="email"], input[type="password"], select {
       width: 100%;
       padding: 12px 14px;
       border: 1.5px solid var(--border);
@@ -530,20 +530,32 @@
 
     <!-- لوحة الموجهة الطلابية -->
     <section id="counselorStep" class="step-panel hidden">
-      <div class="card" id="counselorNoticeCard">
+      <div class="card" id="counselorLockBox">
         <h2>هذه اللوحة خاصة بالموجهة الطلابية</h2>
-        <p class="muted">هذه اللوحة خاصة بالموجهة الطلابية لمتابعة نتائج الطالبات وقياس الأثر وتقرير التطوير والتدريب.</p>
+        <p class="muted">لزيادة الأمان، أدخلي الإيميل والرقم السري الخاصين بالموجهة الطلابية لفتح اللوحة.</p>
+        <form id="counselorLoginForm" style="max-width:520px; margin-top:14px;">
+          <div class="field">
+            <label for="counselorEmailInput">إيميل الموجهة الطلابية</label>
+            <input type="email" id="counselorEmailInput" required placeholder="أدخلي إيميل الموجهة الطلابية" autocomplete="username" />
+          </div>
+          <div class="field">
+            <label for="passcodeInput">الرقم السري</label>
+            <input type="password" id="passcodeInput" required placeholder="أدخلي الرقم السري" autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="unlockBtn">دخول اللوحة</button>
+        </form>
       </div>
 
-      <div class="card" id="counselorBoardBox">
+      <div class="card hidden" id="counselorBoardBox">
         <div class="card-header">
           <div>
-            <h2>متابعة نتائج الطالبات — لوحة الموجهة الطلابية</h2>
+            <h2>هذه اللوحة خاصة بالموجهة الطلابية — متابعة النتائج</h2>
             <p class="muted">عرض نتائج القياس القبلي والبعدي وقياس الأثر للبرنامج وتقرير الأثر السلوكي لطالبات المرحلة المتوسطة.</p>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:8px;">
             <button type="button" class="btn btn-soft" id="refreshBtn">تحديث البيانات</button>
             <button type="button" class="btn btn-accent" id="exportBtn">تصدير CSV</button>
+            <button type="button" class="btn btn-soft" id="lockBtn">خروج وقفل اللوحة</button>
           </div>
         </div>
 
@@ -614,6 +626,8 @@
     const SUPABASE_URL = 'https://saqpjwezeyuuziwliwhc.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O';
     const TABLE_NAME = 'student_assessments';
+    const COUNSELOR_EMAIL = 'ershadd66@gmail.com';
+    const COUNSELOR_PASSCODE = 'EmanibrahimKh4422';
 
     const CHOICES = [
       { value: 1, label: 'لا أوافق بشدة' },
@@ -690,6 +704,7 @@
 
     let supabaseClient = null;
     let isDbConnected = false;
+    let isCounselorAuthenticated = false;
     let cachedBoardRows = [];
     let comparisonChartInstance = null;
     let readinessChartInstance = null;
@@ -741,14 +756,14 @@
     function isThreeNames(n = '') { return cleanName(n).split(' ').filter(Boolean).length >= 3; }
 
     function getLocalRows() {
-      try { return JSON.parse(localStorage.getItem('mustaqbali_v6_rows') || '[]'); }
+      try { return JSON.parse(localStorage.getItem('mustaqbali_v7_rows') || '[]'); }
       catch { return []; }
     }
 
     function addLocalRow(row) {
       const rows = getLocalRows();
       rows.unshift(row);
-      localStorage.setItem('mustaqbali_v6_rows', JSON.stringify(rows));
+      localStorage.setItem('mustaqbali_v7_rows', JSON.stringify(rows));
     }
 
     async function getAllRows() {
@@ -812,8 +827,18 @@
 
       document.querySelectorAll('.step-btn').forEach(b => b.classList.toggle('active', b.dataset.step === stepId));
       document.querySelectorAll('.step-panel').forEach(p => p.classList.toggle('hidden', p.id !== stepId));
+
       if (stepId === 'impactStep') renderImpactSection();
-      if (stepId === 'counselorStep') await loadBoard();
+      if (stepId === 'counselorStep') {
+        if (isCounselorAuthenticated) {
+          document.getElementById('counselorLockBox').classList.add('hidden');
+          document.getElementById('counselorBoardBox').classList.remove('hidden');
+          await loadBoard();
+        } else {
+          document.getElementById('counselorBoardBox').classList.add('hidden');
+          document.getElementById('counselorLockBox').classList.remove('hidden');
+        }
+      }
     }
 
     document.querySelectorAll('.step-btn').forEach(btn => {
@@ -1049,8 +1074,42 @@
       showNotice('success', 'أتممتِ قياس الأثر بنجاح! اطلعي على رسالتكِ الختامية أدناه.');
     });
 
-    document.getElementById('refreshBtn').addEventListener('click', loadBoard);
-    document.getElementById('exportBtn').addEventListener('click', exportBoardCsv);
+    document.getElementById('counselorLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearNotice();
+
+      const enteredEmail = document.getElementById('counselorEmailInput').value.trim().toLowerCase();
+      const enteredPass = document.getElementById('passcodeInput').value;
+
+      if (enteredEmail !== COUNSELOR_EMAIL.toLowerCase() || enteredPass !== COUNSELOR_PASSCODE) {
+        isCounselorAuthenticated = false;
+        showNotice('danger', 'الإيميل أو الرقم السري الخاص بالموجهة الطلابية غير صحيح.');
+        return;
+      }
+
+      isCounselorAuthenticated = true;
+      document.getElementById('counselorLockBox').classList.add('hidden');
+      document.getElementById('counselorBoardBox').classList.remove('hidden');
+      await loadBoard();
+    });
+
+    document.getElementById('lockBtn').addEventListener('click', () => {
+      isCounselorAuthenticated = false;
+      document.getElementById('counselorBoardBox').classList.add('hidden');
+      document.getElementById('counselorLockBox').classList.remove('hidden');
+      document.getElementById('counselorEmailInput').value = '';
+      document.getElementById('passcodeInput').value = '';
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', async () => {
+      if (!isCounselorAuthenticated) return;
+      await loadBoard();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      if (!isCounselorAuthenticated) return;
+      exportBoardCsv();
+    });
 
     function renderCharts(rows, preAvg, postAvg, impactAvg) {
       if (!window.Chart) return;
@@ -1100,6 +1159,8 @@
     }
 
     async function loadBoard() {
+      if (!isCounselorAuthenticated) return;
+
       const tbody = document.getElementById('recordsBody');
       tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">جارٍ التحميل...</td></tr>';
 
@@ -1176,13 +1237,14 @@
     }
 
     window.removeStudent = async function(fullName) {
+      if (!isCounselorAuthenticated) return;
       if (!confirm(`حذف سجل "${fullName}"؟`)) return;
       const target = cleanName(fullName).toLowerCase();
       if (isDbConnected && supabaseClient) {
         await supabaseClient.from(TABLE_NAME).delete().ilike('full_name', cleanName(fullName));
       }
       const left = getLocalRows().filter(r => cleanName(r.full_name).toLowerCase() !== target);
-      localStorage.setItem('mustaqbali_v6_rows', JSON.stringify(left));
+      localStorage.setItem('mustaqbali_v7_rows', JSON.stringify(left));
       await loadBoard();
     };
 
