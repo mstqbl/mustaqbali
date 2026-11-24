@@ -8,9 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #f4f8f9;
+      --bg: #f3f8f9;
       --surface: #ffffff;
       --surface-soft: #eef5f7;
       --ink: #172a3a;
@@ -26,7 +27,7 @@
       --danger-soft: #fdecec;
       --border: #d7e4e8;
       --radius: 18px;
-      --shadow: 0 8px 24px rgba(23, 42, 58, 0.06);
+      --shadow: 0 10px 26px rgba(23, 42, 58, 0.06);
     }
 
     * { box-sizing: border-box; }
@@ -50,7 +51,7 @@
     }
 
     .topbar-inner {
-      max-width: 1120px;
+      max-width: 1140px;
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
@@ -89,7 +90,7 @@
     .dot { width: 9px; height: 9px; border-radius: 50%; background: #4ade80; }
     .dot.warn { background: #facc15; }
 
-    .container { max-width: 1120px; margin: 24px auto 64px; padding: 0 18px; }
+    .container { max-width: 1140px; margin: 24px auto 64px; padding: 0 18px; }
 
     .stepper {
       display: grid;
@@ -149,8 +150,8 @@
       margin-bottom: 18px;
     }
 
-    .card h2 { margin: 0; font-size: 1.22rem; font-weight: 800; color: var(--primary-dark); }
-    .card h3 { margin: 0 0 8px; font-size: 1.05rem; font-weight: 800; color: var(--primary-dark); }
+    .card h2 { margin: 0; font-size: 1.24rem; font-weight: 800; color: var(--primary-dark); }
+    .card h3 { margin: 0 0 8px; font-size: 1.06rem; font-weight: 800; color: var(--primary-dark); }
     .muted { color: var(--muted); font-size: 0.93rem; margin: 4px 0 0; }
 
     .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
@@ -209,6 +210,29 @@
     .alert-success { background: var(--success-soft); color: var(--success); border: 1px solid #b8e8cf; }
     .alert-danger { background: var(--danger-soft); color: var(--danger); border: 1px solid #f7c5c8; }
     .alert-info { background: var(--primary-soft); color: var(--primary-dark); border: 1px solid #bfe3e8; }
+
+    .closing-message {
+      background: linear-gradient(135deg, #e7f6ee, #e1f2f4);
+      border: 2px solid #9ad8b8;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 18px;
+      color: var(--ink);
+    }
+
+    .closing-message h4 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .closing-message p {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.85;
+    }
 
     .tag {
       display: inline-block;
@@ -300,22 +324,44 @@
       accent-color: var(--primary);
     }
 
-    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .stat-box { background: var(--surface-soft); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
-    .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); }
-
-    .report-box {
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .stat-box {
+      background: linear-gradient(180deg, #ffffff, var(--surface-soft));
       border: 1.5px solid var(--border);
       border-radius: 15px;
+      padding: 16px;
+    }
+    .stat-num { font-size: 1.55rem; font-weight: 800; color: var(--primary-dark); margin-top: 4px; }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .chart-card {
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
       padding: 18px;
-      background: #f9fcfd;
-      margin-top: 18px;
+      background: #fcfefe;
+    }
+
+    .chart-wrap { position: relative; height: 260px; width: 100%; }
+
+    .report-box {
+      border: 1.5px solid #bfe3e8;
+      border-radius: 16px;
+      padding: 18px;
+      background: #f4fafb;
+      margin-bottom: 18px;
     }
 
     .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: #fff; }
-    th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; background: #fff; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
     th { background: var(--surface-soft); font-weight: 800; color: var(--primary-dark); }
+    tbody tr:hover { background: #f8fbfc; }
 
     .hidden { display: none !important; }
   </style>
@@ -458,21 +504,28 @@
           <h3>ما الخطوات العملية التي تنوين القيام بها لتطوير نفسكِ؟</h3>
           <p class="muted">اختاري ما يناسبكِ من هذه الخطوات السهلة والعملية:</p>
           <div id="behaviorOptionsList" style="margin-top:12px;"></div>
-          <button type="submit" class="btn btn-primary" style="margin-top:12px;">حفظ خطوات الأثر السلوكي</button>
+          <button type="submit" class="btn btn-primary" style="margin-top:12px;">حفظ خطوات الأثر السلوكي وإتمام قياس الأثر</button>
         </form>
 
         <div id="behaviorSavedBox" class="hidden" style="margin-top:16px;"></div>
+
+        <div id="finalGuidanceMessage" class="closing-message hidden">
+          <h4>رسالة لكِ في ختام رحلتكِ</h4>
+          <p>
+            هذي الشاشة عامل بسيط مساعد، لكن المهن متنوعة وكثيرة؛ ابحثي وواصلي واجتهدي ليكون لكِ مستقبل ناجح بإذن الله.
+          </p>
+        </div>
       </div>
     </section>
 
     <!-- لوحة الموجهة الطلابية -->
     <section id="counselorStep" class="step-panel hidden">
       <div class="card" id="counselorLockBox">
-        <h2>لوحة الموجهة الطلابية</h2>
-        <p class="muted">أدخلي رمز الدخول الخاص بالموجهة الطلابية لعرض نتائج الطالبات وتقرير الأثر السلوكي.</p>
+        <h2>اللوحة خاصة بالموجهة الطلابية فقط</h2>
+        <p class="muted">هذه اللوحة مخصصة للموجهة الطلابية فقط؛ يرجى إدخال رمز الدخول الخاص بها.</p>
         <div class="grid-2" style="max-width:480px; margin-top:14px;">
           <div class="field">
-            <label for="passcodeInput">رمز الدخول</label>
+            <label for="passcodeInput">رمز الدخول الخاص بالموجهة الطلابية</label>
             <input type="password" id="passcodeInput" placeholder="أدخلي رمز الدخول" />
           </div>
           <div class="field" style="justify-content:flex-end;">
@@ -484,11 +537,11 @@
       <div class="card hidden" id="counselorBoardBox">
         <div class="card-header">
           <div>
-            <h2>متابعة الطالبات — لوحة الموجهة الطلابية</h2>
-            <p class="muted">سجلات المرحلة المتوسطة (القبلي، البعدي، قياس الأثر، وتقرير الأثر السلوكي).</p>
+            <h2>اللوحة خاصة بالموجهة الطلابية فقط — متابعة النتائج</h2>
+            <p class="muted">عرض نتائج القياس القبلي والبعدي وقياس الأثر للبرنامج وتقرير الأثر السلوكي لطالبات المرحلة المتوسطة.</p>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:8px;">
-            <button type="button" class="btn btn-soft" id="refreshBtn">تحديث</button>
+            <button type="button" class="btn btn-soft" id="refreshBtn">تحديث البيانات</button>
             <button type="button" class="btn btn-accent" id="exportBtn">تصدير CSV</button>
             <button type="button" class="btn btn-soft" id="lockBtn">خروج</button>
           </div>
@@ -513,12 +566,27 @@
           </div>
         </div>
 
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>مقارنة القياس القبلي والبعدي للبرنامج</h3>
+            <div class="chart-wrap">
+              <canvas id="programComparisonChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <h3>استعداد الطالبات للتطوير والتدريب (الأثر السلوكي)</h3>
+            <div class="chart-wrap">
+              <canvas id="readinessChart"></canvas>
+            </div>
+          </div>
+        </div>
+
         <div class="report-box" id="behavioralReportBox">
           <h3>تقرير الأثر السلوكي: استعداد الطالبات للتطوير والتدريب</h3>
           <div id="behavioralReportDetails" class="muted">جارٍ إعداد التقرير...</div>
         </div>
 
-        <div class="table-wrap" style="margin-top:18px;">
+        <div class="table-wrap">
           <table>
             <thead>
               <tr>
@@ -526,9 +594,9 @@
                 <th>الاسم الثلاثي</th>
                 <th>الصف</th>
                 <th>المهنة المختارة</th>
-                <th>القبلي</th>
-                <th>البعدي</th>
-                <th>الأثر</th>
+                <th>القياس القبلي</th>
+                <th>القياس البعدي</th>
+                <th>قياس الأثر</th>
                 <th>الأثر السلوكي (التطوير والتدريب)</th>
                 <th>إجراء</th>
               </tr>
@@ -618,6 +686,8 @@
     let supabaseClient = null;
     let isDbConnected = false;
     let cachedBoardRows = [];
+    let comparisonChartInstance = null;
+    let readinessChartInstance = null;
 
     const state = {
       student: { full_name: '', grade_level: '', school_name: '' },
@@ -627,6 +697,7 @@
       preDone: false,
       exploredDone: false,
       postDone: false,
+      impactCompleted: false,
       chosenCareer: null,
       preScore: null,
       postScore: null
@@ -665,14 +736,14 @@
     function isThreeNames(n = '') { return cleanName(n).split(' ').filter(Boolean).length >= 3; }
 
     function getLocalRows() {
-      try { return JSON.parse(localStorage.getItem('mustaqbali_v4_rows') || '[]'); }
+      try { return JSON.parse(localStorage.getItem('mustaqbali_v5_rows') || '[]'); }
       catch { return []; }
     }
 
     function addLocalRow(row) {
       const rows = getLocalRows();
       rows.unshift(row);
-      localStorage.setItem('mustaqbali_v4_rows', JSON.stringify(rows));
+      localStorage.setItem('mustaqbali_v5_rows', JSON.stringify(rows));
     }
 
     async function getAllRows() {
@@ -705,7 +776,7 @@
         { id: 'preStep', done: state.preDone },
         { id: 'exploreStep', done: state.exploredDone },
         { id: 'postStep', done: state.postDone },
-        { id: 'impactStep', done: state.postDone }
+        { id: 'impactStep', done: state.impactCompleted }
       ];
 
       map.forEach(item => {
@@ -926,6 +997,10 @@
         `;
         list.appendChild(lbl);
       });
+
+      if (state.impactCompleted) {
+        document.getElementById('finalGuidanceMessage').classList.remove('hidden');
+      }
     }
 
     document.getElementById('behaviorForm').addEventListener('submit', async (e) => {
@@ -937,6 +1012,9 @@
       }
 
       state.selectedBehaviors = chosen;
+      state.impactCompleted = true;
+      refreshStepper();
+
       const record = {
         full_name: state.student.full_name,
         grade_level: state.student.grade_level,
@@ -959,14 +1037,15 @@
 
       const box = document.getElementById('behaviorSavedBox');
       box.classList.remove('hidden');
-      box.innerHTML = `<div class="alert alert-success">تم حفظ خطواتكِ العملية للأثر السلوكي بنجاح (${chosen.length} خطوات).</div>`;
-      showNotice('success', 'تم تسجيل أثركِ السلوكي وإرساله إلى لوحة الموجهة الطلابية.');
+      box.innerHTML = `<div class="alert alert-success">تم حفظ خطوات الأثر السلوكي وإتمام قياس الأثر بنجاح (${chosen.length} خطوات).</div>`;
+      document.getElementById('finalGuidanceMessage').classList.remove('hidden');
+      showNotice('success', 'أتممتِ قياس الأثر بنجاح! اطلعي على رسالتكِ الختامية أدناه.');
     });
 
     document.getElementById('unlockBtn').addEventListener('click', async () => {
       clearNotice();
       if (document.getElementById('passcodeInput').value.trim() !== COUNSELOR_PASSCODE) {
-        showNotice('danger', 'رمز الدخول غير صحيح.');
+        showNotice('danger', 'رمز الدخول الخاص بالموجهة الطلابية غير صحيح.');
         return;
       }
       document.getElementById('counselorLockBox').classList.add('hidden');
@@ -982,6 +1061,53 @@
 
     document.getElementById('refreshBtn').addEventListener('click', loadBoard);
     document.getElementById('exportBtn').addEventListener('click', exportBoardCsv);
+
+    function renderCharts(rows, preAvg, postAvg, impactAvg) {
+      if (!window.Chart) return;
+
+      const compCtx = document.getElementById('programComparisonChart').getContext('2d');
+      if (comparisonChartInstance) comparisonChartInstance.destroy();
+      comparisonChartInstance = new Chart(compCtx, {
+        type: 'bar',
+        data: {
+          labels: ['متوسط القياس القبلي', 'متوسط القياس البعدي', 'قياس الأثر للبرنامج'],
+          datasets: [{
+            label: 'النسبة (%)',
+            data: [preAvg, postAvg, impactAvg],
+            backgroundColor: ['#5c7285', '#0d6e7a', '#1b7a4b'],
+            borderRadius: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
+          }
+        }
+      });
+
+      const readyCount = rows.filter(x => x.readyForTraining).length;
+      const notReadyCount = Math.max(0, rows.length - readyCount);
+      const readyCtx = document.getElementById('readinessChart').getContext('2d');
+      if (readinessChartInstance) readinessChartInstance.destroy();
+      readinessChartInstance = new Chart(readyCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['مستعدة للتطوير والتدريب', 'لم تحدد خطوات بعد'],
+          datasets: [{
+            data: [readyCount, notReadyCount],
+            backgroundColor: ['#1b7a4b', '#d9822b']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
 
     async function loadBoard() {
       const tbody = document.getElementById('recordsBody');
@@ -1023,10 +1149,15 @@
       const postVals = cachedBoardRows.filter(x => x.post !== null).map(x => x.post);
       const impVals = cachedBoardRows.filter(x => x.impact !== null).map(x => x.impact);
 
-      document.getElementById('statPre').textContent = preVals.length ? Math.round(preVals.reduce((a, b) => a + b, 0) / preVals.length) + '%' : '0%';
-      document.getElementById('statPost').textContent = postVals.length ? Math.round(postVals.reduce((a, b) => a + b, 0) / postVals.length) + '%' : '0%';
-      const avgImp = impVals.length ? Math.round(impVals.reduce((a, b) => a + b, 0) / impVals.length) : 0;
-      document.getElementById('statImpact').textContent = impVals.length ? (avgImp >= 0 ? '+' + avgImp : avgImp) + '%' : '0%';
+      const preAvg = preVals.length ? Math.round(preVals.reduce((a, b) => a + b, 0) / preVals.length) : 0;
+      const postAvg = postVals.length ? Math.round(postVals.reduce((a, b) => a + b, 0) / postVals.length) : 0;
+      const impAvg = impVals.length ? Math.round(impVals.reduce((a, b) => a + b, 0) / impVals.length) : 0;
+
+      document.getElementById('statPre').textContent = preAvg + '%';
+      document.getElementById('statPost').textContent = postAvg + '%';
+      document.getElementById('statImpact').textContent = (impAvg >= 0 ? '+' + impAvg : impAvg) + '%';
+
+      renderCharts(cachedBoardRows, preAvg, postAvg, impAvg);
 
       const readyStudents = cachedBoardRows.filter(x => x.readyForTraining);
       document.getElementById('behavioralReportDetails').innerHTML = `
@@ -1061,7 +1192,7 @@
         await supabaseClient.from(TABLE_NAME).delete().ilike('full_name', cleanName(fullName));
       }
       const left = getLocalRows().filter(r => cleanName(r.full_name).toLowerCase() !== target);
-      localStorage.setItem('mustaqbali_v4_rows', JSON.stringify(left));
+      localStorage.setItem('mustaqbali_v5_rows', JSON.stringify(left));
       await loadBoard();
     };
 
