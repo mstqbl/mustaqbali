@@ -160,7 +160,7 @@
     .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
     label { font-weight: 700; font-size: 0.94rem; }
 
-    input[type="text"], input[type="password"], select {
+    input[type="text"], select {
       width: 100%;
       padding: 12px 14px;
       border: 1.5px solid var(--border);
@@ -302,6 +302,16 @@
       border-top: 1px dashed var(--border);
       padding-top: 10px;
       font-size: 0.92rem;
+    }
+
+    .career-example {
+      margin-top: 8px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: var(--surface-soft);
+      font-size: 0.87rem;
+      font-weight: 700;
+      color: var(--primary-dark);
     }
 
     .behavior-option {
@@ -456,7 +466,7 @@
         <div class="card-header">
           <div>
             <h2>استكشاف المهن</h2>
-            <p class="muted">تعرّفي على مهن متنوعة بلغة سهلة وواضحة، واختاري المهنة الأقرب لميولكِ بعد الاستكشاف.</p>
+            <p class="muted">تعرّفي على مهن متنوعة بلغة سهلة وواضحة مع أمثلة قريبة منكِ، واختاري المهنة الأقرب لميولكِ بعد الاستكشاف.</p>
           </div>
           <span class="tag" id="chosenCareerTag">لم تختاري مهنة بعد</span>
         </div>
@@ -520,30 +530,20 @@
 
     <!-- لوحة الموجهة الطلابية -->
     <section id="counselorStep" class="step-panel hidden">
-      <div class="card" id="counselorLockBox">
-        <h2>اللوحة خاصة بالموجهة الطلابية فقط</h2>
-        <p class="muted">هذه اللوحة مخصصة للموجهة الطلابية فقط؛ يرجى إدخال رمز الدخول الخاص بها.</p>
-        <div class="grid-2" style="max-width:480px; margin-top:14px;">
-          <div class="field">
-            <label for="passcodeInput">رمز الدخول الخاص بالموجهة الطلابية</label>
-            <input type="password" id="passcodeInput" placeholder="أدخلي رمز الدخول" />
-          </div>
-          <div class="field" style="justify-content:flex-end;">
-            <button type="button" class="btn btn-primary" id="unlockBtn">دخول اللوحة</button>
-          </div>
-        </div>
+      <div class="card" id="counselorNoticeCard">
+        <h2>هذه اللوحة خاصة بالموجهة الطلابية</h2>
+        <p class="muted">هذه اللوحة خاصة بالموجهة الطلابية لمتابعة نتائج الطالبات وقياس الأثر وتقرير التطوير والتدريب.</p>
       </div>
 
-      <div class="card hidden" id="counselorBoardBox">
+      <div class="card" id="counselorBoardBox">
         <div class="card-header">
           <div>
-            <h2>اللوحة خاصة بالموجهة الطلابية فقط — متابعة النتائج</h2>
+            <h2>متابعة نتائج الطالبات — لوحة الموجهة الطلابية</h2>
             <p class="muted">عرض نتائج القياس القبلي والبعدي وقياس الأثر للبرنامج وتقرير الأثر السلوكي لطالبات المرحلة المتوسطة.</p>
           </div>
           <div style="display:flex; flex-wrap:wrap; gap:8px;">
             <button type="button" class="btn btn-soft" id="refreshBtn">تحديث البيانات</button>
             <button type="button" class="btn btn-accent" id="exportBtn">تصدير CSV</button>
-            <button type="button" class="btn btn-soft" id="lockBtn">خروج</button>
           </div>
         </div>
 
@@ -614,7 +614,6 @@
     const SUPABASE_URL = 'https://saqpjwezeyuuziwliwhc.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_eif2kb63j_2YtDrDMtHswA_ihqnge2O';
     const TABLE_NAME = 'student_assessments';
-    const COUNSELOR_PASSCODE = 'EmanibrahimKh4422';
 
     const CHOICES = [
       { value: 1, label: 'لا أوافق بشدة' },
@@ -639,40 +638,46 @@
 
     const CAREERS = [
       {
+        id: 'ai',
+        title: 'مختصة الذكاء الاصطناعي وتدريب الأنظمة الذكية',
+        field: 'الذكاء الاصطناعي والتقنية',
+        simpleDesc: 'تدرّب البرامج الذكية على فهم الأسئلة ومساعدة الناس وتنظيم المعلومات وتسهيل المهام اليومية بأمان ووضوح.',
+        example: 'مثال: تدريب مساعد ذكي يلخّص دروس العلوم أو يقترح أفكاراً لمشروع مدرسي.'
+      },
+      {
+        id: 'edu-games',
+        title: 'مصممة ألعاب وتجارب تعليمية تفاعلية',
+        field: 'التعليم والتصميم التفاعلي',
+        simpleDesc: 'تحوّل الدروس والمفاهيم إلى أنشطة وألعاب ممتعة تساعد الطالبات على الفهم والتذكر بسهولة.',
+        example: 'مثال: تصميم لعبة أسئلة وتحديات لمراجعة جدول الضرب أو خريطة العالم.'
+      },
+      {
         id: 'tech',
         title: 'مصممة برامج وتطبيقات',
         field: 'التقنية والحاسب',
-        simpleDesc: 'تبتكر تطبيقات الهواتف والألعاب والمواقع التي نستخدمها يومياً، وتحل المشكلات بأفكار ذكية. تناسب من تحب الحاسب والابتكار وحل الألغاز.'
+        simpleDesc: 'تبتكر تطبيقات الهواتف والمواقع التي نستخدمها يومياً، وتحل المشكلات بأفكار ذكية.',
+        example: 'مثال: تصميم تطبيق بسيط يرتّب جدول المذاكرة والمهام اليومية.'
       },
       {
         id: 'health',
         title: 'طبيبة أو صيدلانية',
         field: 'العلوم والصحة',
-        simpleDesc: 'تساعد المرضى على التعافي وتشرح لهم كيفية استخدام العلاج بأمان واهتمام. تناسب من تحب العلوم والأحياء وتحب مساعدة الناس.'
+        simpleDesc: 'تساعد المرضى على التعافي وتشرح لهم كيفية استخدام العلاج بأمان واهتمام.',
+        example: 'مثال: توضيح طريقة استخدام الدواء الصحيحة ومواعيده بلغة سهلة للمريض.'
       },
       {
         id: 'design',
         title: 'مصممة جرافيك ومحتوى إبداعي',
         field: 'الفن والإبداع',
-        simpleDesc: 'تصمم الشعارات والملصقات والصور والمحتوى الجميل الذي يوصل الفكرة بوضوح. تناسب من تحب الرسم والألوان والأفكار الجديدة.'
+        simpleDesc: 'تصمم الشعارات والملصقات والصور والمحتوى الجميل الذي يوصل الفكرة بوضوح.',
+        example: 'مثال: تصميم لوحة توعوية مدرسية بألوان متناسقة ورسوم واضحة.'
       },
       {
         id: 'business',
         title: 'رائدة أعمال ومشروعات',
         field: 'المشاريع والإدارة',
-        simpleDesc: 'تحوّل فكرة جميلة إلى مشروع صغير أو متجر منظم وتديره بنجاح. تناسب من تحب التنظيم والتخطيط وتجربة المشاريع.'
-      },
-      {
-        id: 'education',
-        title: 'معلمة أو مرشدة تربوية',
-        field: 'التربية والمجتمع',
-        simpleDesc: 'تشرح الدروس بأسلوب محبب وتدعم الطالبات وتساعدهن على اكتشاف قدراتهن. تناسب من تحب التواصل والشرح ومساعدة الآخرين.'
-      },
-      {
-        id: 'engineering',
-        title: 'مهندسة عمارة أو ديكور داخلي',
-        field: 'الهندسة والتصميم',
-        simpleDesc: 'ترسم وتخطط للمباني والمساحات لتكون مريحة وآمنة وجميلة في شكلها واستخدامها. تناسب من تحب الهندسة والقياس والترتيب.'
+        simpleDesc: 'تحوّل فكرة جميلة إلى مشروع صغير أو متجر منظم وتديره بنجاح.',
+        example: 'مثال: إدارة ركن صغير في السوق المدرسي وتنظيم التكاليف والمبيعات.'
       }
     ];
 
@@ -736,14 +741,14 @@
     function isThreeNames(n = '') { return cleanName(n).split(' ').filter(Boolean).length >= 3; }
 
     function getLocalRows() {
-      try { return JSON.parse(localStorage.getItem('mustaqbali_v5_rows') || '[]'); }
+      try { return JSON.parse(localStorage.getItem('mustaqbali_v6_rows') || '[]'); }
       catch { return []; }
     }
 
     function addLocalRow(row) {
       const rows = getLocalRows();
       rows.unshift(row);
-      localStorage.setItem('mustaqbali_v5_rows', JSON.stringify(rows));
+      localStorage.setItem('mustaqbali_v6_rows', JSON.stringify(rows));
     }
 
     async function getAllRows() {
@@ -795,7 +800,7 @@
         : 'لم تختاري مهنة بعد';
     }
 
-    function goToStep(stepId) {
+    async function goToStep(stepId) {
       clearNotice();
       if (!canOpenStep(stepId)) {
         if (stepId === 'preStep') showNotice('danger', 'يرجى أولاً إدخال الاسم الثلاثي والصف في خطوة «بيانات الطالبة».');
@@ -808,6 +813,7 @@
       document.querySelectorAll('.step-btn').forEach(b => b.classList.toggle('active', b.dataset.step === stepId));
       document.querySelectorAll('.step-panel').forEach(p => p.classList.toggle('hidden', p.id !== stepId));
       if (stepId === 'impactStep') renderImpactSection();
+      if (stepId === 'counselorStep') await loadBoard();
     }
 
     document.querySelectorAll('.step-btn').forEach(btn => {
@@ -946,6 +952,7 @@
             <span class="tag">${escapeHtml(career.field)}</span>
             <h3 style="margin:8px 0 6px; font-size:1.05rem; font-weight:800;">${escapeHtml(career.title)}</h3>
             <div class="career-simple-desc">${escapeHtml(career.simpleDesc)}</div>
+            <div class="career-example">${escapeHtml(career.example)}</div>
           </div>
           <button type="button" class="btn ${chosen ? 'btn-primary' : 'btn-soft'}">
             ${chosen ? '✓ اخترتِ هذه المهنة' : 'اختيار هذه المهنة'}
@@ -1040,23 +1047,6 @@
       box.innerHTML = `<div class="alert alert-success">تم حفظ خطوات الأثر السلوكي وإتمام قياس الأثر بنجاح (${chosen.length} خطوات).</div>`;
       document.getElementById('finalGuidanceMessage').classList.remove('hidden');
       showNotice('success', 'أتممتِ قياس الأثر بنجاح! اطلعي على رسالتكِ الختامية أدناه.');
-    });
-
-    document.getElementById('unlockBtn').addEventListener('click', async () => {
-      clearNotice();
-      if (document.getElementById('passcodeInput').value.trim() !== COUNSELOR_PASSCODE) {
-        showNotice('danger', 'رمز الدخول الخاص بالموجهة الطلابية غير صحيح.');
-        return;
-      }
-      document.getElementById('counselorLockBox').classList.add('hidden');
-      document.getElementById('counselorBoardBox').classList.remove('hidden');
-      await loadBoard();
-    });
-
-    document.getElementById('lockBtn').addEventListener('click', () => {
-      document.getElementById('counselorBoardBox').classList.add('hidden');
-      document.getElementById('counselorLockBox').classList.remove('hidden');
-      document.getElementById('passcodeInput').value = '';
     });
 
     document.getElementById('refreshBtn').addEventListener('click', loadBoard);
@@ -1192,7 +1182,7 @@
         await supabaseClient.from(TABLE_NAME).delete().ilike('full_name', cleanName(fullName));
       }
       const left = getLocalRows().filter(r => cleanName(r.full_name).toLowerCase() !== target);
-      localStorage.setItem('mustaqbali_v5_rows', JSON.stringify(left));
+      localStorage.setItem('mustaqbali_v6_rows', JSON.stringify(left));
       await loadBoard();
     };
 
