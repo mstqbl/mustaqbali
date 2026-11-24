@@ -467,7 +467,7 @@
         <div class="card-header">
           <div>
             <h2>استكشاف المهن</h2>
-            <p class="muted">تعرّفي على مهن متنوعة بلغة سهلة وواضحة مع أمثلة قريبة منكِ، واختاري المهنة الأقرب لميولكِ بعد الاستكشاف.</p>
+            <p class="muted">تعرّفي على مهن متنوعة بلغة سهلة وواضحة مع أمثلة قريبة منكِ، ويجب اختيار مهنة واحدة على الأقل قبل الانتقال للقياس البعدي.</p>
           </div>
           <span class="tag" id="chosenCareerTag">لم تختاري مهنة بعد</span>
         </div>
@@ -475,7 +475,7 @@
         <div class="grid-3" id="careersList"></div>
 
         <div style="margin-top:22px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px;">
-          <span class="muted">بعد الاطلاع على المهن واختيار الأقرب لكِ، انتقلي للقياس البعدي.</span>
+          <span class="muted">اختاري المهنة الأقرب لكِ أولاً ثم انتقلي للقياس البعدي.</span>
           <button type="button" class="btn btn-primary" id="toPostTestBtn">الانتقال إلى القياس البعدي</button>
         </div>
       </div>
@@ -757,14 +757,14 @@
     function isThreeNames(n = '') { return cleanName(n).split(' ').filter(Boolean).length >= 3; }
 
     function getLocalRows() {
-      try { return JSON.parse(localStorage.getItem('mustaqbali_v8_rows') || '[]'); }
+      try { return JSON.parse(localStorage.getItem('mustaqbali_v9_rows') || '[]'); }
       catch { return []; }
     }
 
     function addLocalRow(row) {
       const rows = getLocalRows();
       rows.unshift(row);
-      localStorage.setItem('mustaqbali_v8_rows', JSON.stringify(rows));
+      localStorage.setItem('mustaqbali_v9_rows', JSON.stringify(rows));
     }
 
     async function getAllRows() {
@@ -786,7 +786,7 @@
       if (stepId === 'profileStep' || stepId === 'counselorStep') return true;
       if (stepId === 'preStep') return Boolean(state.student.full_name);
       if (stepId === 'exploreStep') return state.preDone;
-      if (stepId === 'postStep') return state.preDone && state.exploredDone;
+      if (stepId === 'postStep') return state.preDone && state.exploredDone && Boolean(state.chosenCareer);
       if (stepId === 'impactStep') return state.preDone && state.postDone;
       return false;
     }
@@ -795,7 +795,7 @@
       const map = [
         { id: 'profileStep', done: Boolean(state.student.full_name) },
         { id: 'preStep', done: state.preDone },
-        { id: 'exploreStep', done: state.exploredDone },
+        { id: 'exploreStep', done: state.exploredDone && Boolean(state.chosenCareer) },
         { id: 'postStep', done: state.postDone },
         { id: 'impactStep', done: state.impactCompleted }
       ];
@@ -821,7 +821,10 @@
       if (!canOpenStep(stepId)) {
         if (stepId === 'preStep') showNotice('danger', 'يرجى أولاً إدخال الاسم الثلاثي والصف في خطوة «بيانات الطالبة».');
         else if (stepId === 'exploreStep') showNotice('danger', 'يرجى إكمال «القياس القبلي» أولاً قبل استكشاف المهن.');
-        else if (stepId === 'postStep') showNotice('danger', 'يرجى إكمال «القياس القبلي» و«استكشاف المهن» أولاً قبل فتح «القياس البعدي».');
+        else if (stepId === 'postStep') {
+          if (!state.preDone) showNotice('danger', 'يرجى إكمال «القياس القبلي» أولاً.');
+          else showNotice('danger', 'يجب اختيار مهنة من «استكشاف المهن» أولاً قبل الانتقال إلى «القياس البعدي».');
+        }
         else if (stepId === 'impactStep') showNotice('danger', 'تظهر هذه الخطوة بعد إكمال القياس القبلي والقياس البعدي معاً.');
         return;
       }
@@ -919,6 +922,11 @@
         return;
       }
 
+      if (stage === 'post' && !state.chosenCareer) {
+        showNotice('danger', 'يرجى اختيار مهنة في خطوة «استكشاف المهن» قبل حفظ القياس البعدي.');
+        return;
+      }
+
       if (await isNameUsedForStage(state.student.full_name, stage)) {
         showNotice('danger', `تم تسجيل هذا القياس مسبقاً للاسم "${state.student.full_name}" ولا يمكن تكراره.`);
         return;
@@ -951,7 +959,7 @@
         state.preDone = true;
         state.preScore = pct;
         refreshStepper();
-        showNotice('success', 'تم حفظ القياس القبلي. انتقلي الآن لاستكشاف المهن وتعرّفي عليها.');
+        showNotice('success', 'تم حفظ القياس القبلي. انتقلي الآن لاستكشاف المهن واختاري المهنة الأقرب لكِ.');
         goToStep('exploreStep');
       } else {
         state.postDone = true;
@@ -990,7 +998,7 @@
           state.exploredDone = true;
           refreshStepper();
           renderCareers();
-          showNotice('success', `تم تسجيل اختياركِ لمهنة "${career.title}".`);
+          showNotice('success', `تم تسجيل اختياركِ لمهنة "${career.title}". يمكنكِ الآن الانتقال للقياس البعدي.`);
         });
 
         list.appendChild(card);
@@ -998,6 +1006,11 @@
     }
 
     document.getElementById('toPostTestBtn').addEventListener('click', () => {
+      clearNotice();
+      if (!state.chosenCareer) {
+        showNotice('danger', 'يجب اختيار مهنة واحدة على الأقل قبل الانتقال إلى القياس البعدي.');
+        return;
+      }
       state.exploredDone = true;
       refreshStepper();
       goToStep('postStep');
@@ -1245,7 +1258,7 @@
         await supabaseClient.from(TABLE_NAME).delete().ilike('full_name', cleanName(fullName));
       }
       const left = getLocalRows().filter(r => cleanName(r.full_name).toLowerCase() !== target);
-      localStorage.setItem('mustaqbali_v8_rows', JSON.stringify(left));
+      localStorage.setItem('mustaqbali_v9_rows', JSON.stringify(left));
       await loadBoard();
     };
 
